@@ -1,0 +1,248 @@
+/* See the Tailwind configuration guide for advanced usage
+   https://tailwindcss.com/docs/configuration */
+
+@import "tailwindcss" source(none);
+@import "phoenix-colocated/growthpush_router/colocated.css";
+@source "../css";
+@source "../js";
+@source "../../lib/growthpush_router_web";
+/* Required for Tailwind to automatically pick up changes in colocated CSS files in dev */
+@source "../../_build/dev/phoenix-colocated/growthpush_router/*/";
+
+/* A Tailwind plugin that makes "hero-#{ICON}" classes available.
+   The heroicons installation itself is managed by your mix.exs */
+@plugin "../vendor/heroicons";
+
+/* daisyUI Tailwind Plugin. You can update this file by fetching the latest version with:
+   curl -sLO https://github.com/saadeghi/daisyui/releases/latest/download/daisyui.js
+   Make sure to look at the daisyUI changelog: https://daisyui.com/docs/changelog/ */
+@plugin "../vendor/daisyui" {
+  themes: false;
+}
+
+/* daisyUI theme plugin. You can update this file by fetching the latest version with:
+  curl -sLO https://github.com/saadeghi/daisyui/releases/latest/download/daisyui-theme.js
+  We ship with two themes, a light one inspired on Phoenix colors and a dark one inspired
+  on Elixir colors. Build your own at: https://daisyui.com/theme-generator/ */
+@plugin "../vendor/daisyui-theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: #111827;
+  --color-base-200: #1f2937;
+  --color-base-300: #374151;
+  --color-base-content: #f3f6f8;
+  --color-primary: #00a7c2;
+  --color-primary-content: #ffffff;
+  --color-secondary: #6d5dfc;
+  --color-secondary-content: #ffffff;
+  --color-accent: #c6f432;
+  --color-accent-content: #111827;
+  --color-neutral: #e7eef3;
+  --color-neutral-content: #111827;
+  --color-info: #00a7c2;
+  --color-info-content: #ffffff;
+  --color-success: #c6f432;
+  --color-success-content: #111827;
+  --color-warning: #facc15;
+  --color-warning-content: #111827;
+  --color-error: #ef4444;
+  --color-error-content: #ffffff;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.21875rem;
+  --border: 1.5px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "../vendor/daisyui-theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: #f3f6f8;
+  --color-base-200: #e7eef3;
+  --color-base-300: #d9e3ea;
+  --color-base-content: #111827;
+  --color-primary: #00a7c2;
+  --color-primary-content: #ffffff;
+  --color-secondary: #6d5dfc;
+  --color-secondary-content: #ffffff;
+  --color-accent: #c6f432;
+  --color-accent-content: #111827;
+  --color-neutral: #4b5563;
+  --color-neutral-content: #ffffff;
+  --color-info: #00a7c2;
+  --color-info-content: #ffffff;
+  --color-success: #c6f432;
+  --color-success-content: #111827;
+  --color-warning: #facc15;
+  --color-warning-content: #111827;
+  --color-error: #ef4444;
+  --color-error-content: #ffffff;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.21875rem;
+  --border: 1.5px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* Add variants based on LiveView classes */
+@custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
+@custom-variant phx-submit-loading (.phx-submit-loading&, .phx-submit-loading &);
+@custom-variant phx-change-loading (.phx-change-loading&, .phx-change-loading &);
+
+/* Make LiveView wrapper divs transparent for layout */
+[data-phx-session], [data-phx-teleported-src] { display: contents }
+
+/* This file is for your main application CSS */
+:root {
+  --bg: #f3f6f8;
+  --surface: #ffffff;
+  --surface-2: #e7eef3;
+  --text: #111827;
+  --muted: #4b5563;
+  --border: #d9e3ea;
+  --primary: #00a7c2;
+  --accent: #c6f432;
+  --ai: #6d5dfc;
+  --shadow: rgba(17, 24, 39, 0.10);
+  --font-heading: "Sora", Inter, system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+h1,
+h2,
+h3,
+.brand-heading {
+  font-family: var(--font-heading);
+  letter-spacing: 0;
+}
+
+.brand-shell {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(243, 246, 248, 0.94)),
+    var(--bg);
+}
+
+.brand-nav {
+  border-bottom: 1px solid rgba(217, 227, 234, 0.82);
+  background: rgba(243, 246, 248, 0.86);
+  backdrop-filter: blur(16px);
+}
+
+.brand-mark {
+  display: inline-grid;
+  height: 2.25rem;
+  width: 2.25rem;
+  place-items: center;
+  border-radius: 0.625rem;
+  background: var(--primary);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  box-shadow: 0 16px 34px rgba(0, 167, 194, 0.22);
+}
+
+.brand-card {
+  border: 1px solid var(--border);
+  border-radius: 1.75rem;
+  background: var(--surface);
+  box-shadow: 0 24px 80px var(--shadow);
+}
+
+.brand-panel {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.brand-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.875rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  box-shadow: 0 16px 34px rgba(0, 167, 194, 0.24);
+}
+
+.brand-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.875rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--text);
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+}
+
+.badge-ai {
+  border: 1px solid rgba(109, 93, 252, 0.20);
+  border-radius: 999px;
+  background: rgba(109, 93, 252, 0.10);
+  color: var(--ai);
+  font-weight: 700;
+}
+
+.badge-signal {
+  border-radius: 999px;
+  background: rgba(198, 244, 50, 0.34);
+  color: var(--text);
+  font-weight: 700;
+}
+
+.workflow-node {
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.875rem 1rem;
+  box-shadow: 0 10px 26px rgba(17, 24, 39, 0.06);
+}
+
+.workflow-line {
+  height: 2rem;
+  width: 2px;
+  background: var(--border);
+}
+
+.workflow-node-primary {
+  border-color: rgba(0, 167, 194, 0.38);
+  background: rgba(0, 167, 194, 0.08);
+}
+
+.workflow-node-ai {
+  border-color: rgba(109, 93, 252, 0.34);
+  background: rgba(109, 93, 252, 0.08);
+}
+
+.workflow-node-signal {
+  border-color: rgba(198, 244, 50, 0.68);
+  background: rgba(198, 244, 50, 0.22);
+}

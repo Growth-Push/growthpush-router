@@ -1,0 +1,56 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#: lib/growthpush_router_web/components/core_components.ex:375
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/growthpush_router_web/components/layouts.ex:71
+#: lib/growthpush_router_web/components/layouts.ex:86
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/growthpush_router_web/controllers/error_html.ex:23
+#: lib/growthpush_router_web/controllers/error_json.ex:22
+#, elixir-autogen, elixir-format
+msgid "Error"
+msgstr ""
+
+#: lib/growthpush_router_web/controllers/error_html.ex:22
+#: lib/growthpush_router_web/controllers/error_json.ex:21
+#, elixir-autogen, elixir-format
+msgid "Internal Server Error"
+msgstr ""
+
+#: lib/growthpush_router_web/controllers/error_html.ex:21
+#: lib/growthpush_router_web/controllers/error_json.ex:20
+#, elixir-autogen, elixir-format
+msgid "Not Found"
+msgstr ""
+
+#: lib/growthpush_router_web/components/layouts.ex:78
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/growthpush_router_web/components/layouts.ex:63
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/growthpush_router_web/components/core_components.ex:81
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""

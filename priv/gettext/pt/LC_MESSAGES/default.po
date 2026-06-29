@@ -1,0 +1,56 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/growthpush_router_web/components/core_components.ex:375
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr "Ações"
+
+#: lib/growthpush_router_web/components/layouts.ex:71
+#: lib/growthpush_router_web/components/layouts.ex:86
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "Tentando reconectar"
+
+#: lib/growthpush_router_web/controllers/error_html.ex:23
+#: lib/growthpush_router_web/controllers/error_json.ex:22
+#, elixir-autogen, elixir-format
+msgid "Error"
+msgstr "Erro"
+
+#: lib/growthpush_router_web/controllers/error_html.ex:22
+#: lib/growthpush_router_web/controllers/error_json.ex:21
+#, elixir-autogen, elixir-format
+msgid "Internal Server Error"
+msgstr "Erro interno do servidor"
+
+#: lib/growthpush_router_web/controllers/error_html.ex:21
+#: lib/growthpush_router_web/controllers/error_json.ex:20
+#, elixir-autogen, elixir-format
+msgid "Not Found"
+msgstr "Não encontrado"
+
+#: lib/growthpush_router_web/components/layouts.ex:78
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "Algo deu errado!"
+
+#: lib/growthpush_router_web/components/layouts.ex:63
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "Não conseguimos encontrar a internet"
+
+#: lib/growthpush_router_web/components/core_components.ex:81
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr "fechar"
