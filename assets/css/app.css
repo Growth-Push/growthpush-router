@@ -20,53 +20,15 @@
   themes: false;
 }
 
-/* daisyUI theme plugin. You can update this file by fetching the latest version with:
-  curl -sLO https://github.com/saadeghi/daisyui/releases/latest/download/daisyui-theme.js
-  We ship with two themes, a light one inspired on Phoenix colors and a dark one inspired
-  on Elixir colors. Build your own at: https://daisyui.com/theme-generator/ */
-@plugin "../vendor/daisyui-theme" {
-  name: "dark";
-  default: false;
-  prefersdark: true;
-  color-scheme: "dark";
-  --color-base-100: #111827;
-  --color-base-200: #1f2937;
-  --color-base-300: #374151;
-  --color-base-content: #f3f6f8;
-  --color-primary: #00a7c2;
-  --color-primary-content: #ffffff;
-  --color-secondary: #6d5dfc;
-  --color-secondary-content: #ffffff;
-  --color-accent: #c6f432;
-  --color-accent-content: #111827;
-  --color-neutral: #e7eef3;
-  --color-neutral-content: #111827;
-  --color-info: #00a7c2;
-  --color-info-content: #ffffff;
-  --color-success: #c6f432;
-  --color-success-content: #111827;
-  --color-warning: #facc15;
-  --color-warning-content: #111827;
-  --color-error: #ef4444;
-  --color-error-content: #ffffff;
-  --radius-selector: 0.25rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.5rem;
-  --size-selector: 0.21875rem;
-  --size-field: 0.21875rem;
-  --border: 1.5px;
-  --depth: 1;
-  --noise: 0;
-}
-
+/* daisyUI theme plugin. Keep one light-only application theme. */
 @plugin "../vendor/daisyui-theme" {
   name: "light";
   default: true;
   prefersdark: false;
   color-scheme: "light";
-  --color-base-100: #f3f6f8;
-  --color-base-200: #e7eef3;
-  --color-base-300: #d9e3ea;
+  --color-base-100: #ffffff;
+  --color-base-200: #f3f6f8;
+  --color-base-300: #e7eef3;
   --color-base-content: #111827;
   --color-primary: #00a7c2;
   --color-primary-content: #ffffff;
@@ -104,15 +66,16 @@
 
 /* This file is for your main application CSS */
 :root {
-  --bg: #f3f6f8;
-  --surface: #ffffff;
-  --surface-2: #e7eef3;
+  color-scheme: light;
+  --bg: #F3F6F8;
+  --surface: #FFFFFF;
+  --surface-2: #E7EEF3;
   --text: #111827;
-  --muted: #4b5563;
-  --border: #d9e3ea;
-  --primary: #00a7c2;
-  --accent: #c6f432;
-  --ai: #6d5dfc;
+  --muted: #4B5563;
+  --border: #D9E3EA;
+  --primary: #00A7C2;
+  --accent: #C6F432;
+  --ai: #6D5DFC;
   --shadow: rgba(17, 24, 39, 0.10);
   --font-heading: "Sora", Inter, system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
@@ -121,6 +84,7 @@
 html {
   background: var(--bg);
   color: var(--text);
+  color-scheme: light;
   font-family: var(--font-body);
 }
 

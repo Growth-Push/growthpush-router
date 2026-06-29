@@ -112,42 +112,42 @@ msgid "must be equal to %{number}"
 msgstr ""
 
 ## From Ecto.Changeset.cast/4
-#: lib/growthpush_router/accounts/user.ex:31
-#: lib/growthpush_router/accounts/user.ex:46
+#: lib/growthpush_router/accounts/user.ex:44
+#: lib/growthpush_router/accounts/user.ex:72
 #, elixir-autogen, elixir-format
 msgid ".cant_be_blank"
 msgstr "can't be blank"
 
-#: lib/growthpush_router/accounts/user.ex:36
-#: lib/growthpush_router/accounts/user.ex:39
+#: lib/growthpush_router/accounts/user.ex:49
+#: lib/growthpush_router/accounts/user.ex:52
 #, elixir-autogen, elixir-format
 msgid ".email_unique_error"
 msgstr "has already been taken"
 
-#: lib/growthpush_router/accounts/user.ex:50
+#: lib/growthpush_router/accounts/user.ex:76
 #, elixir-autogen, elixir-format
 msgid ".password_confirmation_mismatch"
 msgstr "does not match confirmation"
 
-#: lib/growthpush_router/accounts/user.ex:48
-#: lib/growthpush_router/accounts/user.ex:101
+#: lib/growthpush_router/accounts/user.ex:74
+#: lib/growthpush_router/accounts/user.ex:189
 #, elixir-autogen, elixir-format
 msgid ".password_too_long"
 msgstr "must be at most 72 characters"
 
-#: lib/growthpush_router/accounts/user.ex:47
+#: lib/growthpush_router/accounts/user.ex:73
 #, elixir-autogen, elixir-format
 msgid ".password_too_short"
 msgstr "must be at least 8 characters"
 
-#: lib/growthpush_router/accounts/user.ex:33
-#: lib/growthpush_router/accounts/user.ex:34
-#: lib/growthpush_router/accounts/user.ex:35
+#: lib/growthpush_router/accounts/user.ex:46
+#: lib/growthpush_router/accounts/user.ex:47
+#: lib/growthpush_router/accounts/user.ex:48
 #, elixir-autogen, elixir-format
 msgid ".too_long"
 msgstr "must be at most %{count} characters"
 
-#: lib/growthpush_router/accounts/user.ex:32
+#: lib/growthpush_router/accounts/user.ex:45
 #, elixir-autogen, elixir-format
 msgid ".wrong_email"
 msgstr "has invalid format"

@@ -54,3 +54,322 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:171
+#, elixir-autogen, elixir-format
+msgid ".admin_nav.sign_out"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:166
+#, elixir-autogen, elixir-format
+msgid ".admin_nav.title"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:64
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.cancel"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:61
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.company"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:52
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.email"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:58
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.name"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:65
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.save"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:99
+#, elixir-autogen, elixir-format
+msgid ".admin_users.actions"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:110
+#, elixir-autogen, elixir-format
+msgid ".admin_users.admin"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:39
+#, elixir-autogen, elixir-format
+msgid ".admin_users.cannot_delete_self"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:96
+#, elixir-autogen, elixir-format
+msgid ".admin_users.company"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:89
+#, elixir-autogen, elixir-format
+msgid ".admin_users.edit_title"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:94
+#, elixir-autogen, elixir-format
+msgid ".admin_users.email"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:97
+#, elixir-autogen, elixir-format
+msgid ".admin_users.kind"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:95
+#, elixir-autogen, elixir-format
+msgid ".admin_users.name"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:80
+#, elixir-autogen, elixir-format
+msgid ".admin_users.new_title"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:73
+#, elixir-autogen, elixir-format
+msgid ".admin_users.new_user"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:98
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:122
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_pending"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:197
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_reset"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:204
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_reset_failed"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:121
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_set"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:111
+#, elixir-autogen, elixir-format
+msgid ".admin_users.regular_user"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:83
+#, elixir-autogen, elixir-format
+msgid ".admin_users.search_placeholder"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:68
+#, elixir-autogen, elixir-format
+msgid ".admin_users.section"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:69
+#, elixir-autogen, elixir-format
+msgid ".admin_users.title"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:105
+#, elixir-autogen, elixir-format
+msgid ".admin_users.user_created"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:184
+#, elixir-autogen, elixir-format
+msgid ".admin_users.user_deleted"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:121
+#, elixir-autogen, elixir-format
+msgid ".admin_users.user_updated"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:95
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:109
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:125
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:30
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:45
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:55
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:188
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:201
+#: lib/growthpush_router_web/user_auth.ex:69
+#, elixir-autogen, elixir-format
+msgid ".auth.admin_required"
+msgstr ""
+
+#: lib/growthpush_router_web/user_auth.ex:55
+#: lib/growthpush_router_web/user_auth.ex:76
+#, elixir-autogen, elixir-format
+msgid ".auth.authentication_required"
+msgstr ""
+
+#: lib/growthpush_router_web/user_auth.ex:27
+#, elixir-autogen, elixir-format
+msgid ".auth.signed_out"
+msgstr ""
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:54
+#, elixir-autogen, elixir-format
+msgid ".dashboard.access"
+msgstr ""
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:50
+#, elixir-autogen, elixir-format
+msgid ".dashboard.company"
+msgstr ""
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:46
+#, elixir-autogen, elixir-format
+msgid ".dashboard.email"
+msgstr ""
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:26
+#, elixir-autogen, elixir-format
+msgid ".dashboard.nav_title"
+msgstr ""
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:55
+#, elixir-autogen, elixir-format
+msgid ".dashboard.regular_user"
+msgstr ""
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:36
+#, elixir-autogen, elixir-format
+msgid ".dashboard.section"
+msgstr ""
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:29
+#, elixir-autogen, elixir-format
+msgid ".dashboard.sign_out"
+msgstr ""
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:41
+#, elixir-autogen, elixir-format
+msgid ".dashboard.subtitle"
+msgstr ""
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:38
+#, elixir-autogen, elixir-format
+msgid ".dashboard.title"
+msgstr ""
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:65
+#, elixir-autogen, elixir-format
+msgid ".password_setup.back_to_login"
+msgstr ""
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:47
+#, elixir-autogen, elixir-format
+msgid ".password_setup.email"
+msgstr ""
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:53
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password"
+msgstr ""
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:19
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password_already_set"
+msgstr ""
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:59
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password_confirmation"
+msgstr ""
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:14
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password_set"
+msgstr ""
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:63
+#, elixir-autogen, elixir-format
+msgid ".password_setup.submit"
+msgstr ""
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:34
+#, elixir-autogen, elixir-format
+msgid ".password_setup.subtitle"
+msgstr ""
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:33
+#, elixir-autogen, elixir-format
+msgid ".password_setup.title"
+msgstr ""
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:29
+#, elixir-autogen, elixir-format
+msgid ".password_setup.unknown_email"
+msgstr ""
+
+#: lib/growthpush_router_web/live/session_live/new.ex:33
+#, elixir-autogen, elixir-format
+msgid ".session.email"
+msgstr ""
+
+#: lib/growthpush_router_web/controllers/session_controller.ex:19
+#, elixir-autogen, elixir-format
+msgid ".session.invalid_credentials"
+msgstr ""
+
+#: lib/growthpush_router_web/live/session_live/new.ex:41
+#, elixir-autogen, elixir-format
+msgid ".session.password"
+msgstr ""
+
+#: lib/growthpush_router_web/live/session_live/new.ex:49
+#, elixir-autogen, elixir-format
+msgid ".session.password_setup_link"
+msgstr ""
+
+#: lib/growthpush_router_web/controllers/session_controller.ex:14
+#, elixir-autogen, elixir-format
+msgid ".session.password_setup_required"
+msgstr ""
+
+#: lib/growthpush_router_web/live/session_live/new.ex:46
+#, elixir-autogen, elixir-format
+msgid ".session.submit"
+msgstr ""
+
+#: lib/growthpush_router_web/live/session_live/new.ex:20
+#, elixir-autogen, elixir-format
+msgid ".session.subtitle"
+msgstr ""
+
+#: lib/growthpush_router_web/live/session_live/new.ex:19
+#, elixir-autogen, elixir-format
+msgid ".session.title"
+msgstr ""
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:34
+#, elixir-autogen, elixir-format
+msgid ".password_setup.invalid_password"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:142
+#, elixir-autogen, elixir-format
+msgid ".admin_users.delete_confirm"
+msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:133
+#, elixir-autogen, elixir-format
+msgid ".admin_users.reset_password_confirm"
+msgstr ""

@@ -14,43 +14,362 @@ msgstr ""
 #: lib/growthpush_router_web/components/core_components.ex:375
 #, elixir-autogen, elixir-format
 msgid "Actions"
-msgstr "Ações"
+msgstr "ações"
 
 #: lib/growthpush_router_web/components/layouts.ex:71
 #: lib/growthpush_router_web/components/layouts.ex:86
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
-msgstr "Tentando reconectar"
+msgstr "tentando reconectar"
 
 #: lib/growthpush_router_web/controllers/error_html.ex:23
 #: lib/growthpush_router_web/controllers/error_json.ex:22
 #, elixir-autogen, elixir-format
 msgid "Error"
-msgstr "Erro"
+msgstr "erro"
 
 #: lib/growthpush_router_web/controllers/error_html.ex:22
 #: lib/growthpush_router_web/controllers/error_json.ex:21
 #, elixir-autogen, elixir-format
 msgid "Internal Server Error"
-msgstr "Erro interno do servidor"
+msgstr "erro interno do servidor"
 
 #: lib/growthpush_router_web/controllers/error_html.ex:21
 #: lib/growthpush_router_web/controllers/error_json.ex:20
 #, elixir-autogen, elixir-format
 msgid "Not Found"
-msgstr "Não encontrado"
+msgstr "não encontrado"
 
 #: lib/growthpush_router_web/components/layouts.ex:78
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
-msgstr "Algo deu errado!"
+msgstr "algo deu errado!"
 
 #: lib/growthpush_router_web/components/layouts.ex:63
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
-msgstr "Não conseguimos encontrar a internet"
+msgstr "não conseguimos encontrar a internet"
 
 #: lib/growthpush_router_web/components/core_components.ex:81
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr "fechar"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:171
+#, elixir-autogen, elixir-format
+msgid ".admin_nav.sign_out"
+msgstr "sair"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:166
+#, elixir-autogen, elixir-format
+msgid ".admin_nav.title"
+msgstr "admin"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:64
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.cancel"
+msgstr "cancelar"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:61
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.company"
+msgstr "empresa"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:52
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.email"
+msgstr "e-mail"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:58
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.name"
+msgstr "nome"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:65
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.save"
+msgstr "salvar"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:99
+#, elixir-autogen, elixir-format
+msgid ".admin_users.actions"
+msgstr "ações"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:110
+#, elixir-autogen, elixir-format
+msgid ".admin_users.admin"
+msgstr "admin"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:39
+#, elixir-autogen, elixir-format
+msgid ".admin_users.cannot_delete_self"
+msgstr "você não pode excluir seu próprio usuário admin."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:96
+#, elixir-autogen, elixir-format
+msgid ".admin_users.company"
+msgstr "empresa"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:89
+#, elixir-autogen, elixir-format
+msgid ".admin_users.edit_title"
+msgstr "editar usuário"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:94
+#, elixir-autogen, elixir-format
+msgid ".admin_users.email"
+msgstr "e-mail"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:97
+#, elixir-autogen, elixir-format
+msgid ".admin_users.kind"
+msgstr "tipo"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:95
+#, elixir-autogen, elixir-format
+msgid ".admin_users.name"
+msgstr "nome"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:80
+#, elixir-autogen, elixir-format
+msgid ".admin_users.new_title"
+msgstr "novo usuário"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:73
+#, elixir-autogen, elixir-format
+msgid ".admin_users.new_user"
+msgstr "novo usuário"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:98
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password"
+msgstr "senha"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:122
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_pending"
+msgstr "pendente"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:197
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_reset"
+msgstr "senha redefinida. o usuário deverá definir uma nova senha ao entrar."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:204
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_reset_failed"
+msgstr "não foi possível redefinir a senha."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:121
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_set"
+msgstr "definida"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:111
+#, elixir-autogen, elixir-format
+msgid ".admin_users.regular_user"
+msgstr "usuário"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:83
+#, elixir-autogen, elixir-format
+msgid ".admin_users.search_placeholder"
+msgstr "buscar por e-mail, nome ou empresa"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:68
+#, elixir-autogen, elixir-format
+msgid ".admin_users.section"
+msgstr "admin"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:69
+#, elixir-autogen, elixir-format
+msgid ".admin_users.title"
+msgstr "usuários"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:105
+#, elixir-autogen, elixir-format
+msgid ".admin_users.user_created"
+msgstr "usuário criado. ele poderá definir a senha no primeiro acesso."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:184
+#, elixir-autogen, elixir-format
+msgid ".admin_users.user_deleted"
+msgstr "usuário excluído."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:121
+#, elixir-autogen, elixir-format
+msgid ".admin_users.user_updated"
+msgstr "usuário atualizado."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:95
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:109
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:125
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:30
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:45
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:55
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:188
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:201
+#: lib/growthpush_router_web/user_auth.ex:69
+#, elixir-autogen, elixir-format
+msgid ".auth.admin_required"
+msgstr "você não tem acesso à administração."
+
+#: lib/growthpush_router_web/user_auth.ex:55
+#: lib/growthpush_router_web/user_auth.ex:76
+#, elixir-autogen, elixir-format
+msgid ".auth.authentication_required"
+msgstr "você precisa entrar."
+
+#: lib/growthpush_router_web/user_auth.ex:27
+#, elixir-autogen, elixir-format
+msgid ".auth.signed_out"
+msgstr "sessão encerrada."
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:54
+#, elixir-autogen, elixir-format
+msgid ".dashboard.access"
+msgstr "acesso"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:50
+#, elixir-autogen, elixir-format
+msgid ".dashboard.company"
+msgstr "empresa"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:46
+#, elixir-autogen, elixir-format
+msgid ".dashboard.email"
+msgstr "e-mail"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:26
+#, elixir-autogen, elixir-format
+msgid ".dashboard.nav_title"
+msgstr "dashboard"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:55
+#, elixir-autogen, elixir-format
+msgid ".dashboard.regular_user"
+msgstr "usuário"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:36
+#, elixir-autogen, elixir-format
+msgid ".dashboard.section"
+msgstr "dashboard"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:29
+#, elixir-autogen, elixir-format
+msgid ".dashboard.sign_out"
+msgstr "sair"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:41
+#, elixir-autogen, elixir-format
+msgid ".dashboard.subtitle"
+msgstr "este é o painel inicial da sua conta."
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:38
+#, elixir-autogen, elixir-format
+msgid ".dashboard.title"
+msgstr "olá, %{name}"
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:65
+#, elixir-autogen, elixir-format
+msgid ".password_setup.back_to_login"
+msgstr "voltar para o login"
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:47
+#, elixir-autogen, elixir-format
+msgid ".password_setup.email"
+msgstr "e-mail"
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:53
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password"
+msgstr "nova senha"
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:19
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password_already_set"
+msgstr "este usuário já tem senha. peça um reset ao admin se não conseguir entrar."
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:59
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password_confirmation"
+msgstr "confirmar senha"
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:14
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password_set"
+msgstr "senha definida."
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:63
+#, elixir-autogen, elixir-format
+msgid ".password_setup.submit"
+msgstr "salvar e entrar"
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:34
+#, elixir-autogen, elixir-format
+msgid ".password_setup.subtitle"
+msgstr "disponível apenas para usuários criados por um admin e contas resetadas."
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:33
+#, elixir-autogen, elixir-format
+msgid ".password_setup.title"
+msgstr "definir senha"
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:29
+#, elixir-autogen, elixir-format
+msgid ".password_setup.unknown_email"
+msgstr "não existe usuário com esse e-mail."
+
+#: lib/growthpush_router_web/live/session_live/new.ex:33
+#, elixir-autogen, elixir-format
+msgid ".session.email"
+msgstr "e-mail"
+
+#: lib/growthpush_router_web/controllers/session_controller.ex:19
+#, elixir-autogen, elixir-format
+msgid ".session.invalid_credentials"
+msgstr "e-mail ou senha inválidos."
+
+#: lib/growthpush_router_web/live/session_live/new.ex:41
+#, elixir-autogen, elixir-format
+msgid ".session.password"
+msgstr "senha"
+
+#: lib/growthpush_router_web/live/session_live/new.ex:49
+#, elixir-autogen, elixir-format
+msgid ".session.password_setup_link"
+msgstr "primeiro acesso ou reset de senha"
+
+#: lib/growthpush_router_web/controllers/session_controller.ex:14
+#, elixir-autogen, elixir-format
+msgid ".session.password_setup_required"
+msgstr "defina sua senha para entrar pela primeira vez."
+
+#: lib/growthpush_router_web/live/session_live/new.ex:46
+#, elixir-autogen, elixir-format
+msgid ".session.submit"
+msgstr "entrar"
+
+#: lib/growthpush_router_web/live/session_live/new.ex:20
+#, elixir-autogen, elixir-format
+msgid ".session.subtitle"
+msgstr "use o acesso criado pela administração."
+
+#: lib/growthpush_router_web/live/session_live/new.ex:19
+#, elixir-autogen, elixir-format
+msgid ".session.title"
+msgstr "entrar"
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:34
+#, elixir-autogen, elixir-format
+msgid ".password_setup.invalid_password"
+msgstr "revise os dados da senha."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:142
+#, elixir-autogen, elixir-format
+msgid ".admin_users.delete_confirm"
+msgstr "excluir este usuário?"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:133
+#, elixir-autogen, elixir-format
+msgid ".admin_users.reset_password_confirm"
+msgstr "resetar a senha deste usuário?"

@@ -54,3 +54,322 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:171
+#, elixir-autogen, elixir-format
+msgid ".admin_nav.sign_out"
+msgstr "sign out"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:166
+#, elixir-autogen, elixir-format
+msgid ".admin_nav.title"
+msgstr "admin"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:64
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.cancel"
+msgstr "cancel"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:61
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.company"
+msgstr "company"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:52
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.email"
+msgstr "email"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:58
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.name"
+msgstr "name"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:65
+#, elixir-autogen, elixir-format
+msgid ".admin_user_form.save"
+msgstr "save"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:99
+#, elixir-autogen, elixir-format
+msgid ".admin_users.actions"
+msgstr "actions"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:110
+#, elixir-autogen, elixir-format
+msgid ".admin_users.admin"
+msgstr "admin"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:39
+#, elixir-autogen, elixir-format
+msgid ".admin_users.cannot_delete_self"
+msgstr "you cannot delete your own admin user."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:96
+#, elixir-autogen, elixir-format
+msgid ".admin_users.company"
+msgstr "company"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:89
+#, elixir-autogen, elixir-format
+msgid ".admin_users.edit_title"
+msgstr "edit user"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:94
+#, elixir-autogen, elixir-format
+msgid ".admin_users.email"
+msgstr "email"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:97
+#, elixir-autogen, elixir-format
+msgid ".admin_users.kind"
+msgstr "type"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:95
+#, elixir-autogen, elixir-format
+msgid ".admin_users.name"
+msgstr "name"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:80
+#, elixir-autogen, elixir-format
+msgid ".admin_users.new_title"
+msgstr "new user"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:73
+#, elixir-autogen, elixir-format
+msgid ".admin_users.new_user"
+msgstr "new user"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:98
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password"
+msgstr "password"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:122
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_pending"
+msgstr "pending"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:197
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_reset"
+msgstr "password reset. the user must define a new password when signing in."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:204
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_reset_failed"
+msgstr "could not reset the password."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:121
+#, elixir-autogen, elixir-format
+msgid ".admin_users.password_set"
+msgstr "set"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:111
+#, elixir-autogen, elixir-format
+msgid ".admin_users.regular_user"
+msgstr "user"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:83
+#, elixir-autogen, elixir-format
+msgid ".admin_users.search_placeholder"
+msgstr "search by email, name, or company"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:68
+#, elixir-autogen, elixir-format
+msgid ".admin_users.section"
+msgstr "admin"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:69
+#, elixir-autogen, elixir-format
+msgid ".admin_users.title"
+msgstr "users"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:105
+#, elixir-autogen, elixir-format
+msgid ".admin_users.user_created"
+msgstr "user created. they can define their password on first access."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:184
+#, elixir-autogen, elixir-format
+msgid ".admin_users.user_deleted"
+msgstr "user deleted."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:121
+#, elixir-autogen, elixir-format
+msgid ".admin_users.user_updated"
+msgstr "user updated."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:95
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:109
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:125
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:30
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:45
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:55
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:188
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:201
+#: lib/growthpush_router_web/user_auth.ex:69
+#, elixir-autogen, elixir-format
+msgid ".auth.admin_required"
+msgstr "you do not have access to administration."
+
+#: lib/growthpush_router_web/user_auth.ex:55
+#: lib/growthpush_router_web/user_auth.ex:76
+#, elixir-autogen, elixir-format
+msgid ".auth.authentication_required"
+msgstr "you need to sign in."
+
+#: lib/growthpush_router_web/user_auth.ex:27
+#, elixir-autogen, elixir-format
+msgid ".auth.signed_out"
+msgstr "signed out."
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:54
+#, elixir-autogen, elixir-format
+msgid ".dashboard.access"
+msgstr "access"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:50
+#, elixir-autogen, elixir-format
+msgid ".dashboard.company"
+msgstr "company"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:46
+#, elixir-autogen, elixir-format
+msgid ".dashboard.email"
+msgstr "email"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:26
+#, elixir-autogen, elixir-format
+msgid ".dashboard.nav_title"
+msgstr "dashboard"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:55
+#, elixir-autogen, elixir-format
+msgid ".dashboard.regular_user"
+msgstr "user"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:36
+#, elixir-autogen, elixir-format
+msgid ".dashboard.section"
+msgstr "dashboard"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:29
+#, elixir-autogen, elixir-format
+msgid ".dashboard.sign_out"
+msgstr "sign out"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:41
+#, elixir-autogen, elixir-format
+msgid ".dashboard.subtitle"
+msgstr "this is the starting dashboard for your account."
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:38
+#, elixir-autogen, elixir-format
+msgid ".dashboard.title"
+msgstr "hello, %{name}"
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:65
+#, elixir-autogen, elixir-format
+msgid ".password_setup.back_to_login"
+msgstr "back to login"
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:47
+#, elixir-autogen, elixir-format
+msgid ".password_setup.email"
+msgstr "email"
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:53
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password"
+msgstr "new password"
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:19
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password_already_set"
+msgstr "this user already has a password. ask an admin for a reset if you cannot sign in."
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:59
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password_confirmation"
+msgstr "confirm password"
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:14
+#, elixir-autogen, elixir-format
+msgid ".password_setup.password_set"
+msgstr "password set."
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:63
+#, elixir-autogen, elixir-format
+msgid ".password_setup.submit"
+msgstr "save and sign in"
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:34
+#, elixir-autogen, elixir-format
+msgid ".password_setup.subtitle"
+msgstr "available only for admin-created users and reset accounts."
+
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:33
+#, elixir-autogen, elixir-format
+msgid ".password_setup.title"
+msgstr "define password"
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:29
+#, elixir-autogen, elixir-format
+msgid ".password_setup.unknown_email"
+msgstr "no user exists with that email."
+
+#: lib/growthpush_router_web/live/session_live/new.ex:33
+#, elixir-autogen, elixir-format
+msgid ".session.email"
+msgstr "email"
+
+#: lib/growthpush_router_web/controllers/session_controller.ex:19
+#, elixir-autogen, elixir-format
+msgid ".session.invalid_credentials"
+msgstr "invalid email or password."
+
+#: lib/growthpush_router_web/live/session_live/new.ex:41
+#, elixir-autogen, elixir-format
+msgid ".session.password"
+msgstr "password"
+
+#: lib/growthpush_router_web/live/session_live/new.ex:49
+#, elixir-autogen, elixir-format
+msgid ".session.password_setup_link"
+msgstr "first access or password reset"
+
+#: lib/growthpush_router_web/controllers/session_controller.ex:14
+#, elixir-autogen, elixir-format
+msgid ".session.password_setup_required"
+msgstr "define your password to sign in for the first time."
+
+#: lib/growthpush_router_web/live/session_live/new.ex:46
+#, elixir-autogen, elixir-format
+msgid ".session.submit"
+msgstr "sign in"
+
+#: lib/growthpush_router_web/live/session_live/new.ex:20
+#, elixir-autogen, elixir-format
+msgid ".session.subtitle"
+msgstr "use the access created by administration."
+
+#: lib/growthpush_router_web/live/session_live/new.ex:19
+#, elixir-autogen, elixir-format
+msgid ".session.title"
+msgstr "sign in"
+
+#: lib/growthpush_router_web/controllers/password_setup_controller.ex:34
+#, elixir-autogen, elixir-format
+msgid ".password_setup.invalid_password"
+msgstr "review the password details."
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:142
+#, elixir-autogen, elixir-format
+msgid ".admin_users.delete_confirm"
+msgstr "delete this user?"
+
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:133
+#, elixir-autogen, elixir-format
+msgid ".admin_users.reset_password_confirm"
+msgstr "reset this user's password?"
