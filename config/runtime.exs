@@ -20,6 +20,17 @@ if System.get_env("PHX_SERVER") do
   config :growthpush_router, GrowthPushRouterWeb.Endpoint, server: true
 end
 
+admin_emails =
+  "GROWTHPUSH_ADMIN_EMAILS"
+  |> System.get_env("")
+  |> String.split(",", trim: true)
+  |> Enum.map(&String.trim/1)
+  |> Enum.reject(&(&1 == ""))
+
+if admin_emails != [] do
+  config :growthpush_router, admin_emails: admin_emails
+end
+
 if config_env() == :dev do
   config :growthpush_router, GrowthPushRouterWeb.Endpoint,
     http: [

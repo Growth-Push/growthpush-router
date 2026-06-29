@@ -18,7 +18,8 @@ config :growthpush_router, Oban,
 config :growthpush_router,
   namespace: GrowthPushRouter,
   ecto_repos: [GrowthPushRouter.Repo],
-  generators: [timestamp_type: :utc_datetime, binary_id: true]
+  generators: [timestamp_type: :utc_datetime, binary_id: true],
+  admin_emails: []
 
 # Configure the endpoint
 config :growthpush_router, GrowthPushRouterWeb.Endpoint,

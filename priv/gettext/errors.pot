@@ -107,3 +107,43 @@ msgstr ""
 
 msgid "must be equal to %{number}"
 msgstr ""
+
+#: lib/growthpush_router/accounts/user.ex:31
+#: lib/growthpush_router/accounts/user.ex:46
+#, elixir-autogen, elixir-format
+msgid ".cant_be_blank"
+msgstr ""
+
+#: lib/growthpush_router/accounts/user.ex:36
+#: lib/growthpush_router/accounts/user.ex:39
+#, elixir-autogen, elixir-format
+msgid ".email_unique_error"
+msgstr ""
+
+#: lib/growthpush_router/accounts/user.ex:50
+#, elixir-autogen, elixir-format
+msgid ".password_confirmation_mismatch"
+msgstr ""
+
+#: lib/growthpush_router/accounts/user.ex:48
+#: lib/growthpush_router/accounts/user.ex:101
+#, elixir-autogen, elixir-format
+msgid ".password_too_long"
+msgstr ""
+
+#: lib/growthpush_router/accounts/user.ex:47
+#, elixir-autogen, elixir-format
+msgid ".password_too_short"
+msgstr ""
+
+#: lib/growthpush_router/accounts/user.ex:33
+#: lib/growthpush_router/accounts/user.ex:34
+#: lib/growthpush_router/accounts/user.ex:35
+#, elixir-autogen, elixir-format
+msgid ".too_long"
+msgstr ""
+
+#: lib/growthpush_router/accounts/user.ex:32
+#, elixir-autogen, elixir-format
+msgid ".wrong_email"
+msgstr ""
