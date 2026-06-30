@@ -377,6 +377,76 @@ defmodule GrowthPushRouter.AgentsTest do
       assert {:ok, _connection} =
                Agents.create_connection(admin, valid_connection_attrs(agent, owner))
     end
+
+    test "owner creates a manual Meta Instagram connection for their own agent", %{
+      owner: owner,
+      agent: agent
+    } do
+      assert {:ok, %Connection{} = connection} =
+               Agents.create_user_connection(
+                 owner,
+                 valid_user_connection_attrs(agent, %{
+                   "provider" => "google",
+                   "channel" => "youtube",
+                   "status" => "error",
+                   "connected_by_user_id" => Ecto.UUID.generate()
+                 })
+               )
+
+      assert connection.agent_id == agent.id
+      assert connection.connected_by_user_id == owner.id
+      assert connection.provider == "meta"
+      assert connection.channel == "instagram"
+      assert connection.status == "active"
+      assert connection.external_account_id == "manual-growth-push-account"
+      assert connection.display_name == "Manual Growth Push"
+      assert connection.access_token_ref == "placeholder://meta/instagram/manual-growth-push"
+    end
+
+    test "owner can create a manual connection with atom keyed attrs", %{
+      owner: owner,
+      agent: agent
+    } do
+      assert {:ok, %Connection{} = connection} =
+               Agents.create_user_connection(owner, %{
+                 agent_id: agent.id,
+                 external_account_id: "manual-atom-account",
+                 display_name: "Manual Atom",
+                 access_token_ref: "placeholder://meta/instagram/manual-atom"
+               })
+
+      assert connection.agent_id == agent.id
+      assert connection.connected_by_user_id == owner.id
+      assert connection.external_account_id == "manual-atom-account"
+    end
+
+    test "admin cannot use user connection creation for another user's agent", %{
+      admin: admin,
+      agent: agent
+    } do
+      assert {:error, :unauthorized} =
+               Agents.create_user_connection(admin, valid_user_connection_attrs(agent))
+    end
+
+    test "owner cannot create a connection for another user's agent", %{
+      admin: admin,
+      owner: owner
+    } do
+      {:ok, other_owner} =
+        Accounts.create_user(admin, %{
+          "email" => "other-manual-connection-owner@example.com",
+          "name" => "Other Owner"
+        })
+
+      {:ok, other_agent} =
+        Agents.create_agent(
+          admin,
+          valid_agent_attrs(other_owner, %{"slug" => "other-manual-connection-agent"})
+        )
+
+      assert {:error, :unauthorized} =
+               Agents.create_user_connection(owner, valid_user_connection_attrs(other_agent))
+    end
   end
 
   defp valid_agent_attrs(%User{} = owner, attrs \\ %{}) do
@@ -401,6 +471,18 @@ defmodule GrowthPushRouter.AgentsTest do
         "external_account_id" => "growth-push-account",
         "display_name" => "Growth Push",
         "access_token_ref" => "vault://meta/instagram/growth-push"
+      },
+      attrs
+    )
+  end
+
+  defp valid_user_connection_attrs(%Agent{} = agent, attrs \\ %{}) do
+    Map.merge(
+      %{
+        "agent_id" => agent.id,
+        "external_account_id" => "manual-growth-push-account",
+        "display_name" => "Manual Growth Push",
+        "access_token_ref" => "placeholder://meta/instagram/manual-growth-push"
       },
       attrs
     )

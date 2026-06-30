@@ -415,6 +415,26 @@ defmodule GrowthPushRouterWeb.AdminUserLiveTest do
       assert html =~ "deve ter pelo menos 16 caracteres"
     end
 
+    test "renders agent connections readonly without token references", %{conn: conn} do
+      {admin, user} = create_user("readonly-connections@example.com")
+      {:ok, agent} = create_agent(admin, user, "readonly-connections-agent")
+
+      {:ok, _connection} =
+        Agents.create_connection(admin, valid_connection_params(agent, user))
+
+      {:ok, _view, html} =
+        conn
+        |> log_in_user(admin)
+        |> live(~p"/admin/users/#{user}/edit")
+
+      assert html =~ "conexões"
+      assert html =~ "Meta Instagram"
+      assert html =~ "Growth Push"
+      assert html =~ "growth-push-account"
+      assert html =~ "ativo"
+      refute html =~ "vault://meta/instagram/growth-push"
+    end
+
     test "deletes an agent only after exact slug confirmation", %{conn: conn} do
       {admin, user} = create_user("delete-agent@example.com")
       {:ok, agent} = create_agent(admin, user, "delete-agent")
@@ -494,6 +514,18 @@ defmodule GrowthPushRouterWeb.AdminUserLiveTest do
     owner
     |> Map.fetch!(:id)
     |> then(&Map.put(valid_agent_form_params(slug), "owner_id", &1))
+  end
+
+  defp valid_connection_params(agent, user) do
+    %{
+      "agent_id" => agent.id,
+      "connected_by_user_id" => user.id,
+      "provider" => "meta",
+      "channel" => "instagram",
+      "external_account_id" => "growth-push-account",
+      "display_name" => "Growth Push",
+      "access_token_ref" => "vault://meta/instagram/growth-push"
+    }
   end
 
   defp endpoint_test_button_disabled?(html) do

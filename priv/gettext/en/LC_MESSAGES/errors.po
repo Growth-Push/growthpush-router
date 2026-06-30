@@ -112,8 +112,8 @@ msgid "must be equal to %{number}"
 msgstr ""
 
 ## From Ecto.Changeset.cast/4
-#: lib/growthpush_router/accounts/user.ex:44
-#: lib/growthpush_router/accounts/user.ex:72
+#: lib/growthpush_router/accounts/user.ex:45
+#: lib/growthpush_router/accounts/user.ex:73
 #: lib/growthpush_router/agents/agent.ex:60
 #: lib/growthpush_router/agents/agent.ex:108
 #: lib/growthpush_router/agents/connection.ex:73
@@ -121,31 +121,31 @@ msgstr ""
 msgid ".cant_be_blank"
 msgstr "can't be blank"
 
-#: lib/growthpush_router/accounts/user.ex:49
-#: lib/growthpush_router/accounts/user.ex:52
+#: lib/growthpush_router/accounts/user.ex:50
+#: lib/growthpush_router/accounts/user.ex:53
 #, elixir-autogen, elixir-format
 msgid ".email_unique_error"
 msgstr "has already been taken"
 
-#: lib/growthpush_router/accounts/user.ex:76
+#: lib/growthpush_router/accounts/user.ex:77
 #, elixir-autogen, elixir-format
 msgid ".password_confirmation_mismatch"
 msgstr "does not match confirmation"
 
-#: lib/growthpush_router/accounts/user.ex:74
-#: lib/growthpush_router/accounts/user.ex:189
+#: lib/growthpush_router/accounts/user.ex:75
+#: lib/growthpush_router/accounts/user.ex:207
 #, elixir-autogen, elixir-format
 msgid ".password_too_long"
 msgstr "must be at most 72 characters"
 
-#: lib/growthpush_router/accounts/user.ex:73
+#: lib/growthpush_router/accounts/user.ex:74
 #, elixir-autogen, elixir-format
 msgid ".password_too_short"
 msgstr "must be at least 8 characters"
 
-#: lib/growthpush_router/accounts/user.ex:46
 #: lib/growthpush_router/accounts/user.ex:47
 #: lib/growthpush_router/accounts/user.ex:48
+#: lib/growthpush_router/accounts/user.ex:49
 #: lib/growthpush_router/agents/agent.ex:62
 #: lib/growthpush_router/agents/agent.ex:68
 #: lib/growthpush_router/agents/connection.ex:74
@@ -157,7 +157,7 @@ msgstr "must be at least 8 characters"
 msgid ".too_long"
 msgstr "must be at most %{count} characters"
 
-#: lib/growthpush_router/accounts/user.ex:45
+#: lib/growthpush_router/accounts/user.ex:46
 #, elixir-autogen, elixir-format
 msgid ".wrong_email"
 msgstr "has invalid format"

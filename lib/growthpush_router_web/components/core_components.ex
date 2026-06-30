@@ -383,7 +383,10 @@ defmodule GrowthPushRouterWeb.CoreComponents do
         <select
           id={@id}
           name={@name}
-          class={[@class || "w-full select", @errors != [] && (@error_class || "select-error")]}
+          class={[
+            @class || "w-full select border border-base-300 bg-base-100 focus:border-primary",
+            @errors != [] && (@error_class || "select-error")
+          ]}
           multiple={@multiple}
           {@rest}
         >
@@ -405,7 +408,7 @@ defmodule GrowthPushRouterWeb.CoreComponents do
           id={@id}
           name={@name}
           class={[
-            @class || "w-full textarea",
+            @class || "w-full textarea border border-base-300 bg-base-100 focus:border-primary",
             @errors != [] && (@error_class || "textarea-error")
           ]}
           {@rest}
@@ -428,7 +431,7 @@ defmodule GrowthPushRouterWeb.CoreComponents do
           id={@id}
           value={Phoenix.HTML.Form.normalize_value(@type, @value)}
           class={[
-            @class || "w-full input",
+            @class || "w-full input border border-base-300 bg-base-100 focus:border-primary",
             @errors != [] && (@error_class || "input-error")
           ]}
           {@rest}

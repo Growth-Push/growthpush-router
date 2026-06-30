@@ -101,8 +101,8 @@ msgstr "deve ser maior ou igual a %{number}"
 msgid "must be equal to %{number}"
 msgstr "deve ser igual a %{number}"
 
-#: lib/growthpush_router/accounts/user.ex:44
-#: lib/growthpush_router/accounts/user.ex:72
+#: lib/growthpush_router/accounts/user.ex:45
+#: lib/growthpush_router/accounts/user.ex:73
 #: lib/growthpush_router/agents/agent.ex:60
 #: lib/growthpush_router/agents/agent.ex:108
 #: lib/growthpush_router/agents/connection.ex:73
@@ -110,31 +110,31 @@ msgstr "deve ser igual a %{number}"
 msgid ".cant_be_blank"
 msgstr "não pode ficar em branco"
 
-#: lib/growthpush_router/accounts/user.ex:49
-#: lib/growthpush_router/accounts/user.ex:52
+#: lib/growthpush_router/accounts/user.ex:50
+#: lib/growthpush_router/accounts/user.ex:53
 #, elixir-autogen, elixir-format
 msgid ".email_unique_error"
 msgstr "já está em uso"
 
-#: lib/growthpush_router/accounts/user.ex:76
+#: lib/growthpush_router/accounts/user.ex:77
 #, elixir-autogen, elixir-format
 msgid ".password_confirmation_mismatch"
 msgstr "não corresponde à confirmação"
 
-#: lib/growthpush_router/accounts/user.ex:74
-#: lib/growthpush_router/accounts/user.ex:189
+#: lib/growthpush_router/accounts/user.ex:75
+#: lib/growthpush_router/accounts/user.ex:207
 #, elixir-autogen, elixir-format
 msgid ".password_too_long"
 msgstr "deve ter no máximo 72 caracteres"
 
-#: lib/growthpush_router/accounts/user.ex:73
+#: lib/growthpush_router/accounts/user.ex:74
 #, elixir-autogen, elixir-format
 msgid ".password_too_short"
 msgstr "deve ter pelo menos 8 caracteres"
 
-#: lib/growthpush_router/accounts/user.ex:46
 #: lib/growthpush_router/accounts/user.ex:47
 #: lib/growthpush_router/accounts/user.ex:48
+#: lib/growthpush_router/accounts/user.ex:49
 #: lib/growthpush_router/agents/agent.ex:62
 #: lib/growthpush_router/agents/agent.ex:68
 #: lib/growthpush_router/agents/connection.ex:74
@@ -146,7 +146,7 @@ msgstr "deve ter pelo menos 8 caracteres"
 msgid ".too_long"
 msgstr "deve ter no máximo %{count} caracteres"
 
-#: lib/growthpush_router/accounts/user.ex:45
+#: lib/growthpush_router/accounts/user.ex:46
 #, elixir-autogen, elixir-format
 msgid ".wrong_email"
 msgstr "tem formato inválido"

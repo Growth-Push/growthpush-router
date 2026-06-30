@@ -61,6 +61,8 @@ defmodule GrowthPushRouterWeb.Router do
 
     delete "/logout", SessionController, :delete
     live "/dashboard", DashboardLive.Index, :index
+    get "/connect/instagram", InstagramAuthController, :connect
+    get "/auth/instagram/callback", InstagramAuthController, :callback
   end
 
   scope "/admin", GrowthPushRouterWeb do

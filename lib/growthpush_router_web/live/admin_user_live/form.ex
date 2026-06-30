@@ -7,6 +7,7 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
   alias GrowthPushRouter.Accounts.User
   alias GrowthPushRouter.Agents
   alias GrowthPushRouter.Agents.Agent
+  alias GrowthPushRouter.Agents.Connection
 
   @impl true
   def mount(_params, session, socket) do
@@ -21,6 +22,7 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
          form: nil,
          agent: nil,
          agent_form: nil,
+         agent_connections: [],
          agent_delete_modal?: false,
          agent_delete_confirmation: "",
          show_agent_secret?: false
@@ -291,6 +293,51 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
             </div>
           </.form>
         </.section_card>
+
+        <.section_card
+          :if={@live_action == :edit && @agent && @agent.id}
+          title={gettext(".admin_connections.title")}
+          subtitle={gettext(".admin_connections.subtitle")}
+        >
+          <.info_box :if={@agent_connections == []}>
+            {gettext(".admin_connections.empty")}
+          </.info_box>
+
+          <div :if={@agent_connections != []} class="overflow-x-auto">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>{gettext(".admin_connections.provider")}</th>
+                  <th>{gettext(".admin_connections.account")}</th>
+                  <th>{gettext(".admin_connections.status")}</th>
+                  <th>{gettext(".admin_connections.last_connected_at")}</th>
+                  <th>{gettext(".admin_connections.last_checked_at")}</th>
+                  <th>{gettext(".admin_connections.last_error_at")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr :for={connection <- @agent_connections}>
+                  <td>{connection_label(connection)}</td>
+                  <td>
+                    <span class="font-medium">{connection.display_name}</span>
+                    <span class="block text-xs text-base-content/60">
+                      {connection.external_account_id}
+                    </span>
+                  </td>
+                  <td>
+                    <.status_badge
+                      status={connection.status}
+                      label={connection_status_label(connection.status)}
+                    />
+                  </td>
+                  <td>{format_datetime(connection.last_connected_at)}</td>
+                  <td>{format_datetime(connection.last_checked_at)}</td>
+                  <td>{format_datetime(connection.last_error_at)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </.section_card>
       </section>
 
       <.confirm_modal
@@ -323,6 +370,7 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
     |> assign_form(Accounts.change_user(user))
     |> assign(:agent, nil)
     |> assign(:agent_form, nil)
+    |> assign(:agent_connections, [])
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -449,6 +497,7 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
         socket
         |> assign(:agent, agent)
         |> assign_agent_form(Agents.change_agent(agent))
+        |> assign_agent_connections(agent)
 
       {:error, :unauthorized} ->
         socket
@@ -459,6 +508,21 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
 
   defp assign_agent_form(socket, %Ecto.Changeset{} = changeset) do
     assign(socket, :agent_form, Phoenix.Component.to_form(changeset))
+  end
+
+  defp assign_agent_connections(socket, %Agent{id: nil}),
+    do: assign(socket, :agent_connections, [])
+
+  defp assign_agent_connections(socket, %Agent{id: agent_id}) do
+    case Agents.list_connections(socket.assigns.current_user, agent_id: agent_id) do
+      {:ok, connections} ->
+        assign(socket, :agent_connections, connections)
+
+      {:error, :unauthorized} ->
+        socket
+        |> assign(:agent_connections, [])
+        |> put_flash(:error, gettext(".auth.admin_required"))
+    end
   end
 
   defp agent_params(socket, params) do
@@ -537,6 +601,25 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
   defp agent_status_label("inactive"), do: gettext(".admin_agent_form.status_inactive")
   defp agent_status_label("error"), do: gettext(".admin_agent_form.status_error")
   defp agent_status_label(status), do: status
+
+  defp connection_label(%Connection{provider: "meta", channel: "instagram"}) do
+    gettext(".admin_connections.meta_instagram")
+  end
+
+  defp connection_label(%Connection{provider: provider, channel: channel}) do
+    "#{provider} / #{channel}"
+  end
+
+  defp connection_status_label("active"), do: gettext(".admin_agent_form.status_active")
+  defp connection_status_label("inactive"), do: gettext(".admin_agent_form.status_inactive")
+  defp connection_status_label("error"), do: gettext(".admin_agent_form.status_error")
+  defp connection_status_label(status), do: status
+
+  defp format_datetime(nil), do: "-"
+
+  defp format_datetime(%DateTime{} = datetime) do
+    Calendar.strftime(datetime, "%Y-%m-%d %H:%M")
+  end
 
   defp shared_secret_label(%Agent{id: nil}), do: gettext(".admin_agent_form.shared_secret")
   defp shared_secret_label(%Agent{}), do: gettext(".admin_agent_form.shared_secret_optional")

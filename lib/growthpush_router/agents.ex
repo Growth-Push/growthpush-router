@@ -277,6 +277,59 @@ defmodule GrowthPushRouter.Agents do
   def create_connection(_admin_user, _attrs), do: {:error, :unauthorized}
 
   @doc """
+  Creates a manual Meta Instagram connection for an agent owned by the actor.
+
+  User-controlled attrs are limited to the agent id, external account id,
+  display name, and token reference. Provider, channel, status, and connected
+  user are derived by the context.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "connections-user-create-doc@example.com", "name" => "Connections User Create Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "connections-user-create-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_user_connection(owner, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "external_account_id" => "connections-user-create-doc-account",
+      ...>     "display_name" => "Connections User Create Doc",
+      ...>     "access_token_ref" => "placeholder://meta/instagram/connections-user-create-doc"
+      ...>   })
+      iex> {connection.provider, connection.channel, connection.connected_by_user_id}
+      {"meta", "instagram", owner.id}
+
+  """
+  def create_user_connection(%User{id: user_id} = actor_user, %{"agent_id" => agent_id} = attrs)
+      when is_binary(user_id) and is_binary(agent_id) do
+    with {:ok, %Agent{} = agent} <- fetch_connection_agent(actor_user, agent_id) do
+      attrs
+      |> user_connection_attrs(actor_user, agent)
+      |> do_create_connection()
+    end
+  end
+
+  def create_user_connection(%User{} = actor_user, %{agent_id: agent_id} = attrs)
+      when is_binary(agent_id) do
+    attrs =
+      attrs
+      |> stringify_keys()
+      |> Map.put("agent_id", agent_id)
+
+    create_user_connection(actor_user, attrs)
+  end
+
+  def create_user_connection(_actor_user, _attrs), do: {:error, :unauthorized}
+
+  @doc """
   Returns a connection changeset.
 
   ## Examples
@@ -361,6 +414,13 @@ defmodule GrowthPushRouter.Agents do
     where(query, [a], a.owner_id == ^owner_id)
   end
 
+  defp filter_agent_query(query, id: id) when is_binary(id) do
+    case Ecto.UUID.cast(id) do
+      {:ok, id} -> where(query, [a], a.id == ^id)
+      :error -> where(query, false)
+    end
+  end
+
   defp filter_agent_query(query, slug: slug) when is_binary(slug) do
     where(query, [a], a.slug == ^GrowthPushRouter.Helpers.normalize_string(slug))
   end
@@ -393,6 +453,32 @@ defmodule GrowthPushRouter.Agents do
   end
 
   defp filter_connection_query(query, _), do: query
+
+  defp fetch_connection_agent(%User{id: owner_id} = actor_user, agent_id)
+       when is_binary(owner_id) and is_binary(agent_id) do
+    case list_agents(actor_user, id: agent_id, owner_id: owner_id) do
+      {:ok, [%Agent{} = agent]} -> {:ok, agent}
+      {:ok, []} -> {:error, :unauthorized}
+    end
+  end
+
+  defp fetch_connection_agent(_actor_user, _agent_id), do: {:error, :unauthorized}
+
+  defp user_connection_attrs(attrs, %User{id: user_id}, %Agent{id: agent_id}) do
+    attrs
+    |> Map.take(["external_account_id", "display_name", "access_token_ref"])
+    |> Map.merge(%{
+      "agent_id" => agent_id,
+      "connected_by_user_id" => user_id,
+      "provider" => "meta",
+      "channel" => "instagram",
+      "status" => "active"
+    })
+  end
+
+  defp stringify_keys(attrs) when is_map(attrs) do
+    Map.new(attrs, fn {key, value} -> {to_string(key), value} end)
+  end
 
   defp force_owner_filter(opts, owner_id) do
     opts

@@ -146,5 +146,52 @@ defmodule GrowthPushRouterWeb.AuthControllerTest do
     assert :error = Accounts.authenticate_user(user.email, "strong-pass")
   end
 
+  test "instagram placeholder routes require authentication", %{conn: conn} do
+    for path <- [~p"/connect/instagram", ~p"/auth/instagram/callback"] do
+      conn =
+        conn
+        |> recycle()
+        |> get(path)
+
+      assert redirected_to(conn) == ~p"/login"
+    end
+  end
+
+  test "instagram connect placeholder redirects authenticated users", %{conn: conn, admin: admin} do
+    {:ok, user} =
+      Accounts.create_user(admin, %{
+        "email" => "instagram-placeholder@example.com",
+        "name" => "Instagram Placeholder"
+      })
+
+    conn =
+      conn
+      |> log_in_user(user)
+      |> get(~p"/connect/instagram")
+
+    assert redirected_to(conn) == ~p"/dashboard"
+    assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "OAuth"
+  end
+
+  test "instagram callback placeholder redirects authenticated users", %{conn: conn, admin: admin} do
+    {:ok, user} =
+      Accounts.create_user(admin, %{
+        "email" => "instagram-callback-placeholder@example.com",
+        "name" => "Instagram Callback Placeholder"
+      })
+
+    conn =
+      conn
+      |> log_in_user(user)
+      |> get(~p"/auth/instagram/callback")
+
+    assert redirected_to(conn) == ~p"/dashboard"
+    assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "callback"
+  end
+
+  defp log_in_user(conn, %User{} = user) do
+    Plug.Test.init_test_session(conn, user_id: user.id, live_socket_id: live_socket_id(user))
+  end
+
   defp live_socket_id(%User{id: id}), do: "users_sessions:#{Base.url_encode64(id)}"
 end
