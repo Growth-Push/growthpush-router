@@ -19,7 +19,8 @@ config :growthpush_router,
   namespace: GrowthPushRouter,
   ecto_repos: [GrowthPushRouter.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true],
-  admin_emails: []
+  admin_emails: [],
+  mode: "both"
 
 # Configure the endpoint
 config :growthpush_router, GrowthPushRouterWeb.Endpoint,
