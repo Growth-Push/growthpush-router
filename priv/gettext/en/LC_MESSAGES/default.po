@@ -224,47 +224,47 @@ msgstr "you need to sign in."
 msgid ".auth.signed_out"
 msgstr "signed out."
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:61
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:65
 #, elixir-autogen, elixir-format
 msgid ".dashboard.access"
 msgstr "access"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:57
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:61
 #, elixir-autogen, elixir-format
 msgid ".dashboard.company"
 msgstr "company"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:53
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:57
 #, elixir-autogen, elixir-format
 msgid ".dashboard.email"
 msgstr "email"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:33
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:37
 #, elixir-autogen, elixir-format
 msgid ".dashboard.nav_title"
 msgstr "dashboard"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:62
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:66
 #, elixir-autogen, elixir-format
 msgid ".dashboard.regular_user"
 msgstr "user"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:43
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:47
 #, elixir-autogen, elixir-format
 msgid ".dashboard.section"
 msgstr "dashboard"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:36
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:40
 #, elixir-autogen, elixir-format
 msgid ".dashboard.sign_out"
 msgstr "sign out"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:48
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:52
 #, elixir-autogen, elixir-format
 msgid ".dashboard.subtitle"
 msgstr "this is the starting dashboard for your account."
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:45
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:49
 #, elixir-autogen, elixir-format
 msgid ".dashboard.title"
 msgstr "hello, %{name}"

@@ -114,6 +114,8 @@ msgstr ""
 ## From Ecto.Changeset.cast/4
 #: lib/growthpush_router/accounts/user.ex:44
 #: lib/growthpush_router/accounts/user.ex:72
+#: lib/growthpush_router/agents/agent.ex:58
+#: lib/growthpush_router/agents/agent.ex:106
 #, elixir-autogen, elixir-format
 msgid ".cant_be_blank"
 msgstr "can't be blank"
@@ -143,6 +145,8 @@ msgstr "must be at least 8 characters"
 #: lib/growthpush_router/accounts/user.ex:46
 #: lib/growthpush_router/accounts/user.ex:47
 #: lib/growthpush_router/accounts/user.ex:48
+#: lib/growthpush_router/agents/agent.ex:60
+#: lib/growthpush_router/agents/agent.ex:66
 #, elixir-autogen, elixir-format
 msgid ".too_long"
 msgstr "must be at most %{count} characters"
@@ -151,3 +155,39 @@ msgstr "must be at most %{count} characters"
 #, elixir-autogen, elixir-format
 msgid ".wrong_email"
 msgstr "has invalid format"
+
+#: lib/growthpush_router/agents/agent.ex:132
+#, elixir-autogen, elixir-format
+msgid ".agent_endpoint_url_invalid"
+msgstr "must be an http or https URL"
+
+#: lib/growthpush_router/agents/agent.ex:89
+#, elixir-autogen, elixir-format
+msgid ".agent_owner_not_found"
+msgstr "does not exist"
+
+#: lib/growthpush_router/agents/agent.ex:79
+#, elixir-autogen, elixir-format
+msgid ".agent_secret_too_long"
+msgstr "must be at most 72 bytes"
+
+#: lib/growthpush_router/agents/agent.ex:74
+#, elixir-autogen, elixir-format
+msgid ".agent_secret_too_short"
+msgstr "must be at least 16 characters"
+
+#: lib/growthpush_router/agents/agent.ex:62
+#, elixir-autogen, elixir-format
+msgid ".agent_slug_format"
+msgstr "must use lowercase letters, numbers, and hyphens"
+
+#: lib/growthpush_router/agents/agent.ex:83
+#: lib/growthpush_router/agents/agent.ex:87
+#, elixir-autogen, elixir-format
+msgid ".agent_slug_unique_error"
+msgstr "has already been taken"
+
+#: lib/growthpush_router/agents/agent.ex:70
+#, elixir-autogen, elixir-format
+msgid ".agent_status_invalid"
+msgstr "is not a valid agent status"

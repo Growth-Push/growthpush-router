@@ -103,6 +103,8 @@ msgstr "deve ser igual a %{number}"
 
 #: lib/growthpush_router/accounts/user.ex:44
 #: lib/growthpush_router/accounts/user.ex:72
+#: lib/growthpush_router/agents/agent.ex:58
+#: lib/growthpush_router/agents/agent.ex:106
 #, elixir-autogen, elixir-format
 msgid ".cant_be_blank"
 msgstr "não pode ficar em branco"
@@ -132,6 +134,8 @@ msgstr "deve ter pelo menos 8 caracteres"
 #: lib/growthpush_router/accounts/user.ex:46
 #: lib/growthpush_router/accounts/user.ex:47
 #: lib/growthpush_router/accounts/user.ex:48
+#: lib/growthpush_router/agents/agent.ex:60
+#: lib/growthpush_router/agents/agent.ex:66
 #, elixir-autogen, elixir-format
 msgid ".too_long"
 msgstr "deve ter no máximo %{count} caracteres"
@@ -140,3 +144,39 @@ msgstr "deve ter no máximo %{count} caracteres"
 #, elixir-autogen, elixir-format
 msgid ".wrong_email"
 msgstr "tem formato inválido"
+
+#: lib/growthpush_router/agents/agent.ex:132
+#, elixir-autogen, elixir-format
+msgid ".agent_endpoint_url_invalid"
+msgstr "deve ser uma URL http ou https"
+
+#: lib/growthpush_router/agents/agent.ex:89
+#, elixir-autogen, elixir-format
+msgid ".agent_owner_not_found"
+msgstr "não existe"
+
+#: lib/growthpush_router/agents/agent.ex:79
+#, elixir-autogen, elixir-format
+msgid ".agent_secret_too_long"
+msgstr "deve ter no máximo 72 bytes"
+
+#: lib/growthpush_router/agents/agent.ex:74
+#, elixir-autogen, elixir-format
+msgid ".agent_secret_too_short"
+msgstr "deve ter pelo menos 16 caracteres"
+
+#: lib/growthpush_router/agents/agent.ex:62
+#, elixir-autogen, elixir-format
+msgid ".agent_slug_format"
+msgstr "deve usar letras minúsculas, números e hífens"
+
+#: lib/growthpush_router/agents/agent.ex:83
+#: lib/growthpush_router/agents/agent.ex:87
+#, elixir-autogen, elixir-format
+msgid ".agent_slug_unique_error"
+msgstr "já está em uso"
+
+#: lib/growthpush_router/agents/agent.ex:70
+#, elixir-autogen, elixir-format
+msgid ".agent_status_invalid"
+msgstr "não é um status de agente válido"
