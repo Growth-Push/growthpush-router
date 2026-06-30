@@ -11,7 +11,7 @@ defmodule GrowthPushRouterWeb.Endpoint do
     same_site: "Lax"
   ]
 
-  socket "/live", Phoenix.LiveView.Socket,
+  socket "/live", GrowthPushRouterWeb.LiveSocket,
     websocket: [connect_info: [session: @session_options]],
     longpoll: [connect_info: [session: @session_options]]
 

@@ -20,6 +20,12 @@ if System.get_env("PHX_SERVER") do
   config :growthpush_router, GrowthPushRouterWeb.Endpoint, server: true
 end
 
+config :growthpush_router,
+  mode:
+    "GROWTHPUSH_MODE"
+    |> System.get_env("both")
+    |> GrowthPushRouter.Helpers.normalize_string()
+
 admin_emails =
   "GROWTHPUSH_ADMIN_EMAILS"
   |> System.get_env("")

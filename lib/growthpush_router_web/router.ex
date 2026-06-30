@@ -1,6 +1,14 @@
 defmodule GrowthPushRouterWeb.Router do
   use GrowthPushRouterWeb, :router
 
+  pipeline :edge do
+    plug GrowthPushRouterWeb.RuntimeModePlug, {:require, :edge}
+  end
+
+  pipeline :agent do
+    plug GrowthPushRouterWeb.RuntimeModePlug, {:require, :agent}
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -28,13 +36,13 @@ defmodule GrowthPushRouterWeb.Router do
   end
 
   scope "/", GrowthPushRouterWeb do
-    pipe_through :browser
+    pipe_through [:edge, :browser]
 
     get "/", PageController, :home
   end
 
   scope "/", GrowthPushRouterWeb do
-    pipe_through [:browser, :redirect_if_authenticated]
+    pipe_through [:edge, :browser, :redirect_if_authenticated]
 
     live "/login", SessionLive.New, :new
     post "/login", SessionController, :create
@@ -43,14 +51,14 @@ defmodule GrowthPushRouterWeb.Router do
   end
 
   scope "/", GrowthPushRouterWeb do
-    pipe_through [:browser, :authenticated]
+    pipe_through [:edge, :browser, :authenticated]
 
     delete "/logout", SessionController, :delete
     live "/dashboard", DashboardLive.Index, :index
   end
 
   scope "/admin", GrowthPushRouterWeb do
-    pipe_through [:browser, :admin]
+    pipe_through [:edge, :browser, :admin]
 
     live "/users", AdminUserLive.Index, :index
     live "/users/new", AdminUserLive.Form, :new
@@ -59,7 +67,7 @@ defmodule GrowthPushRouterWeb.Router do
 
   # Other scopes may use custom stacks.
   # scope "/api", GrowthPushRouterWeb do
-  #   pipe_through :api
+  #   pipe_through [:agent, :api]
   # end
 
   # Enable LiveDashboard in development
@@ -72,7 +80,7 @@ defmodule GrowthPushRouterWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through :browser
+      pipe_through [:edge, :browser]
 
       live_dashboard "/dashboard", metrics: GrowthPushRouterWeb.Telemetry
     end
