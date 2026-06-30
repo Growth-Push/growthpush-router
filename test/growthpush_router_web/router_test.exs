@@ -22,6 +22,15 @@ defmodule GrowthPushRouterWeb.RouterTest do
     assert redirected_to(conn) == ~p"/login"
   end
 
+  test "health check is available in agent mode", %{conn: conn} do
+    Application.put_env(:growthpush_router, :mode, "agent")
+
+    conn = get(conn, ~p"/health")
+
+    assert conn.status == 200
+    assert conn.resp_body == "ok"
+  end
+
   test "edge mode enables admin browser routes", %{conn: conn} do
     Application.put_env(:growthpush_router, :mode, "edge")
     admin = create_admin()
@@ -37,7 +46,7 @@ defmodule GrowthPushRouterWeb.RouterTest do
   test "agent mode disables browser routes", %{conn: conn} do
     Application.put_env(:growthpush_router, :mode, "agent")
 
-    for path <- [~p"/", ~p"/login", ~p"/admin/users"] do
+    for path <- [~p"/", ~p"/login", ~p"/privacy", ~p"/data-deletion", ~p"/admin/users"] do
       conn =
         conn
         |> recycle()

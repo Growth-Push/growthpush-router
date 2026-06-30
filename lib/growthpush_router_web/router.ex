@@ -36,9 +36,15 @@ defmodule GrowthPushRouterWeb.Router do
   end
 
   scope "/", GrowthPushRouterWeb do
+    get "/health", HealthController, :show
+  end
+
+  scope "/", GrowthPushRouterWeb do
     pipe_through [:edge, :browser]
 
     get "/", PageController, :home
+    live "/privacy", PrivacyLive.Show, :show
+    live "/data-deletion", DataDeletionLive.Show, :show
   end
 
   scope "/", GrowthPushRouterWeb do

@@ -55,231 +55,231 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:171
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:178
 #, elixir-autogen, elixir-format
 msgid ".admin_nav.sign_out"
 msgstr "sign out"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:166
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:173
 #, elixir-autogen, elixir-format
 msgid ".admin_nav.title"
 msgstr "admin"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:64
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:77
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.cancel"
 msgstr "cancel"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:61
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:74
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.company"
 msgstr "company"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:52
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:65
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.email"
 msgstr "email"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:58
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:71
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.name"
 msgstr "name"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:65
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:78
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.save"
 msgstr "save"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:99
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:106
 #, elixir-autogen, elixir-format
 msgid ".admin_users.actions"
 msgstr "actions"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:110
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:117
 #, elixir-autogen, elixir-format
 msgid ".admin_users.admin"
 msgstr "admin"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:39
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:41
 #, elixir-autogen, elixir-format
 msgid ".admin_users.cannot_delete_self"
 msgstr "you cannot delete your own admin user."
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:96
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:103
 #, elixir-autogen, elixir-format
 msgid ".admin_users.company"
 msgstr "company"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:89
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:102
 #, elixir-autogen, elixir-format
 msgid ".admin_users.edit_title"
 msgstr "edit user"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:94
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:101
 #, elixir-autogen, elixir-format
 msgid ".admin_users.email"
 msgstr "email"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:97
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:104
 #, elixir-autogen, elixir-format
 msgid ".admin_users.kind"
 msgstr "type"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:95
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:102
 #, elixir-autogen, elixir-format
 msgid ".admin_users.name"
 msgstr "name"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:80
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:93
 #, elixir-autogen, elixir-format
 msgid ".admin_users.new_title"
 msgstr "new user"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:73
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:80
 #, elixir-autogen, elixir-format
 msgid ".admin_users.new_user"
 msgstr "new user"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:98
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:105
 #, elixir-autogen, elixir-format
 msgid ".admin_users.password"
 msgstr "password"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:122
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:129
 #, elixir-autogen, elixir-format
 msgid ".admin_users.password_pending"
 msgstr "pending"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:197
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:204
 #, elixir-autogen, elixir-format
 msgid ".admin_users.password_reset"
 msgstr "password reset. the user must define a new password when signing in."
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:204
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:211
 #, elixir-autogen, elixir-format
 msgid ".admin_users.password_reset_failed"
 msgstr "could not reset the password."
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:121
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:128
 #, elixir-autogen, elixir-format
 msgid ".admin_users.password_set"
 msgstr "set"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:111
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:118
 #, elixir-autogen, elixir-format
 msgid ".admin_users.regular_user"
 msgstr "user"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:83
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:90
 #, elixir-autogen, elixir-format
 msgid ".admin_users.search_placeholder"
 msgstr "search by email, name, or company"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:68
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:75
 #, elixir-autogen, elixir-format
 msgid ".admin_users.section"
 msgstr "admin"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:69
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:76
 #, elixir-autogen, elixir-format
 msgid ".admin_users.title"
 msgstr "users"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:105
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:118
 #, elixir-autogen, elixir-format
 msgid ".admin_users.user_created"
 msgstr "user created. they can define their password on first access."
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:184
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:191
 #, elixir-autogen, elixir-format
 msgid ".admin_users.user_deleted"
 msgstr "user deleted."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:121
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:134
 #, elixir-autogen, elixir-format
 msgid ".admin_users.user_updated"
 msgstr "user updated."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:95
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:109
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:125
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:30
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:45
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:55
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:188
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:201
-#: lib/growthpush_router_web/user_auth.ex:69
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:108
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:122
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:138
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:32
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:47
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:57
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:195
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:208
+#: lib/growthpush_router_web/user_auth.ex:76
 #, elixir-autogen, elixir-format
 msgid ".auth.admin_required"
 msgstr "you do not have access to administration."
 
-#: lib/growthpush_router_web/user_auth.ex:55
-#: lib/growthpush_router_web/user_auth.ex:76
+#: lib/growthpush_router_web/user_auth.ex:62
+#: lib/growthpush_router_web/user_auth.ex:83
 #, elixir-autogen, elixir-format
 msgid ".auth.authentication_required"
 msgstr "you need to sign in."
 
-#: lib/growthpush_router_web/user_auth.ex:27
+#: lib/growthpush_router_web/user_auth.ex:34
 #, elixir-autogen, elixir-format
 msgid ".auth.signed_out"
 msgstr "signed out."
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:54
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:61
 #, elixir-autogen, elixir-format
 msgid ".dashboard.access"
 msgstr "access"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:50
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:57
 #, elixir-autogen, elixir-format
 msgid ".dashboard.company"
 msgstr "company"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:46
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:53
 #, elixir-autogen, elixir-format
 msgid ".dashboard.email"
 msgstr "email"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:26
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:33
 #, elixir-autogen, elixir-format
 msgid ".dashboard.nav_title"
 msgstr "dashboard"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:55
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:62
 #, elixir-autogen, elixir-format
 msgid ".dashboard.regular_user"
 msgstr "user"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:36
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:43
 #, elixir-autogen, elixir-format
 msgid ".dashboard.section"
 msgstr "dashboard"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:29
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:36
 #, elixir-autogen, elixir-format
 msgid ".dashboard.sign_out"
 msgstr "sign out"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:41
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:48
 #, elixir-autogen, elixir-format
 msgid ".dashboard.subtitle"
 msgstr "this is the starting dashboard for your account."
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:38
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:45
 #, elixir-autogen, elixir-format
 msgid ".dashboard.title"
 msgstr "hello, %{name}"
 
-#: lib/growthpush_router_web/live/password_setup_live/new.ex:65
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:66
 #, elixir-autogen, elixir-format
 msgid ".password_setup.back_to_login"
 msgstr "back to login"
 
-#: lib/growthpush_router_web/live/password_setup_live/new.ex:47
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:48
 #, elixir-autogen, elixir-format
 msgid ".password_setup.email"
 msgstr "email"
 
-#: lib/growthpush_router_web/live/password_setup_live/new.ex:53
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:54
 #, elixir-autogen, elixir-format
 msgid ".password_setup.password"
 msgstr "new password"
@@ -289,7 +289,7 @@ msgstr "new password"
 msgid ".password_setup.password_already_set"
 msgstr "this user already has a password. ask an admin for a reset if you cannot sign in."
 
-#: lib/growthpush_router_web/live/password_setup_live/new.ex:59
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:60
 #, elixir-autogen, elixir-format
 msgid ".password_setup.password_confirmation"
 msgstr "confirm password"
@@ -299,7 +299,7 @@ msgstr "confirm password"
 msgid ".password_setup.password_set"
 msgstr "password set."
 
-#: lib/growthpush_router_web/live/password_setup_live/new.ex:63
+#: lib/growthpush_router_web/live/password_setup_live/new.ex:64
 #, elixir-autogen, elixir-format
 msgid ".password_setup.submit"
 msgstr "save and sign in"
@@ -364,12 +364,97 @@ msgstr "sign in"
 msgid ".password_setup.invalid_password"
 msgstr "review the password details."
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:142
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:149
 #, elixir-autogen, elixir-format
 msgid ".admin_users.delete_confirm"
 msgstr "delete this user?"
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:133
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:140
 #, elixir-autogen, elixir-format
 msgid ".admin_users.reset_password_confirm"
 msgstr "reset this user's password?"
+
+#: lib/growthpush_router_web/live/data_deletion_live/show.ex:23
+#, elixir-autogen, elixir-format
+msgid ".data_deletion.instructions"
+msgstr "To request deletion, contact %{contact} and include the Meta account, Page, Instagram account, or business identifier related to the request."
+
+#: lib/growthpush_router_web/live/data_deletion_live/show.ex:32
+#, elixir-autogen, elixir-format
+msgid ".data_deletion.operator_contact"
+msgstr "the app operator through the contact channel published for this Meta app"
+
+#: lib/growthpush_router_web/live/data_deletion_live/show.ex:24
+#, elixir-autogen, elixir-format
+msgid ".data_deletion.outcome"
+msgstr "We will delete app-controlled data associated with the request, or confirm when no app-controlled data is found."
+
+#: lib/growthpush_router_web/live/data_deletion_live/show.ex:8
+#, elixir-autogen, elixir-format
+msgid ".data_deletion.page_title"
+msgstr "Data deletion"
+
+#: lib/growthpush_router_web/live/data_deletion_live/show.ex:22
+#, elixir-autogen, elixir-format
+msgid ".data_deletion.scope"
+msgstr "Data deletion applies to app user account data, agent and connection configuration, provider account identifiers, and event data controlled by Growth Push Router. It does not delete data stored by Meta or by downstream client systems unless this app controls that deletion path."
+
+#: lib/growthpush_router_web/live/data_deletion_live/show.ex:16
+#, elixir-autogen, elixir-format
+msgid ".data_deletion.section"
+msgstr "privacy"
+
+#: lib/growthpush_router_web/live/data_deletion_live/show.ex:18
+#, elixir-autogen, elixir-format
+msgid ".data_deletion.subtitle"
+msgstr "Use this page to request deletion of data controlled by this app."
+
+#: lib/growthpush_router_web/live/data_deletion_live/show.ex:17
+#, elixir-autogen, elixir-format
+msgid ".data_deletion.title"
+msgstr "data deletion"
+
+#: lib/growthpush_router_web/live/privacy_live/show.ex:23
+#, elixir-autogen, elixir-format
+msgid ".privacy.data_control"
+msgstr "For integrations, the app may store agent and connection settings, provider account identifiers, channel details, authorized scopes, token references, shared secret hashes, event metadata, and webhook payloads needed to receive and route events."
+
+#: lib/growthpush_router_web/live/privacy_live/show.ex:22
+#, elixir-autogen, elixir-format
+msgid ".privacy.data_use"
+msgstr "Growth Push Router stores app user account data needed for access, such as email, name, company, password hash, and account timestamps."
+
+#: lib/growthpush_router_web/live/privacy_live/show.ex:25
+#, elixir-autogen, elixir-format
+msgid ".privacy.deletion"
+msgstr "To request deletion of app-controlled data, contact %{contact}."
+
+#: lib/growthpush_router_web/live/privacy_live/show.ex:33
+#, elixir-autogen, elixir-format
+msgid ".privacy.operator_contact"
+msgstr "the app operator through the contact channel published for this Meta app"
+
+#: lib/growthpush_router_web/live/privacy_live/show.ex:8
+#, elixir-autogen, elixir-format
+msgid ".privacy.page_title"
+msgstr "Privacy"
+
+#: lib/growthpush_router_web/live/privacy_live/show.ex:24
+#, elixir-autogen, elixir-format
+msgid ".privacy.retention"
+msgstr "App-controlled data is kept only as needed to operate accounts and integrations, audit access, process events, and troubleshoot the routing service."
+
+#: lib/growthpush_router_web/live/privacy_live/show.ex:16
+#, elixir-autogen, elixir-format
+msgid ".privacy.section"
+msgstr "privacy"
+
+#: lib/growthpush_router_web/live/privacy_live/show.ex:18
+#, elixir-autogen, elixir-format
+msgid ".privacy.subtitle"
+msgstr "This page explains the main categories of data this app stores to manage access, connections, and routed events."
+
+#: lib/growthpush_router_web/live/privacy_live/show.ex:17
+#, elixir-autogen, elixir-format
+msgid ".privacy.title"
+msgstr "privacy policy"

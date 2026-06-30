@@ -26,6 +26,15 @@ config :growthpush_router,
     |> System.get_env("both")
     |> GrowthPushRouter.Helpers.normalize_string()
 
+privacy_email =
+  "GROWTHPUSH_PRIVACY_EMAIL"
+  |> System.get_env("")
+  |> String.trim()
+
+if privacy_email != "" do
+  config :growthpush_router, privacy_email: privacy_email
+end
+
 admin_emails =
   "GROWTHPUSH_ADMIN_EMAILS"
   |> System.get_env("")
