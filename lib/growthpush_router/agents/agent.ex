@@ -9,6 +9,7 @@ defmodule GrowthPushRouter.Agents.Agent do
   import Ecto.Changeset
 
   alias GrowthPushRouter.Accounts.User
+  alias GrowthPushRouter.Agents.Connection
   alias GrowthPushRouter.Helpers
   alias GrowthPushRouter.Repo
 
@@ -28,6 +29,7 @@ defmodule GrowthPushRouter.Agents.Agent do
     field :last_errors, :map, default: %{}
 
     belongs_to :owner, User
+    has_many :connections, Connection
 
     timestamps(type: :utc_datetime)
   end

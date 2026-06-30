@@ -5,15 +5,17 @@ defmodule GrowthPushRouter.AgentsTest do
   alias GrowthPushRouter.Accounts.User
   alias GrowthPushRouter.Agents
   alias GrowthPushRouter.Agents.Agent
+  alias GrowthPushRouter.Agents.Connection
 
   doctest GrowthPushRouter.Agents
   doctest GrowthPushRouter.Agents.Agent
+  doctest GrowthPushRouter.Agents.Connection
 
   describe "agents" do
     setup do
       Gettext.put_locale(GrowthPushRouterWeb.Gettext, "en")
 
-      admin = %User{email: "admin@example.test"}
+      admin = User.with_runtime_role(%User{email: "admin@example.test"})
 
       {:ok, owner} =
         Accounts.create_user(admin, %{"email" => "owner@example.com", "name" => "Owner"})
@@ -126,12 +128,25 @@ defmodule GrowthPushRouter.AgentsTest do
       assert {:error, :unauthorized} = Agents.list_agents(non_admin)
     end
 
-    test "admin can list agents", %{admin: admin, owner: owner} do
+    test "admin can list agents with filters", %{admin: admin, owner: owner} do
       {:ok, agent} = Agents.create_agent(admin, valid_agent_attrs(owner))
 
       assert {:ok, [^agent]} = Agents.list_agents(admin, owner_id: owner.id)
       assert {:ok, [^agent]} = Agents.list_agents(admin, status: "inactive")
       assert {:ok, [^agent]} = Agents.list_agents(admin, slug: agent.slug)
+    end
+
+    test "users can list only agents they own", %{admin: admin, owner: owner} do
+      {:ok, agent} = Agents.create_agent(admin, valid_agent_attrs(owner))
+
+      {:ok, other_user} =
+        Accounts.create_user(admin, %{"email" => "other-owner@example.com", "name" => "Other"})
+
+      {:ok, _other_agent} =
+        Agents.create_agent(admin, valid_agent_attrs(other_user, %{"slug" => "other-agent"}))
+
+      assert {:ok, [^agent]} = Agents.list_agents(owner)
+      assert {:ok, [^agent]} = Agents.list_agents(owner, owner_id: other_user.id)
     end
 
     test "admin and owner can fetch an agent", %{admin: admin, owner: owner} do
@@ -158,6 +173,212 @@ defmodule GrowthPushRouter.AgentsTest do
     end
   end
 
+  describe "connections" do
+    setup do
+      Gettext.put_locale(GrowthPushRouterWeb.Gettext, "en")
+
+      admin = User.with_runtime_role(%User{email: "admin@example.test"})
+
+      {:ok, owner} =
+        Accounts.create_user(admin, %{
+          "email" => "connection-owner@example.com",
+          "name" => "Owner"
+        })
+
+      {:ok, agent} = Agents.create_agent(admin, valid_agent_attrs(owner))
+
+      %{admin: admin, owner: owner, agent: agent}
+    end
+
+    test "admin creates a Meta Instagram connection for an agent", %{
+      admin: admin,
+      owner: owner,
+      agent: agent
+    } do
+      last_connected_at = DateTime.utc_now(:second)
+
+      assert {:ok, %Connection{} = connection} =
+               Agents.create_connection(
+                 admin,
+                 valid_connection_attrs(agent, owner, %{
+                   "last_connected_at" => last_connected_at,
+                   "last_checked_at" => last_connected_at,
+                   "last_error_at" => last_connected_at,
+                   "last_errors" => %{"code" => "rate_limited"}
+                 })
+               )
+
+      assert connection.agent_id == agent.id
+      assert connection.connected_by_user_id == owner.id
+      assert connection.provider == "meta"
+      assert connection.channel == "instagram"
+      assert connection.status == "active"
+      assert connection.scopes == []
+      assert connection.access_token_ref == "vault://meta/instagram/growth-push"
+      assert connection.last_connected_at == last_connected_at
+      assert connection.last_checked_at == last_connected_at
+      assert connection.last_error_at == last_connected_at
+      assert connection.last_errors == %{"code" => "rate_limited"}
+
+      preloaded_connection = Repo.preload(connection, [:agent, :connected_by_user])
+
+      assert preloaded_connection.agent == agent
+      assert preloaded_connection.connected_by_user == owner
+    end
+
+    test "defaults operational fields", %{admin: admin, owner: owner, agent: agent} do
+      assert {:ok, connection} =
+               Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+
+      assert connection.status == "active"
+      assert connection.scopes == []
+      assert connection.last_connected_at == nil
+      assert connection.last_checked_at == nil
+      assert connection.last_error_at == nil
+      assert connection.last_errors == %{}
+    end
+
+    test "validates provider channel and status", %{admin: admin, owner: owner, agent: agent} do
+      assert {:error, changeset} =
+               Agents.create_connection(
+                 admin,
+                 valid_connection_attrs(agent, owner, %{"provider" => "google"})
+               )
+
+      assert "is not a supported connection provider" in errors_on(changeset).provider
+
+      assert {:error, changeset} =
+               Agents.create_connection(
+                 admin,
+                 valid_connection_attrs(agent, owner, %{"channel" => "facebook"})
+               )
+
+      assert "is not a supported connection channel" in errors_on(changeset).channel
+
+      assert {:error, changeset} =
+               Agents.create_connection(
+                 admin,
+                 valid_connection_attrs(agent, owner, %{"status" => "pending"})
+               )
+
+      assert "is not a valid connection status" in errors_on(changeset).status
+    end
+
+    test "requires access token ref instead of a raw token", %{
+      admin: admin,
+      owner: owner,
+      agent: agent
+    } do
+      assert {:error, changeset} =
+               Agents.create_connection(
+                 admin,
+                 valid_connection_attrs(agent, owner, %{
+                   "access_token_ref" => "EAAGraw-provider-token"
+                 })
+               )
+
+      assert "must be a token reference, not a raw token" in errors_on(changeset).access_token_ref
+    end
+
+    test "requires existing agent and connected by user", %{
+      admin: admin,
+      owner: owner,
+      agent: agent
+    } do
+      missing_agent_id = Ecto.UUID.generate()
+      missing_user_id = Ecto.UUID.generate()
+
+      assert {:error, changeset} =
+               Agents.create_connection(
+                 admin,
+                 valid_connection_attrs(agent, owner, %{"agent_id" => missing_agent_id})
+               )
+
+      assert "does not exist" in errors_on(changeset).agent_id
+
+      assert {:error, changeset} =
+               Agents.create_connection(
+                 admin,
+                 valid_connection_attrs(agent, owner, %{
+                   "connected_by_user_id" => missing_user_id
+                 })
+               )
+
+      assert "does not exist" in errors_on(changeset).connected_by_user_id
+    end
+
+    test "enforces unique external account per provider and channel", %{
+      admin: admin,
+      owner: owner,
+      agent: agent
+    } do
+      assert {:ok, _connection} =
+               Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+
+      assert {:error, changeset} =
+               Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+
+      assert "has already been taken" in errors_on(changeset).external_account_id
+    end
+
+    test "admin can list connections with filters", %{admin: admin, owner: owner, agent: agent} do
+      assert {:ok, connection} =
+               Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+
+      assert {:ok, [^connection]} = Agents.list_connections(admin, agent_id: agent.id)
+
+      assert {:ok, [^connection]} =
+               Agents.list_connections(admin, connected_by_user_id: owner.id)
+
+      assert {:ok, [^connection]} = Agents.list_connections(admin, provider: "Meta")
+      assert {:ok, [^connection]} = Agents.list_connections(admin, channel: "Instagram")
+      assert {:ok, [^connection]} = Agents.list_connections(admin, status: "Active")
+    end
+
+    test "users can list only connections for agents they own", %{
+      admin: admin,
+      owner: owner,
+      agent: agent
+    } do
+      {:ok, other_owner} =
+        Accounts.create_user(admin, %{
+          "email" => "other-connection-owner@example.com",
+          "name" => "Other Owner"
+        })
+
+      {:ok, other_agent} =
+        Agents.create_agent(
+          admin,
+          valid_agent_attrs(other_owner, %{"slug" => "other-client-agent"})
+        )
+
+      assert {:ok, connection} =
+               Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+
+      assert {:ok, _other_connection} =
+               Agents.create_connection(
+                 admin,
+                 valid_connection_attrs(other_agent, other_owner, %{
+                   "external_account_id" => "other-growth-push-account"
+                 })
+               )
+
+      assert {:ok, [^connection]} = Agents.list_connections(owner)
+      assert {:ok, [^connection]} = Agents.list_connections(owner, agent_id: agent.id)
+      assert {:ok, []} = Agents.list_connections(owner, agent_id: other_agent.id)
+    end
+
+    test "create rejects non-admin users", %{admin: admin, owner: owner, agent: agent} do
+      non_admin = %User{email: "client@example.com"}
+
+      assert {:error, :unauthorized} =
+               Agents.create_connection(non_admin, valid_connection_attrs(agent, owner))
+
+      assert {:ok, _connection} =
+               Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+    end
+  end
+
   defp valid_agent_attrs(%User{} = owner, attrs \\ %{}) do
     Map.merge(
       %{
@@ -165,6 +386,21 @@ defmodule GrowthPushRouter.AgentsTest do
         "slug" => "client-agent",
         "endpoint_url" => "https://agent.example.test/events",
         "shared_secret" => "agent-secret-1234"
+      },
+      attrs
+    )
+  end
+
+  defp valid_connection_attrs(%Agent{} = agent, %User{} = connected_by_user, attrs \\ %{}) do
+    Map.merge(
+      %{
+        "agent_id" => agent.id,
+        "connected_by_user_id" => connected_by_user.id,
+        "provider" => "meta",
+        "channel" => "instagram",
+        "external_account_id" => "growth-push-account",
+        "display_name" => "Growth Push",
+        "access_token_ref" => "vault://meta/instagram/growth-push"
       },
       attrs
     )

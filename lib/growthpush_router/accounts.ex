@@ -39,6 +39,7 @@ defmodule GrowthPushRouter.Accounts do
     end)
     |> order_by([u], asc: u.inserted_at)
     |> Repo.all()
+    |> tag_runtime_roles()
   end
 
   @doc """
@@ -55,7 +56,12 @@ defmodule GrowthPushRouter.Accounts do
 
   """
   def get_user(nil), do: nil
-  def get_user(id), do: Repo.get(User, id)
+
+  def get_user(id) do
+    User
+    |> Repo.get(id)
+    |> tag_runtime_role()
+  end
 
   @doc """
   Fetches a user for an admin actor.
@@ -73,7 +79,7 @@ defmodule GrowthPushRouter.Accounts do
   """
   def fetch_user(%User{} = admin_user, id) do
     with :ok <- authorize_admin(admin_user) do
-      {:ok, Repo.get!(User, id)}
+      {:ok, User |> Repo.get!(id) |> tag_runtime_role()}
     end
   end
 
@@ -96,6 +102,7 @@ defmodule GrowthPushRouter.Accounts do
     User
     |> filter_query(email: email)
     |> Repo.one()
+    |> tag_runtime_role()
   end
 
   def get_user_by_email(_), do: nil
@@ -181,7 +188,11 @@ defmodule GrowthPushRouter.Accounts do
 
   """
   def delete_user(%User{} = admin_user, %User{} = user) do
-    with :ok <- authorize_admin(admin_user), do: Repo.delete(user)
+    with :ok <- authorize_admin(admin_user) do
+      user
+      |> Repo.delete()
+      |> tag_runtime_role_result()
+    end
   end
 
   def delete_user(_admin_user, _user), do: {:error, :unauthorized}
@@ -212,12 +223,14 @@ defmodule GrowthPushRouter.Accounts do
     %User{}
     |> User.admin_changeset(attrs)
     |> Repo.insert()
+    |> tag_runtime_role_result()
   end
 
   defp do_update_user(%User{} = user, attrs) do
     user
     |> User.admin_changeset(attrs)
     |> Repo.update()
+    |> tag_runtime_role_result()
   end
 
   @doc """
@@ -311,16 +324,21 @@ defmodule GrowthPushRouter.Accounts do
     user
     |> User.clear_password_changeset()
     |> Repo.update()
+    |> tag_runtime_role_result()
   end
 
   defp authorize_admin(%User{} = user) do
-    if User.admin?(user), do: :ok, else: {:error, :unauthorized}
+    case user do
+      %User{is_admin: true} -> :ok
+      %User{} -> if User.admin?(user), do: :ok, else: {:error, :unauthorized}
+    end
   end
 
   defp set_password(%User{} = user, attrs) do
     user
     |> User.password_changeset(attrs)
     |> Repo.update()
+    |> tag_runtime_role_result()
   end
 
   defp authenticate_user_password(nil, password) do
@@ -342,8 +360,16 @@ defmodule GrowthPushRouter.Accounts do
     |> authenticated_user(user)
   end
 
-  defp authenticated_user(true, %User{} = user), do: {:ok, user}
+  defp authenticated_user(true, %User{} = user), do: {:ok, tag_runtime_role(user)}
   defp authenticated_user(false, %User{}), do: :error
+
+  defp tag_runtime_role(%User{} = user), do: User.with_runtime_role(user)
+  defp tag_runtime_role(nil), do: nil
+
+  defp tag_runtime_roles(users) when is_list(users), do: Enum.map(users, &tag_runtime_role/1)
+
+  defp tag_runtime_role_result({:ok, %User{} = user}), do: {:ok, tag_runtime_role(user)}
+  defp tag_runtime_role_result(other), do: other
 
   defp filter_query(query, email: email) when is_binary(email) do
     where(query, [u], u.email == ^User.normalize_email(email))

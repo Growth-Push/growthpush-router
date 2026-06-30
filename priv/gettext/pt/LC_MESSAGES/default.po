@@ -464,8 +464,8 @@ msgstr "Esta página explica as principais categorias de dados que este app arma
 msgid ".privacy.title"
 msgstr "política de privacidade"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:531
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:533
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:545
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:547
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.create"
 msgstr "criar agent"
@@ -515,18 +515,18 @@ msgstr "agent excluído."
 msgid ".admin_agent_form.endpoint_url"
 msgstr "URL do endpoint"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:532
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:546
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.save"
 msgstr "salvar agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:527
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:529
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:541
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:543
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.shared_secret"
 msgstr "segredo compartilhado"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:528
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:542
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.shared_secret_optional"
 msgstr "segredo compartilhado (deixe em branco para manter o atual)"
@@ -541,17 +541,17 @@ msgstr "slug"
 msgid ".admin_agent_form.status"
 msgstr "status"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:522
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:536
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.status_active"
 msgstr "ativo"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:524
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:538
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.status_error"
 msgstr "erro"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:523
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:537
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.status_inactive"
 msgstr "inativo"
@@ -566,13 +566,13 @@ msgstr "Configurações de conexão da instalação router-agent deste usuário.
 msgid ".admin_agent_form.updated"
 msgstr "agent atualizado."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:554
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:556
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:568
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:570
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.create_title"
 msgstr "criar agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:555
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:569
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.edit_title"
 msgstr "editar agent"
@@ -638,12 +638,12 @@ msgstr "copiado"
 msgid ".admin_agent_form.copy_secret"
 msgstr "copiar"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:538
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:552
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.hide_secret"
 msgstr "ocultar"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:539
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:553
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.show_secret"
 msgstr "ver"

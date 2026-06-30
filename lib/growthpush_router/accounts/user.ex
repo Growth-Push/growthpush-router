@@ -20,6 +20,7 @@ defmodule GrowthPushRouter.Accounts.User do
     field :company, :string
     field :hashed_password, :string, redact: true
     field :password, :string, virtual: true, redact: true
+    field :is_admin, :boolean, virtual: true, default: false
 
     timestamps(type: :utc_datetime)
   end
@@ -127,6 +128,22 @@ defmodule GrowthPushRouter.Accounts.User do
   def password_set?(%__MODULE__{hashed_password: hash}), do: is_binary(hash) and hash != ""
 
   @doc """
+  Returns a user with runtime admin status assigned.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> User.with_runtime_role(%User{email: "ADMIN@EXAMPLE.TEST"}).is_admin
+      true
+
+  """
+  def with_runtime_role(%__MODULE__{} = user) do
+    %{user | is_admin: allowed_admin_email?(user.email)}
+  end
+
+  def with_runtime_role(nil), do: nil
+
+  @doc """
   Returns whether a user email is whitelisted as admin.
 
   ## Examples
@@ -136,6 +153,7 @@ defmodule GrowthPushRouter.Accounts.User do
       true
 
   """
+  def admin?(%__MODULE__{is_admin: true}), do: true
   def admin?(%__MODULE__{email: email}), do: allowed_admin_email?(email)
   def admin?(_), do: false
 

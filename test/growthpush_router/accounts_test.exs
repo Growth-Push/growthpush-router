@@ -15,7 +15,13 @@ defmodule GrowthPushRouter.AccountsTest do
     test "admin? validates against the configured whitelist" do
       assert User.admin?(%User{email: "admin@example.test"})
       assert User.admin?(%User{email: "ADMIN@EXAMPLE.TEST"})
+      assert User.admin?(%User{email: "client@example.com", is_admin: true})
       refute User.admin?(%User{email: "client@example.com"})
+    end
+
+    test "runtime role marks whitelisted users as admins" do
+      assert %User{is_admin: true} = User.with_runtime_role(%User{email: "admin@example.test"})
+      assert %User{is_admin: false} = User.with_runtime_role(%User{email: "client@example.com"})
     end
 
     test "CRUD operations reject non-admin users" do
@@ -76,6 +82,27 @@ defmodule GrowthPushRouter.AccountsTest do
       assert updated_user.name == "Updated Client"
       assert {:ok, _deleted_user} = Accounts.delete_user(admin, updated_user)
       assert Accounts.get_user(updated_user.id) == nil
+    end
+
+    test "database reads return users with runtime admin status", %{admin: admin} do
+      assert {:ok, admin_user} =
+               Accounts.create_user(admin, %{
+                 "email" => "admin@example.test",
+                 "name" => "Admin"
+               })
+
+      assert admin_user.is_admin
+      assert Accounts.get_user(admin_user.id).is_admin
+      assert Accounts.get_user_by_email("ADMIN@example.test").is_admin
+
+      assert {:ok, [listed_admin]} = Accounts.list_users(admin, search: "admin@example.test")
+      assert listed_admin.is_admin
+
+      assert {:ok, fetched_admin} = Accounts.fetch_user(admin, admin_user.id)
+      assert fetched_admin.is_admin
+
+      assert {:ok, deleted_admin} = Accounts.delete_user(admin, fetched_admin)
+      assert deleted_admin.is_admin
     end
 
     test "normal users set their password once", %{admin: admin} do

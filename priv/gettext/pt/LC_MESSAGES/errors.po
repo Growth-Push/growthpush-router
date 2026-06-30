@@ -103,8 +103,9 @@ msgstr "deve ser igual a %{number}"
 
 #: lib/growthpush_router/accounts/user.ex:44
 #: lib/growthpush_router/accounts/user.ex:72
-#: lib/growthpush_router/agents/agent.ex:58
-#: lib/growthpush_router/agents/agent.ex:106
+#: lib/growthpush_router/agents/agent.ex:60
+#: lib/growthpush_router/agents/agent.ex:108
+#: lib/growthpush_router/agents/connection.ex:73
 #, elixir-autogen, elixir-format
 msgid ".cant_be_blank"
 msgstr "não pode ficar em branco"
@@ -134,8 +135,13 @@ msgstr "deve ter pelo menos 8 caracteres"
 #: lib/growthpush_router/accounts/user.ex:46
 #: lib/growthpush_router/accounts/user.ex:47
 #: lib/growthpush_router/accounts/user.ex:48
-#: lib/growthpush_router/agents/agent.ex:60
-#: lib/growthpush_router/agents/agent.ex:66
+#: lib/growthpush_router/agents/agent.ex:62
+#: lib/growthpush_router/agents/agent.ex:68
+#: lib/growthpush_router/agents/connection.ex:74
+#: lib/growthpush_router/agents/connection.ex:75
+#: lib/growthpush_router/agents/connection.ex:78
+#: lib/growthpush_router/agents/connection.ex:82
+#: lib/growthpush_router/agents/connection.ex:86
 #, elixir-autogen, elixir-format
 msgid ".too_long"
 msgstr "deve ter no máximo %{count} caracteres"
@@ -145,38 +151,73 @@ msgstr "deve ter no máximo %{count} caracteres"
 msgid ".wrong_email"
 msgstr "tem formato inválido"
 
-#: lib/growthpush_router/agents/agent.ex:132
+#: lib/growthpush_router/agents/agent.ex:134
 #, elixir-autogen, elixir-format
 msgid ".agent_endpoint_url_invalid"
 msgstr "deve ser uma URL http ou https"
 
-#: lib/growthpush_router/agents/agent.ex:89
+#: lib/growthpush_router/agents/agent.ex:91
 #, elixir-autogen, elixir-format
 msgid ".agent_owner_not_found"
 msgstr "não existe"
 
-#: lib/growthpush_router/agents/agent.ex:79
+#: lib/growthpush_router/agents/agent.ex:81
 #, elixir-autogen, elixir-format
 msgid ".agent_secret_too_long"
 msgstr "deve ter no máximo 72 bytes"
 
-#: lib/growthpush_router/agents/agent.ex:74
+#: lib/growthpush_router/agents/agent.ex:76
 #, elixir-autogen, elixir-format
 msgid ".agent_secret_too_short"
 msgstr "deve ter pelo menos 16 caracteres"
 
-#: lib/growthpush_router/agents/agent.ex:62
+#: lib/growthpush_router/agents/agent.ex:64
 #, elixir-autogen, elixir-format
 msgid ".agent_slug_format"
 msgstr "deve usar letras minúsculas, números e hífens"
 
-#: lib/growthpush_router/agents/agent.ex:83
-#: lib/growthpush_router/agents/agent.ex:87
+#: lib/growthpush_router/agents/agent.ex:85
+#: lib/growthpush_router/agents/agent.ex:89
 #, elixir-autogen, elixir-format
 msgid ".agent_slug_unique_error"
 msgstr "já está em uso"
 
-#: lib/growthpush_router/agents/agent.ex:70
+#: lib/growthpush_router/agents/agent.ex:72
 #, elixir-autogen, elixir-format
 msgid ".agent_status_invalid"
 msgstr "não é um status de agente válido"
+
+#: lib/growthpush_router/agents/connection.ex:103
+#, elixir-autogen, elixir-format
+msgid ".connection_agent_not_found"
+msgstr "não existe"
+
+#: lib/growthpush_router/agents/connection.ex:93
+#, elixir-autogen, elixir-format
+msgid ".connection_channel_invalid"
+msgstr "não é um canal de conexão compatível"
+
+#: lib/growthpush_router/agents/connection.ex:106
+#, elixir-autogen, elixir-format
+msgid ".connection_connected_by_user_not_found"
+msgstr "não existe"
+
+#: lib/growthpush_router/agents/connection.ex:100
+#, elixir-autogen, elixir-format
+msgid ".connection_external_account_unique_error"
+msgstr "já está em uso"
+
+#: lib/growthpush_router/agents/connection.ex:90
+#, elixir-autogen, elixir-format
+msgid ".connection_provider_invalid"
+msgstr "não é um provedor de conexão compatível"
+
+#: lib/growthpush_router/agents/connection.ex:96
+#, elixir-autogen, elixir-format
+msgid ".connection_status_invalid"
+msgstr "não é um status de conexão válido"
+
+#: lib/growthpush_router/agents/connection.ex:140
+#, elixir-autogen, elixir-format
+msgid ".connection_access_token_ref_invalid"
+msgstr "deve ser uma referência de token, não um token em claro"
