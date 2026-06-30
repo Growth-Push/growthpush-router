@@ -11,6 +11,17 @@ defmodule GrowthPushRouterWeb.AdminUserLiveTest do
       assert {:error, {:redirect, %{to: "/login"}}} = live(conn, ~p"/admin/users")
     end
 
+    test "redirects anonymous users away from all admin user routes", %{conn: conn} do
+      {_admin, user} = create_user("anonymous-routes@example.com")
+
+      for path <- [~p"/admin/users", ~p"/admin/users/new", ~p"/admin/users/#{user}/edit"] do
+        assert {:error, {:redirect, %{to: "/login"}}} =
+                 conn
+                 |> recycle()
+                 |> live(path)
+      end
+    end
+
     test "redirects normal users away from the admin index", %{conn: conn} do
       {_admin, user} = create_user("normal-index@example.com")
 
@@ -18,6 +29,18 @@ defmodule GrowthPushRouterWeb.AdminUserLiveTest do
                conn
                |> log_in_user(user)
                |> live(~p"/admin/users")
+    end
+
+    test "redirects normal users away from all admin user routes", %{conn: conn} do
+      {_admin, user} = create_user("normal-routes@example.com")
+
+      for path <- [~p"/admin/users", ~p"/admin/users/new", ~p"/admin/users/#{user}/edit"] do
+        assert {:error, {:redirect, %{to: "/dashboard"}}} =
+                 conn
+                 |> recycle()
+                 |> log_in_user(user)
+                 |> live(path)
+      end
     end
 
     test "renders users and confirmation prompts", %{conn: conn} do

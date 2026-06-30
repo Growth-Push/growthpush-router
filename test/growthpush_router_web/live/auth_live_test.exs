@@ -65,6 +65,15 @@ defmodule GrowthPushRouterWeb.AuthLiveTest do
       assert {:error, {:redirect, %{to: "/login"}}} = live(conn, ~p"/dashboard")
     end
 
+    test "redirects admin users to user management", %{conn: conn} do
+      admin = create_admin()
+
+      assert {:error, {:redirect, %{to: "/admin/users"}}} =
+               conn
+               |> log_in_user(admin)
+               |> live(~p"/dashboard")
+    end
+
     test "renders the current normal user dashboard", %{conn: conn} do
       {_admin, user} = create_user()
 

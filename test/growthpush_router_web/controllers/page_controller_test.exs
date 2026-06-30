@@ -3,6 +3,9 @@ defmodule GrowthPushRouterWeb.PageControllerTest do
 
   import Phoenix.LiveViewTest
 
+  alias GrowthPushRouter.Accounts
+  alias GrowthPushRouter.Accounts.User
+
   setup do
     original_privacy_email = Application.get_env(:growthpush_router, :privacy_email)
 
@@ -18,6 +21,28 @@ defmodule GrowthPushRouterWeb.PageControllerTest do
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
     assert redirected_to(conn) == ~p"/login"
+  end
+
+  test "GET / redirects admins to user management", %{conn: conn} do
+    admin = create_admin()
+
+    conn =
+      conn
+      |> log_in_user(admin)
+      |> get(~p"/")
+
+    assert redirected_to(conn) == ~p"/admin/users"
+  end
+
+  test "GET / redirects normal users to dashboard", %{conn: conn} do
+    {_admin, user} = create_user()
+
+    conn =
+      conn
+      |> log_in_user(user)
+      |> get(~p"/")
+
+    assert redirected_to(conn) == ~p"/dashboard"
   end
 
   test "GET /health is public", %{conn: conn} do
@@ -51,4 +76,34 @@ defmodule GrowthPushRouterWeb.PageControllerTest do
     assert html =~ "solicitar exclusão"
     assert html =~ "privacy@example.test"
   end
+
+  defp create_user do
+    admin = create_admin()
+
+    {:ok, user} =
+      Accounts.create_user(admin, %{
+        "email" => "client@example.com",
+        "name" => "client",
+        "company" => "client company"
+      })
+
+    {admin, user}
+  end
+
+  defp create_admin do
+    {:ok, admin} =
+      Accounts.upsert_seeded_admin(%{
+        "email" => "admin@example.test",
+        "name" => "admin",
+        "company" => "example"
+      })
+
+    admin
+  end
+
+  defp log_in_user(conn, %User{} = user) do
+    Plug.Test.init_test_session(conn, user_id: user.id, live_socket_id: live_socket_id(user))
+  end
+
+  defp live_socket_id(%User{id: id}), do: "users_sessions:#{Base.url_encode64(id)}"
 end

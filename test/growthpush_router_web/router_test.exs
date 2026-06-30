@@ -46,7 +46,14 @@ defmodule GrowthPushRouterWeb.RouterTest do
   test "agent mode disables browser routes", %{conn: conn} do
     Application.put_env(:growthpush_router, :mode, "agent")
 
-    for path <- [~p"/", ~p"/login", ~p"/privacy", ~p"/data-deletion", ~p"/admin/users"] do
+    for path <- [
+          ~p"/",
+          ~p"/login",
+          ~p"/privacy",
+          ~p"/data-deletion",
+          ~p"/dashboard",
+          ~p"/admin/users"
+        ] do
       conn =
         conn
         |> recycle()

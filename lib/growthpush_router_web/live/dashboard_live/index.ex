@@ -10,9 +10,13 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
   def mount(_params, session, socket) do
     case Accounts.get_user(session["user_id"]) do
       %User{} = user ->
-        subscribe_to_live_socket(socket, session)
+        if User.admin?(user) do
+          {:ok, redirect(socket, to: ~p"/admin/users")}
+        else
+          subscribe_to_live_socket(socket, session)
 
-        {:ok, assign(socket, :current_user, user)}
+          {:ok, assign(socket, :current_user, user)}
+        end
 
       _ ->
         {:ok, redirect(socket, to: ~p"/login")}
