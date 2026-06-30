@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/growthpush_router_web/components/core_components.ex:375
+#: lib/growthpush_router_web/components/core_components.ex:512
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -65,27 +65,28 @@ msgstr "sign out"
 msgid ".admin_nav.title"
 msgstr "admin"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:77
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:164
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:277
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.cancel"
 msgstr "cancel"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:74
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:161
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.company"
 msgstr "company"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:65
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:152
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.email"
 msgstr "email"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:71
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:158
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.name"
 msgstr "name"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:78
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:165
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.save"
 msgstr "save"
@@ -110,7 +111,7 @@ msgstr "you cannot delete your own admin user."
 msgid ".admin_users.company"
 msgstr "company"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:102
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:332
 #, elixir-autogen, elixir-format
 msgid ".admin_users.edit_title"
 msgstr "edit user"
@@ -130,7 +131,7 @@ msgstr "type"
 msgid ".admin_users.name"
 msgstr "name"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:93
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:321
 #, elixir-autogen, elixir-format
 msgid ".admin_users.new_title"
 msgstr "new user"
@@ -185,7 +186,7 @@ msgstr "admin"
 msgid ".admin_users.title"
 msgstr "users"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:118
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:349
 #, elixir-autogen, elixir-format
 msgid ".admin_users.user_created"
 msgstr "user created. they can define their password on first access."
@@ -195,14 +196,18 @@ msgstr "user created. they can define their password on first access."
 msgid ".admin_users.user_deleted"
 msgstr "user deleted."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:134
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:365
 #, elixir-autogen, elixir-format
 msgid ".admin_users.user_updated"
 msgstr "user updated."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:108
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:122
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:138
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:339
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:353
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:369
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:395
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:411
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:436
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:455
 #: lib/growthpush_router_web/live/admin_user_live/index.ex:32
 #: lib/growthpush_router_web/live/admin_user_live/index.ex:47
 #: lib/growthpush_router_web/live/admin_user_live/index.ex:57
@@ -458,3 +463,187 @@ msgstr "This page explains the main categories of data this app stores to manage
 #, elixir-autogen, elixir-format
 msgid ".privacy.title"
 msgstr "privacy policy"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:531
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:533
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.create"
+msgstr "create agent"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:391
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.created"
+msgstr "agent created."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:289
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.delete"
+msgstr "delete agent"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:300
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.delete_body"
+msgstr "This permanently deletes the agent %{slug}. Type the agent slug to continue."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:309
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.delete_cancel"
+msgstr "cancel"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:308
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.delete_confirm"
+msgstr "delete agent"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:301
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.delete_confirmation_label"
+msgstr "agent slug"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:299
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.delete_title"
+msgstr "delete agent"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:431
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.deleted"
+msgstr "agent deleted."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:211
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.endpoint_url"
+msgstr "endpoint URL"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:532
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.save"
+msgstr "save agent"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:527
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:529
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.shared_secret"
+msgstr "shared secret"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:528
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.shared_secret_optional"
+msgstr "shared secret (leave blank to keep current)"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:194
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.slug"
+msgstr "slug"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:201
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.status"
+msgstr "status"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:522
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.status_active"
+msgstr "active"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:524
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.status_error"
+msgstr "error"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:523
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.status_inactive"
+msgstr "inactive"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:173
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.subtitle"
+msgstr "Connection settings for this user's router-agent installation."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:407
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.updated"
+msgstr "agent updated."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:554
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:556
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.create_title"
+msgstr "create agent"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:555
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.edit_title"
+msgstr "edit agent"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:229
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.endpoint_help"
+msgstr "The test sends a GET request to this URL and treats 2xx or 3xx responses as reachable."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:93
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.endpoint_test_blank"
+msgstr "enter an endpoint URL before testing."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:103
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.endpoint_test_failed"
+msgstr "healthcheck did not respond."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:90
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.endpoint_test_ok"
+msgstr "healthcheck responded with %{status}."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:99
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.endpoint_test_status"
+msgstr "healthcheck responded with %{status}."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:212
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.endpoint_url_placeholder"
+msgstr "https://agent.example.com/health"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:273
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.shared_secret_help"
+msgstr "The secret is stored only as a hash. The plaintext secret must also be configured in the agent deploy, usually as GROWTHPUSH_AGENT_SHARED_SECRET."
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:238
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.shared_secret_placeholder"
+msgstr "minimum 16 characters"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:226
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.test_endpoint"
+msgstr "test"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:249
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.generate_secret"
+msgstr "generate"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:265
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.copied_secret"
+msgstr "copied"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:264
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:269
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.copy_secret"
+msgstr "copy"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:538
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.hide_secret"
+msgstr "hide"
+
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:539
+#, elixir-autogen, elixir-format
+msgid ".admin_agent_form.show_secret"
+msgstr "show"

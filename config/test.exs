@@ -34,6 +34,9 @@ config :logger, level: :warning
 
 config :growthpush_router, GrowthPushRouter.Mailer, adapter: Swoosh.Adapters.Test
 
+config :growthpush_router, :agent_healthcheck_req_options,
+  plug: {Req.Test, GrowthPushRouter.AgentHealthcheck}
+
 config :swoosh, :api_client, false
 
 # Initialize plugs at runtime for faster test compilation

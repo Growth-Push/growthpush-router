@@ -95,13 +95,18 @@ defmodule GrowthPushRouterWeb.CoreComponents do
       <.button phx-click="go" variant="primary">Send!</.button>
       <.button navigate={~p"/"}>Home</.button>
   """
-  attr :rest, :global, include: ~w(href navigate patch method download name value disabled)
+  attr :rest, :global, include: ~w(href navigate patch method download name value disabled type)
   attr :class, :any
-  attr :variant, :string, values: ~w(primary)
+  attr :variant, :string, values: ~w(primary neutral danger)
   slot :inner_block, required: true
 
   def button(%{rest: rest} = assigns) do
-    variants = %{"primary" => "btn-primary", nil => "btn-primary btn-soft"}
+    variants = %{
+      "primary" => "btn-primary",
+      "neutral" => "btn-primary btn-soft",
+      "danger" => "btn-error",
+      nil => "btn-primary btn-soft"
+    }
 
     assigns =
       assign_new(assigns, :class, fn ->
@@ -121,6 +126,138 @@ defmodule GrowthPushRouterWeb.CoreComponents do
       </button>
       """
     end
+  end
+
+  @doc """
+  Renders a reusable section card.
+
+  This HEEx component is covered by LiveView tests instead of doctests because
+  it depends on Phoenix's component rendering pipeline.
+  """
+  attr :title, :string, required: true
+  attr :subtitle, :string, default: nil
+  attr :class, :any, default: nil
+  slot :actions
+  slot :inner_block, required: true
+
+  def section_card(assigns) do
+    ~H"""
+    <div class={["rounded-lg bg-base-100 p-6 shadow-sm", @class]}>
+      <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h2 class="text-xl font-semibold">{@title}</h2>
+          <p :if={@subtitle} class="mt-1 text-sm text-base-content/70">{@subtitle}</p>
+        </div>
+        <div :if={@actions != []} class="flex shrink-0 items-center gap-2">
+          {render_slot(@actions)}
+        </div>
+      </div>
+      {render_slot(@inner_block)}
+    </div>
+    """
+  end
+
+  @doc """
+  Renders a status badge with shared app styling.
+
+  This HEEx component is covered by LiveView tests instead of doctests because
+  it depends on Phoenix's component rendering pipeline.
+  """
+  attr :status, :string, required: true
+  attr :label, :string, default: nil
+
+  def status_badge(assigns) do
+    ~H"""
+    <span class={[
+      "badge px-2",
+      @status == "active" && "badge-success",
+      @status == "inactive" && "badge-warning",
+      @status == "error" && "badge-error"
+    ]}>
+      {@label || @status}
+    </span>
+    """
+  end
+
+  @doc """
+  Renders an inline informational box.
+
+  This HEEx component is covered by LiveView tests instead of doctests because
+  it depends on Phoenix's component rendering pipeline.
+  """
+  attr :class, :any, default: nil
+  slot :inner_block, required: true
+
+  def info_box(assigns) do
+    ~H"""
+    <div class={[
+      "flex gap-2 rounded-md border border-info/20 bg-info/10 px-3 py-2 text-sm text-base-content/80",
+      @class
+    ]}>
+      <.icon name="hero-information-circle" class="mt-0.5 size-4 shrink-0 text-info" />
+      <p>{render_slot(@inner_block)}</p>
+    </div>
+    """
+  end
+
+  @doc """
+  Renders a typed confirmation modal for destructive actions.
+
+  This HEEx component is covered by LiveView tests instead of doctests because
+  it depends on Phoenix's component rendering pipeline.
+  """
+  attr :id, :string, required: true
+  attr :title, :string, required: true
+  attr :body, :string, required: true
+  attr :confirmation_label, :string, required: true
+  attr :confirmation_value, :string, required: true
+  attr :typed_value, :string, default: ""
+  attr :form_name, :atom, required: true
+  attr :change_event, :string, required: true
+  attr :submit_event, :string, required: true
+  attr :cancel_event, :string, required: true
+  attr :confirm_text, :string, required: true
+  attr :cancel_text, :string, required: true
+
+  def confirm_modal(assigns) do
+    assigns = assign(assigns, :confirmed?, assigns.typed_value == assigns.confirmation_value)
+
+    ~H"""
+    <div id={@id} class="fixed inset-0 z-40 flex items-center justify-center px-4">
+      <div class="absolute inset-0 bg-base-content/40" phx-click={@cancel_event} />
+      <div
+        class="relative z-50 w-full max-w-lg rounded-lg bg-base-100 p-6 shadow-xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={"#{@id}-title"}
+      >
+        <h2 id={"#{@id}-title"} class="text-xl font-semibold">{@title}</h2>
+        <p class="mt-3 text-sm text-base-content/70">{@body}</p>
+        <.form
+          id={"#{@id}-form"}
+          for={%{}}
+          as={@form_name}
+          phx-change={@change_event}
+          phx-submit={@submit_event}
+          class="mt-5 space-y-4"
+        >
+          <.input
+            type="text"
+            name={"#{@form_name}[confirmation]"}
+            value={@typed_value}
+            label={@confirmation_label}
+            autocomplete="off"
+          />
+          <p class="rounded-md bg-base-200 px-3 py-2 font-mono text-sm">{@confirmation_value}</p>
+
+          <div class="flex justify-end gap-2">
+            <.button type="button" phx-click={@cancel_event}>{@cancel_text}</.button>
+            <.button variant="danger" disabled={!@confirmed?}>{@confirm_text}</.button>
+          </div>
+        </.form>
+      </div>
+    </div>
+    """
   end
 
   @doc """
