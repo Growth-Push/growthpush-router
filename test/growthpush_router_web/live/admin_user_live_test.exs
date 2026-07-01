@@ -432,6 +432,8 @@ defmodule GrowthPushRouterWeb.AdminUserLiveTest do
       assert html =~ "Growth Push"
       assert html =~ "growth-push-account"
       assert html =~ "ativo"
+      assert html =~ "/internal/test-event"
+      assert html =~ "disparar teste"
       refute html =~ "vault://meta/instagram/growth-push"
     end
 

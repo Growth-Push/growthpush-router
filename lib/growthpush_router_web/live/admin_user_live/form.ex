@@ -325,6 +325,7 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
                   <th>{gettext(".admin_connections.last_connected_at")}</th>
                   <th>{gettext(".admin_connections.last_checked_at")}</th>
                   <th>{gettext(".admin_connections.last_error_at")}</th>
+                  <th class="text-right">{gettext(".admin_connections.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -345,6 +346,16 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
                   <td>{format_datetime(connection.last_connected_at)}</td>
                   <td>{format_datetime(connection.last_checked_at)}</td>
                   <td>{format_datetime(connection.last_error_at)}</td>
+                  <td class="text-right">
+                    <.form for={%{}} action={~p"/internal/test-event"} method="post">
+                      <input type="hidden" name="connection_id" value={connection.id} />
+                      <input type="hidden" name="return_to" value={~p"/admin/users/#{@user}/edit"} />
+                      <.button type="submit" class="btn btn-xs btn-primary btn-soft">
+                        <.icon name="hero-bolt" class="size-4" />
+                        {gettext(".admin_connections.test_event")}
+                      </.button>
+                    </.form>
+                  </td>
                 </tr>
               </tbody>
             </table>

@@ -73,6 +73,12 @@ defmodule GrowthPushRouterWeb.Router do
     live "/users/:id/edit", AdminUserLive.Form, :edit
   end
 
+  scope "/internal", GrowthPushRouterWeb do
+    pipe_through [:edge, :browser, :admin]
+
+    post "/test-event", InternalTestEventController, :create
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", GrowthPushRouterWeb do
   #   pipe_through [:agent, :api]
