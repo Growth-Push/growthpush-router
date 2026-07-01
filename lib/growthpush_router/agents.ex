@@ -8,6 +8,7 @@ defmodule GrowthPushRouter.Agents do
   alias GrowthPushRouter.Accounts.User
   alias GrowthPushRouter.Agents.Agent
   alias GrowthPushRouter.Agents.Connection
+  alias GrowthPushRouter.Agents.Event
   alias GrowthPushRouter.Repo
 
   @doc """
@@ -75,13 +76,11 @@ defmodule GrowthPushRouter.Agents do
     {:ok, Repo.get!(Agent, id)}
   end
 
-  def fetch_agent(%User{id: owner_id}, id) when is_binary(owner_id) do
-    agent = Repo.get!(Agent, id)
-
-    if agent.owner_id == owner_id do
-      {:ok, agent}
-    else
-      {:error, :unauthorized}
+  def fetch_agent(%User{} = actor_user, id) when is_binary(id) do
+    case list_agents(actor_user, id: id) do
+      {:ok, [%Agent{} = agent]} -> {:ok, agent}
+      {:ok, []} -> {:error, :unauthorized}
+      {:error, :unauthorized} -> {:error, :unauthorized}
     end
   end
 
@@ -436,6 +435,108 @@ defmodule GrowthPushRouter.Agents do
     Connection.admin_changeset(connection, attrs)
   end
 
+  @doc """
+  Creates a raw event received through a connection.
+
+  The connection must belong to the acting agent. The connection id, provider,
+  and channel are loaded from the database instead of trusting inbound event
+  attributes.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "events-create-doc@example.com", "name" => "Events Create Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "events-create-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_connection(admin, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "connected_by_user_id" => owner.id,
+      ...>     "provider" => "meta",
+      ...>     "channel" => "instagram",
+      ...>     "external_account_id" => "events-create-doc-account",
+      ...>     "display_name" => "Events Create Doc",
+      ...>     "access_token_ref" => "vault://meta/instagram/events-create-doc"
+      ...>   })
+      iex> {:ok, event} =
+      ...>   Agents.create_connection_event(agent, connection, %{
+      ...>     "event_type" => "message_received",
+      ...>     "external_event_id" => "evt-create-doc",
+      ...>     "payload" => %{"entry" => [%{"id" => "17841400000000000"}]}
+      ...>   })
+      iex> {event.connection_id, event.provider, event.channel, event.status}
+      {connection.id, "meta", "instagram", "received"}
+
+  """
+  def create_connection_event(%Agent{} = agent, %Connection{id: connection_id}, attrs) do
+    create_connection_event(agent, connection_id, attrs)
+  end
+
+  def create_connection_event(%Agent{} = agent, connection_id, attrs)
+      when is_binary(connection_id) and is_map(attrs) do
+    with {:ok, %Connection{} = connection} <- fetch_event_connection(agent, connection_id) do
+      attrs
+      |> stringify_keys()
+      |> connection_event_attrs(connection)
+      |> do_create_event()
+    end
+  end
+
+  def create_connection_event(_agent, _connection, _attrs), do: {:error, :unauthorized}
+
+  @doc """
+  Lists connection events visible to an agent.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "events-list-doc@example.com", "name" => "Events List Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "events-list-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_connection(admin, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "connected_by_user_id" => owner.id,
+      ...>     "provider" => "meta",
+      ...>     "channel" => "instagram",
+      ...>     "external_account_id" => "events-list-doc-account",
+      ...>     "display_name" => "Events List Doc",
+      ...>     "access_token_ref" => "vault://meta/instagram/events-list-doc"
+      ...>   })
+      iex> {:ok, _event} =
+      ...>   Agents.create_connection_event(agent, connection, %{
+      ...>     "event_type" => "message_received",
+      ...>     "payload" => %{"entry" => []}
+      ...>   })
+      iex> {:ok, events} = Agents.list_events(agent, event_type: "Message_Received")
+      iex> Enum.map(events, & &1.event_type)
+      ["message_received"]
+
+  """
+  def list_events(actor, opts \\ [])
+
+  def list_events(%Agent{id: agent_id}, opts) when is_binary(agent_id) do
+    {:ok, do_list_events(opts, agent_id)}
+  end
+
+  def list_events(_actor, _opts), do: {:error, :unauthorized}
+
   defp do_list_agents(opts) do
     query = from(a in Agent)
 
@@ -474,6 +575,22 @@ defmodule GrowthPushRouter.Agents do
     end)
   end
 
+  defp do_list_events(opts, agent_id) do
+    opts
+    |> do_list_events_query()
+    |> where([_e, c], c.agent_id == ^agent_id)
+    |> order_by([e, _c], asc: e.received_at, asc: e.inserted_at)
+    |> Repo.all()
+  end
+
+  defp do_list_events_query(opts) do
+    query = from(e in Event, join: c in assoc(e, :connection))
+
+    Enum.reduce(opts, query, fn filter, q ->
+      filter_event_query(q, [filter])
+    end)
+  end
+
   defp do_create_agent(attrs) do
     %Agent{}
     |> Agent.admin_changeset(attrs)
@@ -483,6 +600,12 @@ defmodule GrowthPushRouter.Agents do
   defp do_create_connection(attrs) do
     %Connection{}
     |> Connection.admin_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  defp do_create_event(attrs) do
+    %Event{}
+    |> Event.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -596,6 +719,59 @@ defmodule GrowthPushRouter.Agents do
 
   defp filter_connection_query(query, _), do: query
 
+  defp filter_event_query(query, connection_id: connection_id) when is_binary(connection_id) do
+    case Ecto.UUID.cast(connection_id) do
+      {:ok, connection_id} -> where(query, [e, _c], e.connection_id == ^connection_id)
+      :error -> where(query, false)
+    end
+  end
+
+  defp filter_event_query(query, provider: provider) when is_binary(provider) do
+    where(query, [e, _c], e.provider == ^GrowthPushRouter.Helpers.normalize_string(provider))
+  end
+
+  defp filter_event_query(query, channel: channel) when is_binary(channel) do
+    where(query, [e, _c], e.channel == ^GrowthPushRouter.Helpers.normalize_string(channel))
+  end
+
+  defp filter_event_query(query, status: status) when is_binary(status) do
+    where(query, [e, _c], e.status == ^GrowthPushRouter.Helpers.normalize_string(status))
+  end
+
+  defp filter_event_query(query, event_type: event_type) when is_binary(event_type) do
+    where(
+      query,
+      [e, _c],
+      e.event_type == ^GrowthPushRouter.Helpers.normalize_string(event_type)
+    )
+  end
+
+  defp filter_event_query(query, external_event_id: external_event_id)
+       when is_binary(external_event_id) do
+    where(query, [e, _c], e.external_event_id == ^String.trim(external_event_id))
+  end
+
+  defp filter_event_query(query, _), do: query
+
+  defp fetch_event_connection(%Agent{id: agent_id}, connection_id)
+       when is_binary(agent_id) and is_binary(connection_id) do
+    case Ecto.UUID.cast(connection_id) do
+      {:ok, connection_id} ->
+        Connection
+        |> where([c], c.id == ^connection_id and c.agent_id == ^agent_id)
+        |> Repo.one()
+        |> case do
+          %Connection{} = connection -> {:ok, connection}
+          nil -> {:error, :unauthorized}
+        end
+
+      :error ->
+        {:error, :unauthorized}
+    end
+  end
+
+  defp fetch_event_connection(_agent, _connection_id), do: {:error, :unauthorized}
+
   defp fetch_connection_agent(%User{id: owner_id} = actor_user, agent_id)
        when is_binary(owner_id) and is_binary(agent_id) do
     case list_agents(actor_user, id: agent_id, owner_id: owner_id) do
@@ -615,6 +791,27 @@ defmodule GrowthPushRouter.Agents do
       "provider" => "meta",
       "channel" => "instagram",
       "status" => "active"
+    })
+  end
+
+  defp connection_event_attrs(attrs, %Connection{
+         id: connection_id,
+         provider: provider,
+         channel: channel
+       }) do
+    attrs
+    |> Map.take([
+      "event_type",
+      "external_event_id",
+      "payload",
+      "status",
+      "received_at",
+      "processed_at"
+    ])
+    |> Map.merge(%{
+      "connection_id" => connection_id,
+      "provider" => provider,
+      "channel" => channel
     })
   end
 

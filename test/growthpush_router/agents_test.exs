@@ -6,10 +6,12 @@ defmodule GrowthPushRouter.AgentsTest do
   alias GrowthPushRouter.Agents
   alias GrowthPushRouter.Agents.Agent
   alias GrowthPushRouter.Agents.Connection
+  alias GrowthPushRouter.Agents.Event
 
   doctest GrowthPushRouter.Agents
   doctest GrowthPushRouter.Agents.Agent
   doctest GrowthPushRouter.Agents.Connection
+  doctest GrowthPushRouter.Agents.Event
 
   describe "agents" do
     setup do
@@ -163,6 +165,11 @@ defmodule GrowthPushRouter.AgentsTest do
         Accounts.create_user(admin, %{"email" => "other@example.com", "name" => "Other"})
 
       assert {:error, :unauthorized} = Agents.fetch_agent(other_user, agent.id)
+    end
+
+    test "owner fetch uses scoped filters instead of raising on missing agents", %{owner: owner} do
+      assert {:error, :unauthorized} = Agents.fetch_agent(owner, Ecto.UUID.generate())
+      assert {:error, :unauthorized} = Agents.fetch_agent(owner, "not-a-uuid")
     end
 
     test "admin deletes an agent", %{admin: admin, owner: owner} do
@@ -513,6 +520,196 @@ defmodule GrowthPushRouter.AgentsTest do
     end
   end
 
+  describe "events" do
+    setup do
+      Gettext.put_locale(GrowthPushRouterWeb.Gettext, "en")
+
+      admin = User.with_runtime_role(%User{email: "admin@example.test"})
+
+      {:ok, owner} =
+        Accounts.create_user(admin, %{
+          "email" => "event-owner@example.com",
+          "name" => "Event Owner"
+        })
+
+      {:ok, agent} = Agents.create_agent(admin, valid_agent_attrs(owner))
+      {:ok, connection} = Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+
+      %{admin: admin, owner: owner, agent: agent, connection: connection}
+    end
+
+    test "creates a raw event for an agent connection", %{agent: agent, connection: connection} do
+      received_at = ~U[2026-07-01 12:00:00Z]
+      processed_at = ~U[2026-07-01 12:01:00Z]
+
+      payload = %{
+        "object" => "instagram",
+        "entry" => [
+          %{
+            "id" => "17841400000000000",
+            "changes" => [%{"value" => %{"text" => "hello"}}]
+          }
+        ]
+      }
+
+      assert {:ok, %Event{} = event} =
+               Agents.create_connection_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{
+                   "connection_id" => Ecto.UUID.generate(),
+                   "provider" => "google",
+                   "channel" => "youtube",
+                   "event_type" => " Message_Received ",
+                   "external_event_id" => " Evt-001 ",
+                   "payload" => payload,
+                   "status" => " Processed ",
+                   "received_at" => received_at,
+                   "processed_at" => processed_at
+                 })
+               )
+
+      assert event.connection_id == connection.id
+      assert event.provider == "meta"
+      assert event.channel == "instagram"
+      assert event.event_type == "message_received"
+      assert event.external_event_id == "Evt-001"
+      assert event.payload == payload
+      assert event.status == "processed"
+      assert event.received_at == received_at
+      assert event.processed_at == processed_at
+
+      assert event |> Repo.preload(:connection) |> Map.fetch!(:connection) == connection
+    end
+
+    test "defaults operational event fields", %{agent: agent, connection: connection} do
+      assert {:ok, event} =
+               Agents.create_connection_event(agent, connection, %{
+                 "event_type" => "story_mention"
+               })
+
+      assert event.status == "received"
+      assert event.payload == %{}
+      assert event.received_at
+      assert event.processed_at == nil
+    end
+
+    test "validates event status", %{agent: agent, connection: connection} do
+      assert {:error, changeset} =
+               Agents.create_connection_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{"status" => "pending"})
+               )
+
+      assert "is not a valid event status" in errors_on(changeset).status
+    end
+
+    test "requires a connection owned by the acting agent", %{agent: agent} do
+      missing_connection = %Connection{id: Ecto.UUID.generate()}
+
+      assert {:error, :unauthorized} =
+               Agents.create_connection_event(agent, missing_connection, valid_event_attrs())
+
+      assert {:error, :unauthorized} =
+               Agents.create_connection_event(agent, "not-a-uuid", valid_event_attrs())
+    end
+
+    test "create event rejects user actors including admins", %{
+      admin: admin,
+      owner: owner,
+      connection: connection
+    } do
+      assert {:error, :unauthorized} =
+               Agents.create_connection_event(admin, connection, valid_event_attrs())
+
+      assert {:error, :unauthorized} =
+               Agents.create_connection_event(owner, connection, valid_event_attrs())
+    end
+
+    test "deleting a connection deletes its events", %{
+      agent: agent,
+      owner: owner,
+      connection: connection
+    } do
+      assert {:ok, event} = Agents.create_connection_event(agent, connection, valid_event_attrs())
+
+      assert {:ok, _deleted_connection} = Agents.delete_connection(owner, connection)
+      refute Repo.get(Event, event.id)
+    end
+
+    test "agent can list its events with filters", %{agent: agent, connection: connection} do
+      assert {:ok, event} =
+               Agents.create_connection_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{
+                   "event_type" => "comment_received",
+                   "external_event_id" => "event-list-1",
+                   "status" => "failed"
+                 })
+               )
+
+      assert {:ok, [^event]} = Agents.list_events(agent, connection_id: connection.id)
+      assert {:ok, [^event]} = Agents.list_events(agent, provider: "Meta")
+      assert {:ok, [^event]} = Agents.list_events(agent, channel: "Instagram")
+      assert {:ok, [^event]} = Agents.list_events(agent, status: "Failed")
+      assert {:ok, [^event]} = Agents.list_events(agent, event_type: "Comment_Received")
+      assert {:ok, [^event]} = Agents.list_events(agent, external_event_id: " event-list-1 ")
+      assert {:ok, [^event]} = Agents.list_events(agent, unsupported: "ignored")
+      assert {:ok, []} = Agents.list_events(agent, connection_id: "not-a-uuid")
+    end
+
+    test "agent can list only events for its connections", %{
+      admin: admin,
+      agent: agent,
+      connection: connection
+    } do
+      {:ok, other_owner} =
+        Accounts.create_user(admin, %{
+          "email" => "other-event-owner@example.com",
+          "name" => "Other Event Owner"
+        })
+
+      {:ok, other_agent} =
+        Agents.create_agent(
+          admin,
+          valid_agent_attrs(other_owner, %{"slug" => "other-event-agent"})
+        )
+
+      {:ok, other_connection} =
+        Agents.create_connection(
+          admin,
+          valid_connection_attrs(other_agent, other_owner, %{
+            "external_account_id" => "other-event-account"
+          })
+        )
+
+      assert {:ok, event} = Agents.create_connection_event(agent, connection, valid_event_attrs())
+
+      assert {:ok, _other_event} =
+               Agents.create_connection_event(
+                 other_agent,
+                 other_connection,
+                 valid_event_attrs(%{"external_event_id" => "other-event"})
+               )
+
+      assert {:ok, [^event]} = Agents.list_events(agent)
+      assert {:ok, [^event]} = Agents.list_events(agent, connection_id: connection.id)
+      assert {:ok, []} = Agents.list_events(agent, connection_id: other_connection.id)
+      assert {:ok, []} = Agents.list_events(other_agent, connection_id: connection.id)
+
+      assert {:error, :unauthorized} =
+               Agents.create_connection_event(agent, other_connection, valid_event_attrs())
+    end
+
+    test "list events rejects user actors including admins", %{admin: admin, owner: owner} do
+      assert {:error, :unauthorized} = Agents.list_events(admin)
+      assert {:error, :unauthorized} = Agents.list_events(owner)
+      assert {:error, :unauthorized} = Agents.list_events(%User{email: "client@example.com"})
+    end
+  end
+
   defp valid_agent_attrs(%User{} = owner, attrs \\ %{}) do
     Map.merge(
       %{
@@ -547,6 +744,17 @@ defmodule GrowthPushRouter.AgentsTest do
         "external_account_id" => "manual-growth-push-account",
         "display_name" => "Manual Growth Push",
         "access_token_ref" => "placeholder://meta/instagram/manual-growth-push"
+      },
+      attrs
+    )
+  end
+
+  defp valid_event_attrs(attrs \\ %{}) do
+    Map.merge(
+      %{
+        "event_type" => "message_received",
+        "external_event_id" => "event-1",
+        "payload" => %{"entry" => [%{"id" => "17841400000000000"}]}
       },
       attrs
     )

@@ -10,6 +10,7 @@ defmodule GrowthPushRouter.Agents.Connection do
 
   alias GrowthPushRouter.Accounts.User
   alias GrowthPushRouter.Agents.Agent
+  alias GrowthPushRouter.Agents.Event
   alias GrowthPushRouter.Helpers
 
   @providers ~w(meta)
@@ -35,6 +36,7 @@ defmodule GrowthPushRouter.Agents.Connection do
 
     belongs_to :agent, Agent
     belongs_to :connected_by_user, User
+    has_many :events, Event
 
     timestamps(type: :utc_datetime)
   end
