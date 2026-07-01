@@ -88,43 +88,90 @@ defmodule GrowthPushRouterWeb.AuthLiveTest do
       assert html =~ "client company"
     end
 
-    test "renders owned agents and creates a manual Instagram connection", %{conn: conn} do
+    test "renders owned agents and links Instagram OAuth", %{conn: conn} do
       {admin, user} = create_user()
       {:ok, agent} = create_agent(admin, user, "dashboard-agent")
+
+      {:ok, _view, html} =
+        conn
+        |> log_in_user(user)
+        |> live(~p"/dashboard")
+
+      assert html =~ "dashboard-agent"
+      assert html =~ ~p"/connect/instagram?agent_id=#{agent.id}"
+      refute html =~ "connection[external_account_id]"
+      refute html =~ "placeholder://meta/instagram/account"
+    end
+
+    test "deletes an owned Instagram connection from the dashboard", %{conn: conn} do
+      {admin, user} = create_user()
+      {:ok, agent} = create_agent(admin, user, "delete-dashboard-connection")
+
+      {:ok, connection} =
+        Agents.create_connection(admin, valid_connection_params(agent, user))
 
       {:ok, view, html} =
         conn
         |> log_in_user(user)
         |> live(~p"/dashboard")
 
-      assert html =~ "dashboard-agent"
-      assert html =~ "connection[external_account_id]"
-      assert html =~ "placeholder://meta/instagram/account"
+      assert html =~ "Dashboard IG"
+      assert html |> Floki.parse_document!() |> Floki.find("button.btn-error") != []
+
+      html = render_click(view, "request_delete_connection", %{"id" => connection.id})
+
+      assert html =~ "delete-connection-modal"
+      assert html =~ "confirm"
+      assert {:ok, [_connection]} = Agents.list_connections(user, agent_id: agent.id)
 
       html =
         view
-        |> form("#instagram-connection-form-#{agent.id}", %{
-          "agent_id" => agent.id,
-          "connection" => %{
-            "external_account_id" => "ig-dashboard-account",
-            "display_name" => "Dashboard IG",
-            "access_token_ref" => "placeholder://meta/instagram/dashboard"
-          }
+        |> form("#delete-connection-modal-form", %{
+          "connection_delete" => %{"confirmation" => "wrong"}
         })
         |> render_submit()
 
-      assert html =~ "Instagram conectado"
-      assert html =~ "Dashboard IG"
-      refute html =~ "placeholder://meta/instagram/dashboard"
+      assert html =~ "delete-connection-modal"
+      assert {:ok, [_connection]} = Agents.list_connections(user, agent_id: agent.id)
 
-      assert {:ok, [connection]} = Agents.list_connections(user, agent_id: agent.id)
-      assert connection.connected_by_user_id == user.id
-      assert connection.provider == "meta"
-      assert connection.channel == "instagram"
-      assert connection.access_token_ref == "placeholder://meta/instagram/dashboard"
+      html =
+        view
+        |> form("#delete-connection-modal-form", %{
+          "connection_delete" => %{"confirmation" => "confirm"}
+        })
+        |> render_submit()
+
+      assert html =~ "conexão excluída"
+      assert {:ok, []} = Agents.list_connections(user, agent_id: agent.id)
     end
 
-    test "does not allow dashboard events for another user's agent", %{conn: conn} do
+    test "shows multiple connections for an owned agent", %{conn: conn} do
+      {admin, user} = create_user()
+      {:ok, agent} = create_agent(admin, user, "multiple-dashboard-connections")
+
+      {:ok, _connection} =
+        Agents.create_connection(admin, valid_connection_params(agent, user))
+
+      {:ok, _other_connection} =
+        Agents.create_connection(
+          admin,
+          valid_connection_params(agent, user, %{
+            "external_account_id" => "ig-dashboard-account-2",
+            "display_name" => "Second IG",
+            "access_token_ref" => "oauth://meta/instagram/ig-dashboard-account-2"
+          })
+        )
+
+      {:ok, _view, html} =
+        conn
+        |> log_in_user(user)
+        |> live(~p"/dashboard")
+
+      assert html =~ "Dashboard IG"
+      assert html =~ "Second IG"
+    end
+
+    test "does not allow dashboard deletes for another user's connection", %{conn: conn} do
       {admin, user} = create_user()
 
       {:ok, other_user} =
@@ -136,22 +183,40 @@ defmodule GrowthPushRouterWeb.AuthLiveTest do
 
       {:ok, other_agent} = create_agent(admin, other_user, "other-dashboard-agent")
 
+      {:ok, connection} =
+        Agents.create_connection(admin, valid_connection_params(other_agent, other_user))
+
       {:ok, view, _html} =
         conn
         |> log_in_user(user)
         |> live(~p"/dashboard")
 
-      html =
-        render_submit(view, "save_connection", %{
-          "agent_id" => other_agent.id,
-          "connection" => %{
-            "external_account_id" => "other-ig-account",
-            "display_name" => "Other IG",
-            "access_token_ref" => "placeholder://meta/instagram/other"
-          }
+      html = render_click(view, "request_delete_connection", %{"id" => connection.id})
+
+      assert html =~ "não foi possível excluir"
+      assert {:ok, [_connection]} = Agents.list_connections(other_user, agent_id: other_agent.id)
+    end
+
+    test "user connection creation still rejects another user's agent" do
+      {admin, user} = create_user()
+
+      {:ok, other_user} =
+        Accounts.create_user(admin, %{
+          "email" => "other-dashboard-create-owner@example.com",
+          "name" => "Other",
+          "company" => "Other Company"
         })
 
-      assert html =~ "agent não encontrado"
+      {:ok, other_agent} = create_agent(admin, other_user, "other-dashboard-create-agent")
+
+      assert {:error, :unauthorized} =
+               Agents.create_user_connection(user, %{
+                 "agent_id" => other_agent.id,
+                 "external_account_id" => "other-ig-account",
+                 "display_name" => "Other IG",
+                 "access_token_ref" => "placeholder://meta/instagram/other"
+               })
+
       assert {:ok, []} = Agents.list_connections(user)
     end
 
@@ -204,6 +269,21 @@ defmodule GrowthPushRouterWeb.AuthLiveTest do
       "endpoint_url" => "https://agent.example.test/events",
       "shared_secret" => "agent-secret-1234"
     })
+  end
+
+  defp valid_connection_params(agent, user, attrs \\ %{}) do
+    Map.merge(
+      %{
+        "agent_id" => agent.id,
+        "connected_by_user_id" => user.id,
+        "provider" => "meta",
+        "channel" => "instagram",
+        "external_account_id" => "ig-dashboard-account",
+        "display_name" => "Dashboard IG",
+        "access_token_ref" => "oauth://meta/instagram/ig-dashboard-account"
+      },
+      attrs
+    )
   end
 
   defp live_socket_id(%User{id: id}), do: "users_sessions:#{Base.url_encode64(id)}"

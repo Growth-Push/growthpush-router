@@ -240,6 +240,48 @@ defmodule GrowthPushRouter.Agents do
   def list_connections(_actor_user, _opts), do: {:error, :unauthorized}
 
   @doc """
+  Fetches a connection visible to an actor.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "connections-fetch-doc@example.com", "name" => "Connections Fetch Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "connections-fetch-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_connection(admin, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "connected_by_user_id" => owner.id,
+      ...>     "provider" => "meta",
+      ...>     "channel" => "instagram",
+      ...>     "external_account_id" => "connections-fetch-doc-account",
+      ...>     "display_name" => "Connections Fetch Doc",
+      ...>     "access_token_ref" => "vault://meta/instagram/connections-fetch-doc"
+      ...>   })
+      iex> {:ok, fetched_connection} = Agents.fetch_connection(owner, connection.id)
+      iex> fetched_connection.display_name
+      "Connections Fetch Doc"
+
+  """
+  def fetch_connection(%User{} = actor_user, id) when is_binary(id) do
+    case list_connections(actor_user, id: id) do
+      {:ok, [%Connection{} = connection]} -> {:ok, connection}
+      {:ok, []} -> {:error, :unauthorized}
+      {:error, :unauthorized} -> {:error, :unauthorized}
+    end
+  end
+
+  def fetch_connection(_actor_user, _id), do: {:error, :unauthorized}
+
+  @doc """
   Creates a connected channel as an admin operation.
 
   ## Examples
@@ -275,6 +317,46 @@ defmodule GrowthPushRouter.Agents do
   end
 
   def create_connection(_admin_user, _attrs), do: {:error, :unauthorized}
+
+  @doc """
+  Deletes a connection as the owning user or as an admin.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "connections-delete-doc@example.com", "name" => "Connections Delete Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "connections-delete-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_connection(admin, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "connected_by_user_id" => owner.id,
+      ...>     "provider" => "meta",
+      ...>     "channel" => "instagram",
+      ...>     "external_account_id" => "connections-delete-doc-account",
+      ...>     "display_name" => "Connections Delete Doc",
+      ...>     "access_token_ref" => "vault://meta/instagram/connections-delete-doc"
+      ...>   })
+      iex> {:ok, deleted_connection} = Agents.delete_connection(owner, connection)
+      iex> deleted_connection.display_name
+      "Connections Delete Doc"
+
+  """
+  def delete_connection(%User{} = actor_user, %Connection{id: id}) when is_binary(id) do
+    with {:ok, %Connection{} = connection} <- fetch_connection(actor_user, id) do
+      Repo.delete(connection)
+    end
+  end
+
+  def delete_connection(_actor_user, _connection), do: {:error, :unauthorized}
 
   @doc """
   Creates a manual Meta Instagram connection for an agent owned by the actor.
@@ -313,7 +395,7 @@ defmodule GrowthPushRouter.Agents do
     with {:ok, %Agent{} = agent} <- fetch_connection_agent(actor_user, agent_id) do
       attrs
       |> user_connection_attrs(actor_user, agent)
-      |> do_create_connection()
+      |> do_create_or_refresh_user_connection(actor_user)
     end
   end
 
@@ -404,6 +486,54 @@ defmodule GrowthPushRouter.Agents do
     |> Repo.insert()
   end
 
+  defp do_create_or_refresh_user_connection(attrs, %User{} = actor_user) do
+    case do_create_connection(attrs) do
+      {:ok, %Connection{} = connection} ->
+        {:ok, connection}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        maybe_refresh_existing_user_connection(changeset, attrs, actor_user)
+    end
+  end
+
+  defp maybe_refresh_existing_user_connection(changeset, attrs, %User{} = actor_user) do
+    if unique_external_account_error?(changeset) do
+      refresh_existing_user_connection(attrs, actor_user)
+    else
+      {:error, changeset}
+    end
+  end
+
+  defp unique_external_account_error?(%Ecto.Changeset{} = changeset) do
+    Enum.any?(changeset.errors, fn
+      {:external_account_id, {_message, opts}} ->
+        opts[:constraint] == :unique and
+          opts[:constraint_name] == "connections_provider_channel_external_account_id_index"
+
+      _error ->
+        false
+    end)
+  end
+
+  defp refresh_existing_user_connection(attrs, %User{} = actor_user) do
+    case list_connections(actor_user,
+           provider: attrs["provider"],
+           channel: attrs["channel"],
+           external_account_id: attrs["external_account_id"]
+         ) do
+      {:ok, [%Connection{} = connection]} ->
+        connection
+        |> Connection.admin_changeset(attrs)
+        |> Repo.update()
+
+      {:ok, []} ->
+        {:error, :unauthorized}
+
+      {:error, :unauthorized} ->
+        {:error, :unauthorized}
+    end
+  end
+
   defp do_update_agent(%Agent{} = agent, attrs) do
     agent
     |> Agent.admin_changeset(attrs)
@@ -435,9 +565,21 @@ defmodule GrowthPushRouter.Agents do
     where(query, [c, _a], c.agent_id == ^agent_id)
   end
 
+  defp filter_connection_query(query, id: id) when is_binary(id) do
+    case Ecto.UUID.cast(id) do
+      {:ok, id} -> where(query, [c, _a], c.id == ^id)
+      :error -> where(query, false)
+    end
+  end
+
   defp filter_connection_query(query, connected_by_user_id: connected_by_user_id)
        when is_binary(connected_by_user_id) do
     where(query, [c, _a], c.connected_by_user_id == ^connected_by_user_id)
+  end
+
+  defp filter_connection_query(query, external_account_id: external_account_id)
+       when is_binary(external_account_id) do
+    where(query, [c, _a], c.external_account_id == ^external_account_id)
   end
 
   defp filter_connection_query(query, provider: provider) when is_binary(provider) do
@@ -466,7 +608,7 @@ defmodule GrowthPushRouter.Agents do
 
   defp user_connection_attrs(attrs, %User{id: user_id}, %Agent{id: agent_id}) do
     attrs
-    |> Map.take(["external_account_id", "display_name", "access_token_ref"])
+    |> Map.take(["external_account_id", "display_name", "access_token_ref", "last_connected_at"])
     |> Map.merge(%{
       "agent_id" => agent_id,
       "connected_by_user_id" => user_id,

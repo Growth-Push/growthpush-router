@@ -22,6 +22,13 @@ config :growthpush_router,
   admin_emails: [],
   mode: "both"
 
+config :growthpush_router, :instagram_oauth,
+  authorize_base_url: "https://www.facebook.com",
+  graph_base_url: "https://graph.facebook.com",
+  graph_version: "v23.0",
+  scopes: ~w(instagram_basic pages_show_list pages_read_engagement),
+  req_options: []
+
 # Configure the endpoint
 config :growthpush_router, GrowthPushRouterWeb.Endpoint,
   url: [host: "localhost"],

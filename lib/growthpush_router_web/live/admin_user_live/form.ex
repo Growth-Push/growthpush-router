@@ -139,7 +139,7 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
     <main class="min-h-screen bg-base-200">
       <GrowthPushRouterWeb.AdminUserLive.Index.admin_nav current_user={@current_user} />
 
-      <section class="mx-auto w-full max-w-2xl space-y-6 px-4 py-8">
+      <section class="mx-auto w-full max-w-6xl space-y-6 px-4 py-8">
         <.section_card title={@page_title}>
           <.form
             id="admin-user-form"
@@ -148,19 +148,25 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
             phx-submit="save"
             class="space-y-4"
           >
-            <.input
-              field={@form[:email]}
-              type="email"
-              label={gettext(".admin_user_form.email")}
-              required
-            />
-            <.input
-              field={@form[:name]}
-              type="text"
-              label={gettext(".admin_user_form.name")}
-              required
-            />
-            <.input field={@form[:company]} type="text" label={gettext(".admin_user_form.company")} />
+            <div class="grid gap-4 lg:grid-cols-3">
+              <.input
+                field={@form[:email]}
+                type="email"
+                label={gettext(".admin_user_form.email")}
+                required
+              />
+              <.input
+                field={@form[:name]}
+                type="text"
+                label={gettext(".admin_user_form.name")}
+                required
+              />
+              <.input
+                field={@form[:company]}
+                type="text"
+                label={gettext(".admin_user_form.company")}
+              />
+            </div>
 
             <div class="flex justify-end gap-2">
               <.link navigate={~p"/admin/users"} class="btn">{gettext(".admin_user_form.cancel")}</.link>
@@ -245,18 +251,20 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
                 <.button
                   type="button"
                   phx-click="generate_agent_secret"
-                  class="btn btn-primary btn-soft sm:mb-2"
+                  title={gettext(".admin_agent_form.generate_secret")}
+                  aria-label={gettext(".admin_agent_form.generate_secret")}
+                  class="btn btn-square btn-primary btn-soft shrink-0 sm:mb-2"
                 >
                   <.icon name="hero-sparkles" class="size-4" />
-                  {gettext(".admin_agent_form.generate_secret")}
                 </.button>
                 <.button
                   type="button"
                   phx-click="toggle_agent_secret_visibility"
-                  class="btn btn-primary btn-soft sm:mb-2"
+                  title={agent_secret_visibility_label(@show_agent_secret?)}
+                  aria-label={agent_secret_visibility_label(@show_agent_secret?)}
+                  class="btn btn-square btn-primary btn-soft shrink-0 sm:mb-2"
                 >
                   <.icon name={agent_secret_visibility_icon(@show_agent_secret?)} class="size-4" />
-                  {agent_secret_visibility_label(@show_agent_secret?)}
                 </.button>
                 <.button
                   type="button"
@@ -265,10 +273,14 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
                   data-copy-source="#agent_shared_secret"
                   data-copy-label={gettext(".admin_agent_form.copy_secret")}
                   data-copied-label={gettext(".admin_agent_form.copied_secret")}
-                  class="btn btn-primary btn-soft sm:mb-2"
+                  title={gettext(".admin_agent_form.copy_secret")}
+                  aria-label={gettext(".admin_agent_form.copy_secret")}
+                  class="btn btn-square btn-primary btn-soft shrink-0 sm:mb-2"
                 >
                   <.icon name="hero-clipboard-document" class="size-4" />
-                  <span data-copy-button-label>{gettext(".admin_agent_form.copy_secret")}</span>
+                  <span class="sr-only" data-copy-button-label>
+                    {gettext(".admin_agent_form.copy_secret")}
+                  </span>
                 </.button>
               </div>
             </div>
@@ -303,8 +315,8 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
             {gettext(".admin_connections.empty")}
           </.info_box>
 
-          <div :if={@agent_connections != []} class="overflow-x-auto">
-            <table class="table table-sm">
+          <div :if={@agent_connections != []} class="overflow-x-auto xl:overflow-visible">
+            <table class="table table-sm w-full table-fixed">
               <thead>
                 <tr>
                   <th>{gettext(".admin_connections.provider")}</th>
@@ -319,8 +331,8 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
                 <tr :for={connection <- @agent_connections}>
                   <td>{connection_label(connection)}</td>
                   <td>
-                    <span class="font-medium">{connection.display_name}</span>
-                    <span class="block text-xs text-base-content/60">
+                    <span class="block break-words font-medium">{connection.display_name}</span>
+                    <span class="block break-all text-xs text-base-content/60">
                       {connection.external_account_id}
                     </span>
                   </td>

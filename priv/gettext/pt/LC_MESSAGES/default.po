@@ -11,7 +11,7 @@ msgstr ""
 "Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/growthpush_router_web/components/core_components.ex:512
+#: lib/growthpush_router_web/components/core_components.ex:515
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "ações"
@@ -65,28 +65,28 @@ msgstr "sair"
 msgid ".admin_nav.title"
 msgstr "admin"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:166
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:279
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:172
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:291
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.cancel"
 msgstr "cancelar"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:163
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:167
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.company"
 msgstr "empresa"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:154
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:155
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.email"
 msgstr "e-mail"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:160
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:161
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.name"
 msgstr "nome"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:167
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:173
 #, elixir-autogen, elixir-format
 msgid ".admin_user_form.save"
 msgstr "salvar"
@@ -111,7 +111,7 @@ msgstr "você não pode excluir seu próprio usuário admin."
 msgid ".admin_users.company"
 msgstr "empresa"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:380
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:392
 #, elixir-autogen, elixir-format
 msgid ".admin_users.edit_title"
 msgstr "editar usuário"
@@ -131,7 +131,7 @@ msgstr "tipo"
 msgid ".admin_users.name"
 msgstr "nome"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:368
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:380
 #, elixir-autogen, elixir-format
 msgid ".admin_users.new_title"
 msgstr "novo usuário"
@@ -186,7 +186,7 @@ msgstr "admin"
 msgid ".admin_users.title"
 msgstr "usuários"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:397
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:409
 #, elixir-autogen, elixir-format
 msgid ".admin_users.user_created"
 msgstr "usuário criado. ele poderá definir a senha no primeiro acesso."
@@ -196,19 +196,19 @@ msgstr "usuário criado. ele poderá definir a senha no primeiro acesso."
 msgid ".admin_users.user_deleted"
 msgstr "usuário excluído."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:413
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:425
 #, elixir-autogen, elixir-format
 msgid ".admin_users.user_updated"
 msgstr "usuário atualizado."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:387
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:401
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:417
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:443
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:459
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:484
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:504
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:523
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:399
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:413
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:429
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:455
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:471
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:496
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:516
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:536
 #: lib/growthpush_router_web/live/admin_user_live/index.ex:32
 #: lib/growthpush_router_web/live/admin_user_live/index.ex:47
 #: lib/growthpush_router_web/live/admin_user_live/index.ex:57
@@ -219,8 +219,7 @@ msgstr "usuário atualizado."
 msgid ".auth.admin_required"
 msgstr "você não tem acesso à administração."
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:233
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:263
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:216
 #: lib/growthpush_router_web/user_auth.ex:62
 #: lib/growthpush_router_web/user_auth.ex:83
 #, elixir-autogen, elixir-format
@@ -232,47 +231,47 @@ msgstr "você precisa entrar."
 msgid ".auth.signed_out"
 msgstr "sessão encerrada."
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:88
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:97
 #, elixir-autogen, elixir-format
 msgid ".dashboard.access"
 msgstr "acesso"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:84
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:93
 #, elixir-autogen, elixir-format
 msgid ".dashboard.company"
 msgstr "empresa"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:80
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:89
 #, elixir-autogen, elixir-format
 msgid ".dashboard.email"
 msgstr "e-mail"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:60
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:69
 #, elixir-autogen, elixir-format
 msgid ".dashboard.nav_title"
 msgstr "dashboard"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:89
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:98
 #, elixir-autogen, elixir-format
 msgid ".dashboard.regular_user"
 msgstr "usuário"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:70
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:79
 #, elixir-autogen, elixir-format
 msgid ".dashboard.section"
 msgstr "dashboard"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:63
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:72
 #, elixir-autogen, elixir-format
 msgid ".dashboard.sign_out"
 msgstr "sair"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:75
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:84
 #, elixir-autogen, elixir-format
 msgid ".dashboard.subtitle"
 msgstr "este é o painel inicial da sua conta."
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:72
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:81
 #, elixir-autogen, elixir-format
 msgid ".dashboard.title"
 msgstr "olá, %{name}"
@@ -467,123 +466,123 @@ msgstr "Esta página explica as principais categorias de dados que este app arma
 msgid ".privacy.title"
 msgstr "política de privacidade"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:627
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:629
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:640
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:642
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.create"
 msgstr "criar agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:439
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:451
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.created"
 msgstr "agent criado."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:291
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:303
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.delete"
 msgstr "excluir agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:347
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:359
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.delete_body"
 msgstr "Isso exclui permanentemente o agent %{slug}. Digite o slug do agent para continuar."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:356
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:368
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.delete_cancel"
 msgstr "cancelar"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:355
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:367
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.delete_confirm"
 msgstr "excluir agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:348
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:360
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.delete_confirmation_label"
 msgstr "slug do agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:346
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:358
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.delete_title"
 msgstr "excluir agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:479
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:491
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.deleted"
 msgstr "agent excluído."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:213
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:219
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.endpoint_url"
 msgstr "URL do endpoint"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:628
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:641
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.save"
 msgstr "salvar agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:623
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:625
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:636
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:638
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.shared_secret"
 msgstr "segredo compartilhado"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:624
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:637
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.shared_secret_optional"
 msgstr "segredo compartilhado (deixe em branco para manter o atual)"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:196
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:202
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.slug"
 msgstr "slug"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:203
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:209
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.status"
 msgstr "status"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:599
 #: lib/growthpush_router_web/live/admin_user_live/form.ex:612
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:625
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.status_active"
 msgstr "ativo"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:601
 #: lib/growthpush_router_web/live/admin_user_live/form.ex:614
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:627
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.status_error"
 msgstr "erro"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:600
 #: lib/growthpush_router_web/live/admin_user_live/form.ex:613
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:626
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.status_inactive"
 msgstr "inativo"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:175
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:181
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.subtitle"
 msgstr "Configurações de conexão da instalação router-agent deste usuário."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:455
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:467
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.updated"
 msgstr "agent atualizado."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:650
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:652
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:663
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:665
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.create_title"
 msgstr "criar agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:651
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:664
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.edit_title"
 msgstr "editar agent"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:231
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:237
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.endpoint_help"
 msgstr "O teste envia um GET para esta URL e considera respostas 2xx ou 3xx como alcançáveis."
@@ -608,244 +607,298 @@ msgstr "healthcheck respondeu com %{status}."
 msgid ".admin_agent_form.endpoint_test_status"
 msgstr "healthcheck respondeu com %{status}."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:214
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:220
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.endpoint_url_placeholder"
 msgstr "https://agent.example.com/health"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:275
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:287
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.shared_secret_help"
 msgstr "O segredo é armazenado apenas como hash. O segredo em texto puro também deve ser configurado no deploy do agent, geralmente como GROWTHPUSH_AGENT_SHARED_SECRET."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:240
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:246
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.shared_secret_placeholder"
 msgstr "mínimo de 16 caracteres"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:228
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:234
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.test_endpoint"
 msgstr "testar"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:251
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:254
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:255
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.generate_secret"
 msgstr "gerar"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:267
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:275
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.copied_secret"
 msgstr "copiado"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:266
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:271
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:274
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:276
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:277
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:282
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.copy_secret"
 msgstr "copiar"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:634
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:647
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.hide_secret"
 msgstr "ocultar"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:635
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:648
 #, elixir-autogen, elixir-format
 msgid ".admin_agent_form.show_secret"
 msgstr "ver"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:311
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:323
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.account"
 msgstr "conta"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:303
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:315
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.empty"
 msgstr "nenhuma conexão criada para este agent."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:314
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:326
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.last_checked_at"
 msgstr "última checagem"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:313
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:325
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.last_connected_at"
 msgstr "última conexão"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:315
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:327
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.last_error_at"
 msgstr "último erro"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:605
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:618
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.meta_instagram"
 msgstr "Meta Instagram"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:310
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:322
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.provider"
 msgstr "provedor"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:312
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:324
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.status"
 msgstr "status"
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:300
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:312
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.subtitle"
 msgstr "Somente metadados operacionais; referências de token não são exibidas."
 
-#: lib/growthpush_router_web/live/admin_user_live/form.ex:299
+#: lib/growthpush_router_web/live/admin_user_live/form.ex:311
 #, elixir-autogen, elixir-format
 msgid ".admin_connections.title"
 msgstr "conexões"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:69
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:78
 #, elixir-autogen, elixir-format
 msgid ".dashboard.account_title"
 msgstr "conta"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:106
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:118
 #, elixir-autogen, elixir-format
 msgid ".dashboard.agent_label"
 msgstr "agent"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:217
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:244
-#, elixir-autogen, elixir-format
-msgid ".dashboard.agent_not_found"
-msgstr "agent não encontrado."
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:336
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:297
 #, elixir-autogen, elixir-format
 msgid ".dashboard.agent_status_active"
 msgstr "ativo"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:338
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:299
 #, elixir-autogen, elixir-format
 msgid ".dashboard.agent_status_error"
 msgstr "erro"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:337
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:298
 #, elixir-autogen, elixir-format
 msgid ".dashboard.agent_status_inactive"
 msgstr "inativo"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:118
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:130
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connection_account"
 msgstr "conta"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:120
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:132
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connection_connected_at"
 msgstr "conectado em"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:329
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:278
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connection_meta_instagram"
 msgstr "Meta Instagram"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:117
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:129
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connection_provider"
 msgstr "provedor"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:119
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:131
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connection_status"
 msgstr "status"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:341
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:302
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connection_status_active"
 msgstr "ativo"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:343
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:304
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connection_status_error"
 msgstr "erro"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:342
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:303
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connection_status_inactive"
 msgstr "inativo"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:96
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:105
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connections_subtitle"
-msgstr "Conecte manualmente as contas usadas pelos seus agents."
+msgstr "Conecte e gerencie as contas usadas pelos seus agents."
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:95
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:104
 #, elixir-autogen, elixir-format
 msgid ".dashboard.connections_title"
 msgstr "conexões"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:185
-#, elixir-autogen, elixir-format
-msgid ".dashboard.instagram_access_token_ref"
-msgstr "referência do token"
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:186
-#, elixir-autogen, elixir-format
-msgid ".dashboard.instagram_access_token_ref_placeholder"
-msgstr "placeholder://meta/instagram/account"
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:229
-#, elixir-autogen, elixir-format
-msgid ".dashboard.instagram_connected"
-msgstr "Instagram conectado."
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:178
-#, elixir-autogen, elixir-format
-msgid ".dashboard.instagram_display_name"
-msgstr "nome exibido"
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:172
-#, elixir-autogen, elixir-format
-msgid ".dashboard.instagram_external_account_id"
-msgstr "ID da conta Instagram"
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:159
-#, elixir-autogen, elixir-format
-msgid ".dashboard.instagram_form_subtitle"
-msgstr "Informe a conta e uma referência placeholder; OAuth real fica fora deste MVP."
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:157
-#, elixir-autogen, elixir-format
-msgid ".dashboard.instagram_form_title"
-msgstr "conectar Instagram manualmente"
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:164
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:171
 #, elixir-autogen, elixir-format
 msgid ".dashboard.instagram_oauth_placeholder"
 msgstr "conectar via Instagram"
 
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:194
-#, elixir-autogen, elixir-format
-msgid ".dashboard.instagram_save"
-msgstr "salvar conexão"
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:189
-#, elixir-autogen, elixir-format
-msgid ".dashboard.instagram_token_ref_help"
-msgstr "Use uma referência, não um token real. Exemplo: placeholder://meta/instagram/account."
-
-#: lib/growthpush_router_web/live/dashboard_live/index.ex:100
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:109
 #, elixir-autogen, elixir-format
 msgid ".dashboard.no_agents"
 msgstr "nenhum agent foi criado para sua conta ainda."
 
-#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:12
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:97
 #, elixir-autogen, elixir-format
-msgid ".instagram_connect.callback_unavailable"
-msgstr "callback do Instagram recebido, mas OAuth real ainda não está habilitado."
+msgid ".instagram_connect.account_not_found"
+msgstr "nenhuma conta Instagram Business foi encontrada para esta autorização."
 
-#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:6
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:43
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:50
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:89
 #, elixir-autogen, elixir-format
-msgid ".instagram_connect.oauth_unavailable"
-msgstr "OAuth do Instagram ainda não está habilitado. Use a conexão manual por enquanto."
+msgid ".instagram_connect.agent_not_found"
+msgstr "agent não encontrado para conectar Instagram."
+
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:71
+#, elixir-autogen, elixir-format
+msgid ".instagram_connect.connected"
+msgstr "Instagram conectado."
+
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:121
+#, elixir-autogen, elixir-format
+msgid ".instagram_connect.connection_failed"
+msgstr "não foi possível salvar a conexão Instagram."
+
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:57
+#, elixir-autogen, elixir-format
+msgid ".instagram_connect.denied"
+msgstr "conexão Instagram cancelada: %{reason}."
+
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:137
+#, elixir-autogen, elixir-format
+msgid ".instagram_connect.invalid_callback"
+msgstr "callback do Instagram inválido."
+
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:77
+#, elixir-autogen, elixir-format
+msgid ".instagram_connect.invalid_state"
+msgstr "estado OAuth inválido. Tente conectar o Instagram novamente."
+
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:38
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:83
+#, elixir-autogen, elixir-format
+msgid ".instagram_connect.missing_config"
+msgstr "OAuth do Instagram não está configurado."
+
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:129
+#, elixir-autogen, elixir-format
+msgid ".instagram_connect.oauth_failed"
+msgstr "não foi possível concluir o OAuth do Instagram."
+
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:113
+#, elixir-autogen, elixir-format
+msgid ".instagram_connect.account_fetch_failed"
+msgstr "não foi possível buscar a conta Instagram no Meta Graph."
+
+#: lib/growthpush_router_web/controllers/instagram_auth_controller.ex:105
+#, elixir-autogen, elixir-format
+msgid ".instagram_connect.token_exchange_failed"
+msgstr "não foi possível trocar o código OAuth por um token Meta."
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:133
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_actions"
+msgstr "ações"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:160
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:194
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_delete"
+msgstr "excluir"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:244
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:269
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_delete_failed"
+msgstr "não foi possível excluir esta conexão."
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:265
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_deleted"
+msgstr "conexão excluída."
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:183
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_delete_body"
+msgstr "Isto remove a conexão %{account}. Para confirmar, digite o texto abaixo."
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:195
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_delete_cancel"
+msgstr "cancelar"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:187
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_delete_confirmation_label"
+msgstr "Digite o texto de confirmação"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:188
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:249
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_delete_confirmation_value"
+msgstr "confirm"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:181
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_delete_title"
+msgstr "Excluir conexão"
+
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:184
+#: lib/growthpush_router_web/live/dashboard_live/index.ex:295
+#, elixir-autogen, elixir-format
+msgid ".dashboard.connection_unknown_account"
+msgstr "conta sem nome"

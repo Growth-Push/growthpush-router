@@ -46,6 +46,30 @@ if admin_emails != [] do
   config :growthpush_router, admin_emails: admin_emails
 end
 
+instagram_oauth =
+  [
+    client_id: System.get_env("META_INSTAGRAM_CLIENT_ID"),
+    client_secret: System.get_env("META_INSTAGRAM_CLIENT_SECRET"),
+    redirect_uri: System.get_env("META_INSTAGRAM_REDIRECT_URI"),
+    graph_version: System.get_env("META_GRAPH_VERSION"),
+    scopes:
+      "META_INSTAGRAM_SCOPES"
+      |> System.get_env("")
+      |> String.split(",", trim: true)
+      |> Enum.map(&String.trim/1)
+      |> Enum.reject(&(&1 == ""))
+  ]
+  |> Enum.reject(fn
+    {_key, nil} -> true
+    {_key, ""} -> true
+    {:scopes, []} -> true
+    _env -> false
+  end)
+
+if instagram_oauth != [] do
+  config :growthpush_router, :instagram_oauth, instagram_oauth
+end
+
 if config_env() == :dev do
   config :growthpush_router, GrowthPushRouterWeb.Endpoint,
     http: [

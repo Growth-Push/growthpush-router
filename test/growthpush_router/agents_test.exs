@@ -335,6 +335,14 @@ defmodule GrowthPushRouter.AgentsTest do
       assert {:ok, [^connection]} = Agents.list_connections(admin, status: "Active")
     end
 
+    test "admin and owner can fetch a connection", %{admin: admin, owner: owner, agent: agent} do
+      assert {:ok, connection} =
+               Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+
+      assert {:ok, ^connection} = Agents.fetch_connection(admin, connection.id)
+      assert {:ok, ^connection} = Agents.fetch_connection(owner, connection.id)
+    end
+
     test "users can list only connections for agents they own", %{
       admin: admin,
       owner: owner,
@@ -366,6 +374,33 @@ defmodule GrowthPushRouter.AgentsTest do
       assert {:ok, [^connection]} = Agents.list_connections(owner)
       assert {:ok, [^connection]} = Agents.list_connections(owner, agent_id: agent.id)
       assert {:ok, []} = Agents.list_connections(owner, agent_id: other_agent.id)
+    end
+
+    test "owner deletes their connection", %{admin: admin, owner: owner, agent: agent} do
+      assert {:ok, connection} =
+               Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+
+      assert {:ok, deleted_connection} = Agents.delete_connection(owner, connection)
+      assert deleted_connection.id == connection.id
+      assert {:ok, []} = Agents.list_connections(owner, agent_id: agent.id)
+    end
+
+    test "unrelated owner cannot delete another user's connection", %{
+      admin: admin,
+      owner: owner,
+      agent: agent
+    } do
+      assert {:ok, connection} =
+               Agents.create_connection(admin, valid_connection_attrs(agent, owner))
+
+      {:ok, other_owner} =
+        Accounts.create_user(admin, %{
+          "email" => "other-delete-connection-owner@example.com",
+          "name" => "Other Owner"
+        })
+
+      assert {:error, :unauthorized} = Agents.delete_connection(other_owner, connection)
+      assert {:ok, [^connection]} = Agents.list_connections(owner, agent_id: agent.id)
     end
 
     test "create rejects non-admin users", %{admin: admin, owner: owner, agent: agent} do
@@ -418,6 +453,35 @@ defmodule GrowthPushRouter.AgentsTest do
       assert connection.agent_id == agent.id
       assert connection.connected_by_user_id == owner.id
       assert connection.external_account_id == "manual-atom-account"
+    end
+
+    test "owner reconnecting the same external account refreshes their connection", %{
+      owner: owner,
+      agent: agent
+    } do
+      connected_at = DateTime.utc_now(:second)
+
+      assert {:ok, connection} =
+               Agents.create_user_connection(
+                 owner,
+                 valid_user_connection_attrs(agent, %{
+                   "last_connected_at" => DateTime.add(connected_at, -60, :second)
+                 })
+               )
+
+      assert {:ok, refreshed_connection} =
+               Agents.create_user_connection(
+                 owner,
+                 valid_user_connection_attrs(agent, %{
+                   "display_name" => "Manual Growth Push Updated",
+                   "last_connected_at" => connected_at
+                 })
+               )
+
+      assert refreshed_connection.id == connection.id
+      assert refreshed_connection.display_name == "Manual Growth Push Updated"
+      assert refreshed_connection.last_connected_at == connected_at
+      assert {:ok, [_connection]} = Agents.list_connections(owner, agent_id: agent.id)
     end
 
     test "admin cannot use user connection creation for another user's agent", %{

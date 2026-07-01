@@ -91,6 +91,9 @@ The MVP should demonstrate:
 * minimal admin/onboarding flow for connecting Instagram;
 * privacy and data deletion pages required for Meta App review.
 
+Instagram OAuth setup is documented in
+[`docs/instagram_oauth_setup.md`](docs/instagram_oauth_setup.md).
+
 ## Design principles
 
 * Client business data should remain in the client environment.
@@ -128,4 +131,3 @@ Future targets:
 * n8n workflows
 * custom webhook destinations
 * follow-up and conversation state tracking
-

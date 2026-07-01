@@ -21,6 +21,7 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
           {:ok,
            socket
            |> assign(:current_user, user)
+           |> close_delete_connection_modal()
            |> assign_dashboard_data()}
         end
 
@@ -30,20 +31,28 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
   end
 
   @impl true
-  def handle_event(
-        "validate_connection",
-        %{"agent_id" => agent_id, "connection" => connection_params},
-        socket
-      ) do
-    {:noreply, validate_connection(socket, agent_id, connection_params)}
+  def handle_event("request_delete_connection", %{"id" => id}, socket) do
+    request_delete_connection(socket, id)
   end
 
   def handle_event(
-        "save_connection",
-        %{"agent_id" => agent_id, "connection" => connection_params},
+        "validate_delete_connection",
+        %{"connection_delete" => %{"confirmation" => confirmation}},
         socket
       ) do
-    save_connection(socket, agent_id, connection_params)
+    {:noreply, assign(socket, :connection_delete_confirmation, confirmation)}
+  end
+
+  def handle_event("cancel_delete_connection", _params, socket) do
+    {:noreply, close_delete_connection_modal(socket)}
+  end
+
+  def handle_event(
+        "confirm_delete_connection",
+        %{"connection_delete" => %{"confirmation" => confirmation}},
+        socket
+      ) do
+    confirm_delete_connection(socket, confirmation)
   end
 
   @impl true
@@ -121,6 +130,7 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
                     <th>{gettext(".dashboard.connection_account")}</th>
                     <th>{gettext(".dashboard.connection_status")}</th>
                     <th>{gettext(".dashboard.connection_connected_at")}</th>
+                    <th class="text-right">{gettext(".dashboard.connection_actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -139,115 +149,55 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
                       />
                     </td>
                     <td>{format_datetime(connection.last_connected_at)}</td>
+                    <td class="text-right">
+                      <button
+                        type="button"
+                        class="btn btn-xs btn-error"
+                        phx-click="request_delete_connection"
+                        phx-value-id={connection.id}
+                      >
+                        <.icon name="hero-trash" class="size-4" />
+                        {gettext(".dashboard.connection_delete")}
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            <.form
-              :if={!instagram_connected?(@connections_by_agent_id, agent)}
-              id={"instagram-connection-form-#{agent.id}"}
-              for={connection_form(@connection_forms, agent)}
-              phx-change="validate_connection"
-              phx-submit="save_connection"
-              phx-value-agent_id={agent.id}
-              class="space-y-4 rounded-md border border-base-300 p-4"
-            >
-              <input type="hidden" name="agent_id" value={agent.id} />
-
-              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h4 class="font-semibold">{gettext(".dashboard.instagram_form_title")}</h4>
-                  <p class="mt-1 text-sm text-base-content/70">
-                    {gettext(".dashboard.instagram_form_subtitle")}
-                  </p>
-                </div>
-                <.link href={~p"/connect/instagram"} class="btn btn-sm btn-primary btn-soft">
-                  <.icon name="hero-link" class="size-4" />
-                  {gettext(".dashboard.instagram_oauth_placeholder")}
-                </.link>
-              </div>
-
-              <div class="grid gap-4 sm:grid-cols-2">
-                <.input
-                  field={connection_form(@connection_forms, agent)[:external_account_id]}
-                  type="text"
-                  label={gettext(".dashboard.instagram_external_account_id")}
-                  required
-                />
-                <.input
-                  field={connection_form(@connection_forms, agent)[:display_name]}
-                  type="text"
-                  label={gettext(".dashboard.instagram_display_name")}
-                  required
-                />
-              </div>
-              <.input
-                field={connection_form(@connection_forms, agent)[:access_token_ref]}
-                type="text"
-                label={gettext(".dashboard.instagram_access_token_ref")}
-                placeholder={gettext(".dashboard.instagram_access_token_ref_placeholder")}
-                required
-              />
-              <.info_box>{gettext(".dashboard.instagram_token_ref_help")}</.info_box>
-
-              <div class="flex justify-end">
-                <.button class="btn btn-primary">
-                  <.icon name="hero-plus" class="size-4" />
-                  {gettext(".dashboard.instagram_save")}
-                </.button>
-              </div>
-            </.form>
+            <div class="flex justify-end">
+              <.link href={~p"/connect/instagram?agent_id=#{agent.id}"} class="btn btn-sm btn-primary">
+                <.icon name="hero-link" class="size-4" />
+                {gettext(".dashboard.instagram_oauth_placeholder")}
+              </.link>
+            </div>
           </div>
         </.section_card>
       </section>
 
+      <.confirm_modal
+        :if={@connection_delete_modal?}
+        id="delete-connection-modal"
+        title={gettext(".dashboard.connection_delete_title")}
+        body={
+          gettext(".dashboard.connection_delete_body",
+            account: @connection_delete_label || gettext(".dashboard.connection_unknown_account")
+          )
+        }
+        confirmation_label={gettext(".dashboard.connection_delete_confirmation_label")}
+        confirmation_value={gettext(".dashboard.connection_delete_confirmation_value")}
+        typed_value={@connection_delete_confirmation}
+        form_name={:connection_delete}
+        change_event="validate_delete_connection"
+        submit_event="confirm_delete_connection"
+        cancel_event="cancel_delete_connection"
+        confirm_text={gettext(".dashboard.connection_delete")}
+        cancel_text={gettext(".dashboard.connection_delete_cancel")}
+      />
+
       <Layouts.flash_group flash={@flash} />
     </main>
     """
-  end
-
-  defp validate_connection(socket, agent_id, connection_params) do
-    with %Agent{} = agent <- find_agent(socket.assigns.agents, agent_id) do
-      form =
-        %Connection{}
-        |> Agents.change_connection(
-          connection_attrs(socket.assigns.current_user, agent, connection_params)
-        )
-        |> Map.put(:action, :validate)
-        |> Phoenix.Component.to_form()
-
-      put_connection_form(socket, agent.id, form)
-    else
-      _ -> put_flash(socket, :error, gettext(".dashboard.agent_not_found"))
-    end
-  end
-
-  defp save_connection(socket, agent_id, connection_params) do
-    with %Agent{} = agent <- find_agent(socket.assigns.agents, agent_id) do
-      params = Map.put(connection_params, "agent_id", agent.id)
-
-      case Agents.create_user_connection(socket.assigns.current_user, params) do
-        {:ok, _connection} ->
-          {:noreply,
-           socket
-           |> put_flash(:info, gettext(".dashboard.instagram_connected"))
-           |> assign_dashboard_data()}
-
-        {:error, :unauthorized} ->
-          {:noreply, put_flash(socket, :error, gettext(".auth.authentication_required"))}
-
-        {:error, %Ecto.Changeset{} = changeset} ->
-          form =
-            changeset
-            |> Map.put(:action, :insert)
-            |> Phoenix.Component.to_form()
-
-          {:noreply, put_connection_form(socket, agent.id, form)}
-      end
-    else
-      _ -> {:noreply, put_flash(socket, :error, gettext(".dashboard.agent_not_found"))}
-    end
   end
 
   defp assign_dashboard_data(socket) do
@@ -258,13 +208,11 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
         socket
         |> assign(:agents, agents)
         |> assign(:connections_by_agent_id, connections_by_agent_id)
-        |> assign(:connection_forms, connection_forms(socket.assigns.current_user, agents))
 
       {:error, :unauthorized} ->
         socket
         |> assign(:agents, [])
         |> assign(:connections_by_agent_id, %{})
-        |> assign(:connection_forms, %{})
         |> put_flash(:error, gettext(".auth.authentication_required"))
     end
   end
@@ -281,53 +229,49 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
     end)
   end
 
-  defp connection_forms(%User{} = user, agents) do
-    Map.new(agents, fn %Agent{} = agent ->
-      form =
-        %Connection{}
-        |> Agents.change_connection(connection_attrs(user, agent, %{}))
-        |> Phoenix.Component.to_form()
+  defp request_delete_connection(socket, id) do
+    case Agents.fetch_connection(socket.assigns.current_user, id) do
+      {:ok, %Connection{} = connection} ->
+        {:noreply,
+         assign(socket,
+           connection_delete_modal?: true,
+           connection_delete_confirmation: "",
+           connection_delete_id: connection.id,
+           connection_delete_label: connection_delete_label(connection)
+         )}
 
-      {agent.id, form}
-    end)
+      {:error, :unauthorized} ->
+        {:noreply, put_flash(socket, :error, gettext(".dashboard.connection_delete_failed"))}
+    end
   end
 
-  defp put_connection_form(socket, agent_id, form) do
-    update(socket, :connection_forms, &Map.put(&1, agent_id, form))
+  defp confirm_delete_connection(socket, confirmation) do
+    expected_confirmation = gettext(".dashboard.connection_delete_confirmation_value")
+
+    if confirmation == expected_confirmation && socket.assigns.connection_delete_id do
+      do_delete_connection(socket, socket.assigns.connection_delete_id)
+    else
+      {:noreply, assign(socket, :connection_delete_confirmation, confirmation)}
+    end
   end
 
-  defp connection_attrs(%User{} = user, %Agent{} = agent, attrs) do
-    attrs = stringify_keys(attrs)
-
-    Map.merge(attrs, %{
-      "agent_id" => agent.id,
-      "connected_by_user_id" => user.id,
-      "provider" => "meta",
-      "channel" => "instagram",
-      "status" => "active"
-    })
+  defp do_delete_connection(socket, id) do
+    with {:ok, connection} <- Agents.fetch_connection(socket.assigns.current_user, id),
+         {:ok, _deleted_connection} <-
+           Agents.delete_connection(socket.assigns.current_user, connection) do
+      {:noreply,
+       socket
+       |> close_delete_connection_modal()
+       |> put_flash(:info, gettext(".dashboard.connection_deleted"))
+       |> assign_dashboard_data()}
+    else
+      {:error, :unauthorized} ->
+        {:noreply, put_flash(socket, :error, gettext(".dashboard.connection_delete_failed"))}
+    end
   end
-
-  defp stringify_keys(attrs) when is_map(attrs) do
-    Map.new(attrs, fn {key, value} -> {to_string(key), value} end)
-  end
-
-  defp stringify_keys(_attrs), do: %{}
-
-  defp find_agent(agents, agent_id), do: Enum.find(agents, &(&1.id == agent_id))
 
   defp connections_for(connections_by_agent_id, %Agent{id: agent_id}) do
     Map.get(connections_by_agent_id, agent_id, [])
-  end
-
-  defp connection_form(connection_forms, %Agent{id: agent_id}) do
-    Map.fetch!(connection_forms, agent_id)
-  end
-
-  defp instagram_connected?(connections_by_agent_id, %Agent{} = agent) do
-    connections_by_agent_id
-    |> connections_for(agent)
-    |> Enum.any?(&(&1.provider == "meta" and &1.channel == "instagram"))
   end
 
   defp connection_label(%Connection{provider: "meta", channel: "instagram"}) do
@@ -337,6 +281,18 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
   defp connection_label(%Connection{provider: provider, channel: channel}) do
     "#{provider} / #{channel}"
   end
+
+  defp connection_delete_label(%Connection{display_name: display_name})
+       when is_binary(display_name) and display_name != "" do
+    display_name
+  end
+
+  defp connection_delete_label(%Connection{external_account_id: external_account_id})
+       when is_binary(external_account_id) and external_account_id != "" do
+    external_account_id
+  end
+
+  defp connection_delete_label(_connection), do: gettext(".dashboard.connection_unknown_account")
 
   defp agent_status_label("active"), do: gettext(".dashboard.agent_status_active")
   defp agent_status_label("inactive"), do: gettext(".dashboard.agent_status_inactive")
@@ -362,4 +318,13 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
   end
 
   defp subscribe_to_live_socket(_socket, _session), do: :ok
+
+  defp close_delete_connection_modal(socket) do
+    assign(socket,
+      connection_delete_modal?: false,
+      connection_delete_confirmation: "",
+      connection_delete_id: nil,
+      connection_delete_label: nil
+    )
+  end
 end
