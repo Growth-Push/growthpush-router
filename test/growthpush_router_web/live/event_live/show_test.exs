@@ -48,6 +48,7 @@ defmodule GrowthPushRouterWeb.EventLive.ShowTest do
     assert html =~ "payload"
     assert html =~ "message_received"
     assert html =~ "hello from show-owned-events"
+    assert html =~ ~s(href="/events?connection_id=#{event.connection_id}")
   end
 
   test "user cannot see another owner's event detail", %{conn: conn} do
@@ -71,6 +72,7 @@ defmodule GrowthPushRouterWeb.EventLive.ShowTest do
 
     assert html =~ "payload"
     assert html =~ "hello from show-other-admin-events"
+    assert html =~ ~s(href="/admin/events?connection_id=#{other_event.connection_id}")
   end
 
   defp create_event_fixture(label) do

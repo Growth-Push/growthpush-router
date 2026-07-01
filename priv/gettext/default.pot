@@ -55,7 +55,7 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:186
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:182
 #, elixir-autogen, elixir-format
 msgid ".admin_nav.sign_out"
 msgstr ""
@@ -151,12 +151,12 @@ msgstr ""
 msgid ".admin_users.password_pending"
 msgstr ""
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:212
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:208
 #, elixir-autogen, elixir-format
 msgid ".admin_users.password_reset"
 msgstr ""
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:219
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:215
 #, elixir-autogen, elixir-format
 msgid ".admin_users.password_reset_failed"
 msgstr ""
@@ -191,7 +191,7 @@ msgstr ""
 msgid ".admin_users.user_created"
 msgstr ""
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:199
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:195
 #, elixir-autogen, elixir-format
 msgid ".admin_users.user_deleted"
 msgstr ""
@@ -212,9 +212,9 @@ msgstr ""
 #: lib/growthpush_router_web/live/admin_user_live/index.ex:32
 #: lib/growthpush_router_web/live/admin_user_live/index.ex:47
 #: lib/growthpush_router_web/live/admin_user_live/index.ex:57
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:203
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:216
-#: lib/growthpush_router_web/live/event_live/index.ex:133
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:199
+#: lib/growthpush_router_web/live/admin_user_live/index.ex:212
+#: lib/growthpush_router_web/live/event_live/index.ex:174
 #: lib/growthpush_router_web/user_auth.ex:76
 #, elixir-autogen, elixir-format
 msgid ".auth.admin_required"
@@ -248,7 +248,7 @@ msgid ".dashboard.email"
 msgstr ""
 
 #: lib/growthpush_router_web/live/dashboard_live/index.ex:69
-#: lib/growthpush_router_web/live/event_live/index.ex:161
+#: lib/growthpush_router_web/live/event_live/index.ex:220
 #: lib/growthpush_router_web/live/event_live/show.ex:138
 #, elixir-autogen, elixir-format
 msgid ".dashboard.nav_title"
@@ -265,7 +265,7 @@ msgid ".dashboard.section"
 msgstr ""
 
 #: lib/growthpush_router_web/live/dashboard_live/index.ex:77
-#: lib/growthpush_router_web/live/event_live/index.ex:170
+#: lib/growthpush_router_web/live/event_live/index.ex:229
 #: lib/growthpush_router_web/live/event_live/show.ex:147
 #, elixir-autogen, elixir-format
 msgid ".dashboard.sign_out"
@@ -933,22 +933,17 @@ msgstr ""
 msgid ".admin_connections.view_events"
 msgstr ""
 
-#: lib/growthpush_router_web/live/admin_user_live/index.ex:179
-#, elixir-autogen, elixir-format
-msgid ".admin_nav.events"
-msgstr ""
-
 #: lib/growthpush_router_web/live/dashboard_live/index.ex:73
 #, elixir-autogen, elixir-format
 msgid ".dashboard.events"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:77
+#: lib/growthpush_router_web/live/event_live/index.ex:93
 #, elixir-autogen, elixir-format
 msgid ".events.actions"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:178
+#: lib/growthpush_router_web/live/event_live/index.ex:237
 #, elixir-autogen, elixir-format
 msgid ".events.admin_index_title"
 msgstr ""
@@ -958,50 +953,45 @@ msgstr ""
 msgid ".events.back_to_events"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:72
+#: lib/growthpush_router_web/live/event_live/index.ex:88
 #: lib/growthpush_router_web/live/event_live/show.ex:65
 #, elixir-autogen, elixir-format
 msgid ".events.channel"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:55
-#, elixir-autogen, elixir-format
-msgid ".events.clear_filters"
-msgstr ""
-
-#: lib/growthpush_router_web/live/event_live/index.ex:64
+#: lib/growthpush_router_web/live/event_live/index.ex:80
 #, elixir-autogen, elixir-format
 msgid ".events.empty"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:73
+#: lib/growthpush_router_web/live/event_live/index.ex:89
 #: lib/growthpush_router_web/live/event_live/show.ex:69
 #, elixir-autogen, elixir-format
 msgid ".events.event_type"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:74
+#: lib/growthpush_router_web/live/event_live/index.ex:90
 #: lib/growthpush_router_web/live/event_live/show.ex:73
 #, elixir-autogen, elixir-format
 msgid ".events.external_event_id"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:60
+#: lib/growthpush_router_web/live/event_live/index.ex:70
 #, elixir-autogen, elixir-format
 msgid ".events.filtered_by_connection"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:51
+#: lib/growthpush_router_web/live/event_live/index.ex:53
 #, elixir-autogen, elixir-format
 msgid ".events.index_subtitle"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:179
+#: lib/growthpush_router_web/live/event_live/index.ex:238
 #, elixir-autogen, elixir-format
 msgid ".events.index_title"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:166
+#: lib/growthpush_router_web/live/event_live/index.ex:225
 #: lib/growthpush_router_web/live/event_live/show.ex:143
 #, elixir-autogen, elixir-format
 msgid ".events.nav_title"
@@ -1017,13 +1007,13 @@ msgstr ""
 msgid ".events.payload_title"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:71
+#: lib/growthpush_router_web/live/event_live/index.ex:87
 #: lib/growthpush_router_web/live/event_live/show.ex:61
 #, elixir-autogen, elixir-format
 msgid ".events.provider"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:76
+#: lib/growthpush_router_web/live/event_live/index.ex:92
 #: lib/growthpush_router_web/live/event_live/show.ex:83
 #, elixir-autogen, elixir-format
 msgid ".events.received_at"
@@ -1034,43 +1024,58 @@ msgstr ""
 msgid ".events.show_title"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:75
+#: lib/growthpush_router_web/live/event_live/index.ex:91
 #: lib/growthpush_router_web/live/event_live/show.ex:77
 #, elixir-autogen, elixir-format
 msgid ".events.status"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:190
-#: lib/growthpush_router_web/live/event_live/show.ex:161
+#: lib/growthpush_router_web/live/event_live/index.ex:270
+#: lib/growthpush_router_web/live/event_live/show.ex:169
 #, elixir-autogen, elixir-format
 msgid ".events.status_failed"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:191
-#: lib/growthpush_router_web/live/event_live/show.ex:162
+#: lib/growthpush_router_web/live/event_live/index.ex:271
+#: lib/growthpush_router_web/live/event_live/show.ex:170
 #, elixir-autogen, elixir-format
 msgid ".events.status_ignored"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:189
-#: lib/growthpush_router_web/live/event_live/show.ex:160
+#: lib/growthpush_router_web/live/event_live/index.ex:269
+#: lib/growthpush_router_web/live/event_live/show.ex:168
 #, elixir-autogen, elixir-format
 msgid ".events.status_processed"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:188
-#: lib/growthpush_router_web/live/event_live/show.ex:159
+#: lib/growthpush_router_web/live/event_live/index.ex:268
+#: lib/growthpush_router_web/live/event_live/show.ex:167
 #, elixir-autogen, elixir-format
 msgid ".events.status_processing"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:187
-#: lib/growthpush_router_web/live/event_live/show.ex:158
+#: lib/growthpush_router_web/live/event_live/index.ex:267
+#: lib/growthpush_router_web/live/event_live/show.ex:166
 #, elixir-autogen, elixir-format
 msgid ".events.status_received"
 msgstr ""
 
-#: lib/growthpush_router_web/live/event_live/index.ex:93
+#: lib/growthpush_router_web/live/event_live/index.ex:109
 #, elixir-autogen, elixir-format
 msgid ".events.view"
+msgstr ""
+
+#: lib/growthpush_router_web/live/event_live/index.ex:66
+#, elixir-autogen, elixir-format
+msgid ".events.admin_connection_required"
+msgstr ""
+
+#: lib/growthpush_router_web/live/event_live/index.ex:61
+#, elixir-autogen, elixir-format
+msgid ".events.back_to_customer"
+msgstr ""
+
+#: lib/growthpush_router_web/live/event_live/index.ex:144
+#, elixir-autogen, elixir-format
+msgid ".events.connection_not_found"
 msgstr ""

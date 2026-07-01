@@ -50,7 +50,7 @@ defmodule GrowthPushRouterWeb.EventLive.Show do
       <section class="mx-auto w-full max-w-6xl space-y-6 px-4 py-8">
         <.section_card title={gettext(".events.show_title")} subtitle={@event.id}>
           <:actions>
-            <.link navigate={events_index_path(@current_user)} class="btn btn-sm">
+            <.link navigate={events_index_path(@current_user, @event)} class="btn btn-sm">
               <.icon name="hero-arrow-left" class="size-4" />
               {gettext(".events.back_to_events")}
             </.link>
@@ -120,7 +120,7 @@ defmodule GrowthPushRouterWeb.EventLive.Show do
       {:error, :unauthorized} ->
         socket
         |> put_flash(:error, gettext(".events.not_found"))
-        |> redirect(to: events_index_path(socket.assigns.current_user))
+        |> redirect(to: fallback_events_path(socket.assigns.current_user))
     end
   end
 
@@ -152,8 +152,16 @@ defmodule GrowthPushRouterWeb.EventLive.Show do
     """
   end
 
-  defp events_index_path(%User{is_admin: true}), do: ~p"/admin/events"
-  defp events_index_path(_user), do: ~p"/events"
+  defp events_index_path(%User{is_admin: true}, %Event{connection_id: connection_id}) do
+    ~p"/admin/events?connection_id=#{connection_id}"
+  end
+
+  defp events_index_path(_user, %Event{connection_id: connection_id}) do
+    ~p"/events?connection_id=#{connection_id}"
+  end
+
+  defp fallback_events_path(%User{is_admin: true}), do: ~p"/admin/users"
+  defp fallback_events_path(_user), do: ~p"/events"
 
   defp event_status_label("received"), do: gettext(".events.status_received")
   defp event_status_label("processing"), do: gettext(".events.status_processing")

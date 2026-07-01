@@ -6,6 +6,7 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
   alias GrowthPushRouter.Accounts
   alias GrowthPushRouter.Accounts.User
   alias GrowthPushRouter.Agents
+  alias GrowthPushRouter.Agents.Connection
   alias GrowthPushRouter.Agents.Event
 
   @impl true
@@ -18,7 +19,8 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
          socket
          |> assign(:current_user, user)
          |> assign(:events, [])
-         |> assign(:connection_id, nil)}
+         |> assign(:connection_context, nil)
+         |> assign(:global_events_blocked?, false)}
 
       _ ->
         {:ok, redirect(socket, to: ~p"/login")}
@@ -50,21 +52,35 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
       <section class="mx-auto w-full max-w-6xl px-4 py-8">
         <.section_card title={page_title(@current_user)} subtitle={gettext(".events.index_subtitle")}>
           <:actions>
-            <.link navigate={events_index_path(@current_user)} class="btn btn-sm">
-              <.icon name="hero-arrow-path" class="size-4" />
-              {gettext(".events.clear_filters")}
+            <.link
+              :if={@connection_context}
+              navigate={customer_path(@current_user, @connection_context)}
+              class="btn btn-sm"
+            >
+              <.icon name="hero-arrow-left" class="size-4" />
+              {gettext(".events.back_to_customer")}
             </.link>
           </:actions>
 
-          <.info_box :if={@connection_id}>
-            {gettext(".events.filtered_by_connection", connection_id: @connection_id)}
+          <.info_box :if={@global_events_blocked?}>
+            {gettext(".events.admin_connection_required")}
           </.info_box>
 
-          <.info_box :if={@events == []} class={[@connection_id && "mt-4"]}>
+          <.info_box :if={@connection_context}>
+            {gettext(".events.filtered_by_connection",
+              customer: customer_label(@connection_context.customer),
+              connection: connection_label(@connection_context.connection)
+            )}
+          </.info_box>
+
+          <.info_box
+            :if={@events == [] && !@global_events_blocked?}
+            class={[@connection_context && "mt-4"]}
+          >
             {gettext(".events.empty")}
           </.info_box>
 
-          <div :if={@events != []} class={["overflow-x-auto", @connection_id && "mt-4"]}>
+          <div :if={@events != []} class={["overflow-x-auto", @connection_context && "mt-4"]}>
             <table class="table table-sm">
               <thead>
                 <tr>
@@ -119,13 +135,38 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
   end
 
   defp assign_events(socket, params) do
+    case connection_context(socket.assigns.current_user, params) do
+      {:ok, connection_context} ->
+        assign_scoped_events(socket, params, connection_context)
+
+      {:error, :unauthorized} ->
+        socket
+        |> put_flash(:error, gettext(".events.connection_not_found"))
+        |> redirect(to: fallback_path(socket.assigns.current_user))
+    end
+  end
+
+  defp assign_scoped_events(
+         %{assigns: %{current_user: %User{is_admin: true}}} = socket,
+         _params,
+         nil
+       ) do
+    assign(socket,
+      events: [],
+      connection_context: nil,
+      global_events_blocked?: true
+    )
+  end
+
+  defp assign_scoped_events(socket, params, connection_context) do
     filters = event_filters(params)
 
     case Agents.list_events(socket.assigns.current_user, filters) do
       {:ok, events} ->
         assign(socket,
           events: events,
-          connection_id: params["connection_id"]
+          connection_context: connection_context,
+          global_events_blocked?: false
         )
 
       {:error, :unauthorized} ->
@@ -134,6 +175,24 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
         |> redirect(to: ~p"/dashboard")
     end
   end
+
+  defp connection_context(%User{} = user, %{"connection_id" => connection_id})
+       when is_binary(connection_id) do
+    with {:ok, %Connection{} = connection} <- Agents.fetch_connection(user, connection_id),
+         {:ok, agent} <- Agents.fetch_agent(user, connection.agent_id),
+         {:ok, customer} <- connection_customer(user, agent) do
+      {:ok, %{connection: connection, agent: agent, customer: customer}}
+    end
+  end
+
+  defp connection_context(_user, _params), do: {:ok, nil}
+
+  defp connection_customer(%User{is_admin: true} = admin, agent) do
+    Accounts.fetch_user(admin, agent.owner_id)
+  end
+
+  defp connection_customer(%User{id: owner_id} = user, %{owner_id: owner_id}), do: {:ok, user}
+  defp connection_customer(_user, _agent), do: {:error, :unauthorized}
 
   defp event_filters(params) do
     params
@@ -178,8 +237,29 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
   defp page_title(%User{is_admin: true}), do: gettext(".events.admin_index_title")
   defp page_title(_user), do: gettext(".events.index_title")
 
-  defp events_index_path(%User{is_admin: true}), do: ~p"/admin/events"
-  defp events_index_path(_user), do: ~p"/events"
+  defp fallback_path(%User{is_admin: true}), do: ~p"/admin/users"
+  defp fallback_path(_user), do: ~p"/dashboard"
+
+  defp customer_path(%User{is_admin: true}, %{customer: customer}),
+    do: ~p"/admin/users/#{customer}/edit"
+
+  defp customer_path(_user, _connection_context), do: ~p"/dashboard"
+
+  defp customer_label(%User{company: company}) when is_binary(company) and company != "",
+    do: company
+
+  defp customer_label(%User{name: name}) when is_binary(name) and name != "", do: name
+  defp customer_label(%User{email: email}) when is_binary(email) and email != "", do: email
+  defp customer_label(_user), do: "-"
+
+  defp connection_label(%Connection{display_name: display_name})
+       when is_binary(display_name) and display_name != "" do
+    display_name
+  end
+
+  defp connection_label(%Connection{provider: provider, channel: channel}) do
+    "#{provider} / #{channel}"
+  end
 
   defp event_detail_path(%User{is_admin: true}, %Event{} = event), do: ~p"/admin/events/#{event}"
   defp event_detail_path(_user, %Event{} = event), do: ~p"/events/#{event}"

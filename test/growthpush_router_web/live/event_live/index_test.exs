@@ -48,7 +48,7 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
     refute html =~ other_event.external_event_id
   end
 
-  test "admin lists all events", %{conn: conn} do
+  test "admin index without a connection filter does not list global events", %{conn: conn} do
     {admin, _owner, event} = create_event_fixture("index-admin-events")
     {_other_owner, other_event} = create_other_event_fixture(admin, "index-other-admin-events")
 
@@ -58,8 +58,9 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
       |> live(~p"/admin/events")
 
     assert html =~ "eventos recebidos"
-    assert html =~ event.external_event_id
-    assert html =~ other_event.external_event_id
+    assert html =~ "Abra os eventos a partir da conexão de um customer."
+    refute html =~ event.external_event_id
+    refute html =~ other_event.external_event_id
   end
 
   test "connection filter limits events", %{conn: conn} do
@@ -75,7 +76,10 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
 
     assert html =~ event.external_event_id
     refute html =~ other_event.external_event_id
-    assert html =~ event.connection_id
+    assert html =~ "Event Owner"
+    assert html =~ "Growth Push index-filtered-events"
+    refute html =~ event.connection_id
+    refute html =~ "limpar filtros"
   end
 
   test "dashboard links normal users to events", %{conn: conn} do
@@ -90,7 +94,7 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
     assert html =~ "eventos"
   end
 
-  test "admin nav links admins to events", %{conn: conn} do
+  test "admin nav does not link admins to a global events screen", %{conn: conn} do
     admin = create_admin()
 
     {:ok, _view, html} =
@@ -98,8 +102,7 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
       |> log_in_user(admin)
       |> live(~p"/admin/users")
 
-    assert html =~ ~s(href="/admin/events")
-    assert html =~ "eventos"
+    refute html =~ ~s(href="/admin/events")
   end
 
   defp create_event_fixture(label) do
