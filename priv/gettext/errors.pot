@@ -113,7 +113,7 @@ msgstr ""
 #: lib/growthpush_router/agents/agent.ex:60
 #: lib/growthpush_router/agents/agent.ex:108
 #: lib/growthpush_router/agents/connection.ex:75
-#: lib/growthpush_router/agents/event.ex:66
+#: lib/growthpush_router/agents/event.ex:72
 #, elixir-autogen, elixir-format
 msgid ".cant_be_blank"
 msgstr ""
@@ -150,10 +150,10 @@ msgstr ""
 #: lib/growthpush_router/agents/connection.ex:80
 #: lib/growthpush_router/agents/connection.ex:84
 #: lib/growthpush_router/agents/connection.ex:88
-#: lib/growthpush_router/agents/event.ex:67
-#: lib/growthpush_router/agents/event.ex:68
-#: lib/growthpush_router/agents/event.ex:71
-#: lib/growthpush_router/agents/event.ex:75
+#: lib/growthpush_router/agents/event.ex:73
+#: lib/growthpush_router/agents/event.ex:74
+#: lib/growthpush_router/agents/event.ex:77
+#: lib/growthpush_router/agents/event.ex:81
 #, elixir-autogen, elixir-format
 msgid ".too_long"
 msgstr ""
@@ -234,12 +234,17 @@ msgstr ""
 msgid ".connection_access_token_ref_invalid"
 msgstr ""
 
-#: lib/growthpush_router/agents/event.ex:81
+#: lib/growthpush_router/agents/event.ex:90
 #, elixir-autogen, elixir-format
 msgid ".event_connection_not_found"
 msgstr ""
 
-#: lib/growthpush_router/agents/event.ex:78
+#: lib/growthpush_router/agents/event.ex:84
 #, elixir-autogen, elixir-format
 msgid ".event_status_invalid"
+msgstr ""
+
+#: lib/growthpush_router/agents/event.ex:87
+#, elixir-autogen, elixir-format
+msgid ".event_stored_by_invalid"
 msgstr ""

@@ -43,13 +43,22 @@ defmodule GrowthPushRouterWeb.InternalTestEventControllerTest do
     assert redirected_to(conn) == return_to
     assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "evento de teste"
 
-    assert %Event{} = event = Repo.one(Event)
-    assert event.connection_id == connection.id
-    assert event.event_type == "test_event"
-    assert event.status == "received"
-    assert event.external_event_id =~ "test-event-#{connection.id}-"
-    assert event.payload["object"] == "instagram"
-    assert [%{"id" => "admin-success-instagram-account"}] = event.payload["entry"]
+    assert [edge_event] = Repo.all_by(Event, stored_by: "edge")
+    assert [agent_event] = Repo.all_by(Event, stored_by: "agent")
+
+    assert edge_event.connection_id == connection.id
+    assert edge_event.event_type == "test_event"
+    assert edge_event.status == "synced"
+    assert edge_event.processed_at
+    assert edge_event.external_event_id =~ "test-event-#{connection.id}-"
+    assert edge_event.payload["object"] == "instagram"
+    assert [%{"id" => "admin-success-instagram-account"}] = edge_event.payload["entry"]
+
+    assert agent_event.connection_id == connection.id
+    assert agent_event.event_type == "test_event"
+    assert agent_event.status == "received"
+    assert agent_event.stored_by == "agent"
+    assert agent_event.external_event_id == edge_event.external_event_id
   end
 
   test "admin can return to the events list filtered by connection", %{conn: conn} do
@@ -65,7 +74,13 @@ defmodule GrowthPushRouterWeb.InternalTestEventControllerTest do
       })
 
     assert redirected_to(conn) == return_to
-    assert %Event{connection_id: connection_id} = Repo.one(Event)
+
+    assert %Event{connection_id: connection_id, status: "synced"} =
+             Repo.get_by(Event, stored_by: "edge")
+
+    assert %Event{connection_id: ^connection_id, status: "received"} =
+             Repo.get_by(Event, stored_by: "agent")
+
     assert connection_id == connection.id
   end
 

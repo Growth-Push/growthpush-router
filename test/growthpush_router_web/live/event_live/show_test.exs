@@ -48,7 +48,43 @@ defmodule GrowthPushRouterWeb.EventLive.ShowTest do
     assert html =~ "payload"
     assert html =~ "message_received"
     assert html =~ "hello from show-owned-events"
+    assert html =~ "progresso"
+    assert html =~ "IG"
+    assert html =~ "enviado"
+    assert html =~ "Router"
+    assert html =~ "Agent"
+    assert html =~ "Error"
     assert html =~ ~s(href="/events?connection_id=#{event.connection_id}")
+  end
+
+  test "user sees synced event progress reaching the agent", %{conn: conn} do
+    %{owner: owner, agent: agent, event: event} =
+      create_event_context_fixture("show-synced-progress-events")
+
+    assert {:ok, synced_event} = Agents.mark_event_synced(agent, event)
+
+    {:ok, _view, html} =
+      conn
+      |> log_in_user(owner)
+      |> live(~p"/events/#{synced_event}")
+
+    assert html =~ "sincronizado"
+    assert html =~ "recebido pelo agent"
+    assert html =~ "sem erro"
+  end
+
+  test "user sees failed event progress on the error path", %{conn: conn} do
+    %{owner: owner, event: event} =
+      create_event_context_fixture("show-failed-progress-events", %{"status" => "failed"})
+
+    {:ok, _view, html} =
+      conn
+      |> log_in_user(owner)
+      |> live(~p"/events/#{event}")
+
+    assert html =~ "falhou"
+    assert html =~ "não enviado"
+    assert html =~ "erro ativo"
   end
 
   test "user cannot see another owner's event detail", %{conn: conn} do
@@ -59,6 +95,22 @@ defmodule GrowthPushRouterWeb.EventLive.ShowTest do
              conn
              |> log_in_user(owner)
              |> live(~p"/events/#{other_event}")
+  end
+
+  test "user cannot see agent-side event detail", %{conn: conn} do
+    %{owner: owner, agent: agent, connection: connection} =
+      create_event_context_fixture("show-agent-internal-events")
+
+    assert {:ok, agent_event} =
+             Agents.create_agent_event(agent, connection, %{
+               "event_type" => "agent_internal_show",
+               "payload" => %{"message" => "internal agent event"}
+             })
+
+    assert {:error, {:redirect, %{to: "/events"}}} =
+             conn
+             |> log_in_user(owner)
+             |> live(~p"/events/#{agent_event}")
   end
 
   test "admin sees event payload detail", %{conn: conn} do
@@ -75,7 +127,29 @@ defmodule GrowthPushRouterWeb.EventLive.ShowTest do
     assert html =~ ~s(href="/admin/events?connection_id=#{other_event.connection_id}")
   end
 
-  defp create_event_fixture(label) do
+  test "admin cannot see agent-side event detail", %{conn: conn} do
+    %{admin: admin, agent: agent, connection: connection} =
+      create_event_context_fixture("show-admin-agent-internal-events")
+
+    assert {:ok, agent_event} =
+             Agents.create_agent_event(agent, connection, %{
+               "event_type" => "admin_agent_internal_show",
+               "payload" => %{"message" => "internal agent event"}
+             })
+
+    assert {:error, {:redirect, %{to: "/admin/users"}}} =
+             conn
+             |> log_in_user(admin)
+             |> live(~p"/admin/events/#{agent_event}")
+  end
+
+  defp create_event_fixture(label, event_attrs \\ %{}) do
+    %{admin: admin, owner: owner, event: event} = create_event_context_fixture(label, event_attrs)
+
+    {admin, owner, event}
+  end
+
+  defp create_event_context_fixture(label, event_attrs \\ %{}) do
     admin = create_admin()
 
     {:ok, owner} =
@@ -104,13 +178,20 @@ defmodule GrowthPushRouterWeb.EventLive.ShowTest do
       })
 
     {:ok, event} =
-      Agents.create_connection_event(agent, connection, %{
-        "event_type" => "message_received",
-        "external_event_id" => "#{label}-event",
-        "payload" => %{"message" => "hello from #{label}"}
-      })
+      Agents.create_connection_event(
+        agent,
+        connection,
+        Map.merge(
+          %{
+            "event_type" => "message_received",
+            "external_event_id" => "#{label}-event",
+            "payload" => %{"message" => "hello from #{label}"}
+          },
+          event_attrs
+        )
+      )
 
-    {admin, owner, event}
+    %{admin: admin, owner: owner, agent: agent, connection: connection, event: event}
   end
 
   defp create_other_event_fixture(%User{} = admin, label) do

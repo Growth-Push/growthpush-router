@@ -171,6 +171,7 @@ defmodule GrowthPushRouterWeb.CoreComponents do
     <span class={[
       "badge px-2",
       @status == "active" && "badge-success",
+      @status == "synced" && "badge-success",
       @status == "inactive" && "badge-warning",
       @status == "error" && "badge-error"
     ]}>

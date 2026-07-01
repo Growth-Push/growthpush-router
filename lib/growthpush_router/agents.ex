@@ -472,8 +472,8 @@ defmodule GrowthPushRouter.Agents do
       ...>     "external_event_id" => "evt-create-doc",
       ...>     "payload" => %{"entry" => [%{"id" => "17841400000000000"}]}
       ...>   })
-      iex> {event.connection_id, event.provider, event.channel, event.status}
-      {connection.id, "meta", "instagram", "received"}
+      iex> {event.connection_id, event.provider, event.channel, event.status, event.stored_by}
+      {connection.id, "meta", "instagram", "received", "edge"}
 
   """
   def create_connection_event(%Agent{} = agent, %Connection{id: connection_id}, attrs) do
@@ -482,18 +482,130 @@ defmodule GrowthPushRouter.Agents do
 
   def create_connection_event(%Agent{} = agent, connection_id, attrs)
       when is_binary(connection_id) and is_map(attrs) do
-    with {:ok, %Connection{} = connection} <- fetch_event_connection(agent, connection_id) do
-      attrs
-      |> stringify_keys()
-      |> connection_event_attrs(connection)
-      |> do_create_event()
-    end
+    do_create_connection_event(agent, connection_id, attrs, "edge")
   end
 
   def create_connection_event(_agent, _connection, _attrs), do: {:error, :unauthorized}
 
   @doc """
-  Lists connection events visible to an actor.
+  Creates an agent-side event available to local consumers.
+
+  The event is persisted with `stored_by` set to `"agent"` and can be consumed
+  by local programs with `list_agent_events_after/3`.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "agent-events-create-doc@example.com", "name" => "Agent Events Create Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "agent-events-create-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_connection(admin, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "connected_by_user_id" => owner.id,
+      ...>     "provider" => "meta",
+      ...>     "channel" => "instagram",
+      ...>     "external_account_id" => "agent-events-create-doc-account",
+      ...>     "display_name" => "Agent Events Create Doc",
+      ...>     "access_token_ref" => "vault://meta/instagram/agent-events-create-doc"
+      ...>   })
+      iex> {:ok, event} =
+      ...>   Agents.create_agent_event(agent, connection, %{
+      ...>     "event_type" => "message_received",
+      ...>     "payload" => %{"entry" => []}
+      ...>   })
+      iex> event.stored_by
+      "agent"
+
+  """
+  def create_agent_event(%Agent{} = agent, %Connection{id: connection_id}, attrs) do
+    create_agent_event(agent, connection_id, attrs)
+  end
+
+  def create_agent_event(%Agent{} = agent, connection_id, attrs)
+      when is_binary(connection_id) and is_map(attrs) do
+    do_create_connection_event(agent, connection_id, attrs, "agent")
+  end
+
+  def create_agent_event(_agent, _connection, _attrs), do: {:error, :unauthorized}
+
+  @doc """
+  Marks an edge-stored event as synced after the local agent accepted it.
+
+  Only the agent that owns the event connection can mark the event synced.
+  Agent-stored events are internal consumer records and are not updated by this
+  operation.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "events-sync-doc@example.com", "name" => "Events Sync Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "events-sync-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_connection(admin, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "connected_by_user_id" => owner.id,
+      ...>     "provider" => "meta",
+      ...>     "channel" => "instagram",
+      ...>     "external_account_id" => "events-sync-doc-account",
+      ...>     "display_name" => "Events Sync Doc",
+      ...>     "access_token_ref" => "vault://meta/instagram/events-sync-doc"
+      ...>   })
+      iex> {:ok, event} = Agents.create_connection_event(agent, connection, %{"event_type" => "message_received"})
+      iex> {:ok, synced_event} = Agents.mark_event_synced(agent, event)
+      iex> synced_event.status
+      "synced"
+
+  """
+  def mark_event_synced(%Agent{} = agent, %Event{id: event_id}) when is_binary(event_id) do
+    mark_event_synced(agent, event_id)
+  end
+
+  def mark_event_synced(%Agent{} = agent, event_id) when is_binary(event_id) do
+    with {:ok, %Event{} = event} <- fetch_agent_edge_event(agent, event_id) do
+      event
+      |> Event.changeset(%{
+        "status" => "synced",
+        "processed_at" => DateTime.utc_now(:second)
+      })
+      |> Repo.update()
+    end
+  end
+
+  def mark_event_synced(_agent, _event), do: {:error, :unauthorized}
+
+  defp do_create_connection_event(%Agent{} = agent, connection_id, attrs, stored_by) do
+    with {:ok, %Connection{} = connection} <- fetch_event_connection(agent, connection_id) do
+      attrs
+      |> stringify_keys()
+      |> connection_event_attrs(connection, stored_by)
+      |> do_create_event()
+    end
+  end
+
+  @doc """
+  Lists edge-stored connection events visible to an actor.
+
+  Agent-stored events are internal consumer records and are intentionally not
+  returned by this generic read API. Local consumers should use
+  `list_agent_events_after/3`.
 
   ## Examples
 
@@ -535,18 +647,76 @@ defmodule GrowthPushRouter.Agents do
   def list_events(actor, opts \\ [])
 
   def list_events(%User{is_admin: true}, opts) do
-    {:ok, do_list_events(opts)}
+    {:ok, do_list_events(edge_event_opts(opts))}
   end
 
   def list_events(%User{id: owner_id}, opts) when is_binary(owner_id) do
-    {:ok, do_list_events_for_owner(opts, owner_id)}
+    {:ok, do_list_events_for_owner(edge_event_opts(opts), owner_id)}
   end
 
   def list_events(%Agent{id: agent_id}, opts) when is_binary(agent_id) do
-    {:ok, do_list_events_for_agent(opts, agent_id)}
+    {:ok, do_list_events_for_agent(edge_event_opts(opts), agent_id)}
   end
 
   def list_events(_actor, _opts), do: {:error, :unauthorized}
+
+  @doc """
+  Lists agent-side events after a sequence cursor.
+
+  This is the DB-backed consumption API for local programs. Consumers should
+  store their own last processed sequence and call this function again with
+  that value.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "agent-events-list-doc@example.com", "name" => "Agent Events List Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "agent-events-list-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_connection(admin, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "connected_by_user_id" => owner.id,
+      ...>     "provider" => "meta",
+      ...>     "channel" => "instagram",
+      ...>     "external_account_id" => "agent-events-list-doc-account",
+      ...>     "display_name" => "Agent Events List Doc",
+      ...>     "access_token_ref" => "vault://meta/instagram/agent-events-list-doc"
+      ...>   })
+      iex> {:ok, event} = Agents.create_agent_event(agent, connection, %{"event_type" => "message_received"})
+      iex> {:ok, events} = Agents.list_agent_events_after(agent, event.sequence - 1)
+      iex> Enum.map(events, & &1.id)
+      [event.id]
+
+  """
+  def list_agent_events_after(actor, sequence, opts \\ [])
+
+  def list_agent_events_after(%Agent{id: agent_id}, sequence, opts)
+      when is_binary(agent_id) and is_integer(sequence) do
+    limit = event_consumer_limit(opts)
+
+    events =
+      Event
+      |> join(:inner, [e], c in assoc(e, :connection))
+      |> where([e, c], c.agent_id == ^agent_id)
+      |> where([e, _c], e.stored_by == "agent")
+      |> where([e, _c], e.sequence > ^sequence)
+      |> order_by([e, _c], asc: e.sequence)
+      |> limit(^limit)
+      |> Repo.all()
+
+    {:ok, events}
+  end
+
+  def list_agent_events_after(_actor, _sequence, _opts), do: {:error, :unauthorized}
 
   @doc """
   Fetches a connection event visible to an actor.
@@ -667,6 +837,38 @@ defmodule GrowthPushRouter.Agents do
       filter_event_query(q, [filter])
     end)
   end
+
+  defp edge_event_opts(opts) when is_list(opts) do
+    stored_by = Keyword.get(opts, :stored_by)
+
+    opts
+    |> Keyword.delete(:stored_by)
+    |> Keyword.put(:stored_by, edge_event_storage_filter(stored_by))
+  end
+
+  defp edge_event_opts(_opts), do: [stored_by: "edge"]
+
+  defp edge_event_storage_filter(nil), do: "edge"
+
+  defp edge_event_storage_filter(stored_by) when is_binary(stored_by) do
+    if GrowthPushRouter.Helpers.normalize_string(stored_by) == "edge" do
+      "edge"
+    else
+      "__hidden_agent_events__"
+    end
+  end
+
+  defp edge_event_storage_filter(_stored_by), do: "__hidden_agent_events__"
+
+  defp event_consumer_limit(opts) do
+    opts
+    |> Keyword.get(:limit, 100)
+    |> clamp_event_consumer_limit()
+  end
+
+  defp clamp_event_consumer_limit(limit) when is_integer(limit) and limit in 1..500, do: limit
+  defp clamp_event_consumer_limit(limit) when is_integer(limit) and limit > 500, do: 500
+  defp clamp_event_consumer_limit(_limit), do: 100
 
   defp do_create_agent(attrs) do
     %Agent{}
@@ -822,6 +1024,14 @@ defmodule GrowthPushRouter.Agents do
     where(query, [e, _c, _a], e.status == ^GrowthPushRouter.Helpers.normalize_string(status))
   end
 
+  defp filter_event_query(query, stored_by: stored_by) when is_binary(stored_by) do
+    where(
+      query,
+      [e, _c, _a],
+      e.stored_by == ^GrowthPushRouter.Helpers.normalize_string(stored_by)
+    )
+  end
+
   defp filter_event_query(query, event_type: event_type) when is_binary(event_type) do
     where(
       query,
@@ -856,6 +1066,27 @@ defmodule GrowthPushRouter.Agents do
 
   defp fetch_event_connection(_agent, _connection_id), do: {:error, :unauthorized}
 
+  defp fetch_agent_edge_event(%Agent{id: agent_id}, event_id)
+       when is_binary(agent_id) and is_binary(event_id) do
+    case Ecto.UUID.cast(event_id) do
+      {:ok, event_id} ->
+        Event
+        |> join(:inner, [e], c in assoc(e, :connection))
+        |> where([e, c], e.id == ^event_id and c.agent_id == ^agent_id)
+        |> where([e, _c], e.stored_by == "edge")
+        |> Repo.one()
+        |> case do
+          %Event{} = event -> {:ok, event}
+          nil -> {:error, :unauthorized}
+        end
+
+      :error ->
+        {:error, :unauthorized}
+    end
+  end
+
+  defp fetch_agent_edge_event(_agent, _event_id), do: {:error, :unauthorized}
+
   defp fetch_connection_agent(%User{id: owner_id} = actor_user, agent_id)
        when is_binary(owner_id) and is_binary(agent_id) do
     case list_agents(actor_user, id: agent_id, owner_id: owner_id) do
@@ -878,11 +1109,15 @@ defmodule GrowthPushRouter.Agents do
     })
   end
 
-  defp connection_event_attrs(attrs, %Connection{
-         id: connection_id,
-         provider: provider,
-         channel: channel
-       }) do
+  defp connection_event_attrs(
+         attrs,
+         %Connection{
+           id: connection_id,
+           provider: provider,
+           channel: channel
+         },
+         stored_by
+       ) do
     attrs
     |> Map.take([
       "event_type",
@@ -895,7 +1130,8 @@ defmodule GrowthPushRouter.Agents do
     |> Map.merge(%{
       "connection_id" => connection_id,
       "provider" => provider,
-      "channel" => channel
+      "channel" => channel,
+      "stored_by" => stored_by
     })
   end
 

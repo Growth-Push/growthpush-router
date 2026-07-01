@@ -11,8 +11,9 @@ defmodule GrowthPushRouter.Agents.Event do
   alias GrowthPushRouter.Agents.Connection
   alias GrowthPushRouter.Helpers
 
-  @statuses ~w(received processing processed failed ignored)
-  @required ~w(connection_id provider channel event_type payload status received_at)a
+  @statuses ~w(received synced processing processed failed ignored)
+  @stored_by_values ~w(edge agent)
+  @required ~w(connection_id provider channel event_type payload status stored_by received_at)a
   @optional ~w(external_event_id processed_at)a
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -24,6 +25,8 @@ defmodule GrowthPushRouter.Agents.Event do
     field :external_event_id, :string
     field :payload, :map, default: %{}
     field :status, :string, default: "received"
+    field :stored_by, :string, default: "edge"
+    field :sequence, :integer, read_after_writes: true
     field :received_at, :utc_datetime
     field :processed_at, :utc_datetime
 
@@ -52,6 +55,8 @@ defmodule GrowthPushRouter.Agents.Event do
       true
       iex> Ecto.Changeset.get_change(changeset, :provider)
       "meta"
+      iex> Ecto.Changeset.get_field(changeset, :stored_by)
+      "edge"
 
   """
   def changeset(event, attrs) do
@@ -60,6 +65,7 @@ defmodule GrowthPushRouter.Agents.Event do
     |> update_change(:provider, &Helpers.normalize_string/1)
     |> update_change(:channel, &Helpers.normalize_string/1)
     |> update_change(:status, &Helpers.normalize_string/1)
+    |> update_change(:stored_by, &Helpers.normalize_string/1)
     |> update_change(:event_type, &Helpers.normalize_string/1)
     |> update_change(:external_event_id, &normalize_optional_string/1)
     |> put_default_received_at()
@@ -77,6 +83,9 @@ defmodule GrowthPushRouter.Agents.Event do
     |> validate_inclusion(:status, @statuses,
       message: dgettext("errors", ".event_status_invalid")
     )
+    |> validate_inclusion(:stored_by, @stored_by_values,
+      message: dgettext("errors", ".event_stored_by_invalid")
+    )
     |> foreign_key_constraint(:connection_id,
       message: dgettext("errors", ".event_connection_not_found")
     )
@@ -88,7 +97,7 @@ defmodule GrowthPushRouter.Agents.Event do
   ## Examples
 
       iex> GrowthPushRouter.Agents.Event.statuses()
-      ["received", "processing", "processed", "failed", "ignored"]
+      ["received", "synced", "processing", "processed", "failed", "ignored"]
 
   """
   def statuses, do: @statuses

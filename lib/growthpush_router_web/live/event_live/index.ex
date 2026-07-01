@@ -87,7 +87,6 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
                   <th>{gettext(".events.provider")}</th>
                   <th>{gettext(".events.channel")}</th>
                   <th>{gettext(".events.event_type")}</th>
-                  <th>{gettext(".events.external_event_id")}</th>
                   <th>{gettext(".events.status")}</th>
                   <th>{gettext(".events.received_at")}</th>
                   <th class="text-right">{gettext(".events.actions")}</th>
@@ -98,7 +97,6 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
                   <td>{event.provider}</td>
                   <td>{event.channel}</td>
                   <td class="font-medium">{event.event_type}</td>
-                  <td class="max-w-64 break-all">{event.external_event_id || "-"}</td>
                   <td>
                     <.status_badge status={event.status} label={event_status_label(event.status)} />
                   </td>
@@ -198,6 +196,7 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
     params
     |> Map.take(["connection_id"])
     |> Enum.map(fn {key, value} -> {String.to_existing_atom(key), value} end)
+    |> Keyword.put(:stored_by, "edge")
   end
 
   defp preserved_query(%{"connection_id" => connection_id}) when is_binary(connection_id) do
@@ -265,6 +264,7 @@ defmodule GrowthPushRouterWeb.EventLive.Index do
   defp event_detail_path(_user, %Event{} = event), do: ~p"/events/#{event}"
 
   defp event_status_label("received"), do: gettext(".events.status_received")
+  defp event_status_label("synced"), do: gettext(".events.status_synced")
   defp event_status_label("processing"), do: gettext(".events.status_processing")
   defp event_status_label("processed"), do: gettext(".events.status_processed")
   defp event_status_label("failed"), do: gettext(".events.status_failed")

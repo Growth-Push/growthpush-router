@@ -576,6 +576,8 @@ defmodule GrowthPushRouter.AgentsTest do
       assert event.external_event_id == "Evt-001"
       assert event.payload == payload
       assert event.status == "processed"
+      assert event.stored_by == "edge"
+      assert is_integer(event.sequence)
       assert event.received_at == received_at
       assert event.processed_at == processed_at
 
@@ -589,9 +591,54 @@ defmodule GrowthPushRouter.AgentsTest do
                })
 
       assert event.status == "received"
+      assert event.stored_by == "edge"
       assert event.payload == %{}
       assert event.received_at
       assert event.processed_at == nil
+    end
+
+    test "creates an agent-side event for local consumers", %{
+      agent: agent,
+      connection: connection
+    } do
+      assert {:ok, %Event{} = event} =
+               Agents.create_agent_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{
+                   "stored_by" => "edge",
+                   "status" => "processed"
+                 })
+               )
+
+      assert event.connection_id == connection.id
+      assert event.provider == "meta"
+      assert event.channel == "instagram"
+      assert event.stored_by == "agent"
+      assert event.status == "processed"
+      assert is_integer(event.sequence)
+    end
+
+    test "marks edge events as synced after agent handoff", %{
+      agent: agent,
+      connection: connection
+    } do
+      assert {:ok, event} = Agents.create_connection_event(agent, connection, valid_event_attrs())
+
+      assert {:ok, synced_event} = Agents.mark_event_synced(agent, event)
+      assert synced_event.id == event.id
+      assert synced_event.status == "synced"
+      assert synced_event.stored_by == "edge"
+      assert synced_event.processed_at
+    end
+
+    test "does not mark agent-side events as synced", %{
+      agent: agent,
+      connection: connection
+    } do
+      assert {:ok, event} = Agents.create_agent_event(agent, connection, valid_event_attrs())
+
+      assert {:error, :unauthorized} = Agents.mark_event_synced(agent, event)
     end
 
     test "validates event status", %{agent: agent, connection: connection} do
@@ -603,6 +650,21 @@ defmodule GrowthPushRouter.AgentsTest do
                )
 
       assert "is not a valid event status" in errors_on(changeset).status
+    end
+
+    test "validates event storage owner", %{connection: connection} do
+      assert changeset =
+               Event.changeset(%Event{}, %{
+                 "connection_id" => connection.id,
+                 "provider" => "meta",
+                 "channel" => "instagram",
+                 "event_type" => "message_received",
+                 "payload" => %{},
+                 "stored_by" => "crm"
+               })
+
+      refute changeset.valid?
+      assert "is not a valid event storage owner" in errors_on(changeset).stored_by
     end
 
     test "requires a connection owned by the acting agent", %{agent: agent} do
@@ -650,15 +712,91 @@ defmodule GrowthPushRouter.AgentsTest do
                  })
                )
 
+      assert {:ok, internal_event} =
+               Agents.create_agent_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{"external_event_id" => "internal-event-list-1"})
+               )
+
       assert {:ok, [^event]} = Agents.list_events(agent, id: event.id)
       assert {:ok, [^event]} = Agents.list_events(agent, connection_id: connection.id)
       assert {:ok, [^event]} = Agents.list_events(agent, provider: "Meta")
       assert {:ok, [^event]} = Agents.list_events(agent, channel: "Instagram")
       assert {:ok, [^event]} = Agents.list_events(agent, status: "Failed")
+      assert {:ok, [^event]} = Agents.list_events(agent, stored_by: "Edge")
+      assert {:ok, []} = Agents.list_events(agent, stored_by: "agent")
       assert {:ok, [^event]} = Agents.list_events(agent, event_type: "Comment_Received")
       assert {:ok, [^event]} = Agents.list_events(agent, external_event_id: " event-list-1 ")
+      assert {:ok, []} = Agents.list_events(agent, id: internal_event.id)
+
+      assert {:ok, []} =
+               Agents.list_events(agent,
+                 external_event_id: "internal-event-list-1",
+                 stored_by: "agent"
+               )
+
       assert {:ok, [^event]} = Agents.list_events(agent, unsupported: "ignored")
       assert {:ok, []} = Agents.list_events(agent, connection_id: "not-a-uuid")
+    end
+
+    test "agent consumers list agent-side events after a sequence", %{
+      admin: admin,
+      agent: agent,
+      connection: connection
+    } do
+      assert {:ok, _edge_event} =
+               Agents.create_connection_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{"external_event_id" => "consumer-edge-event"})
+               )
+
+      assert {:ok, first_event} =
+               Agents.create_agent_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{"external_event_id" => "consumer-agent-event-1"})
+               )
+
+      assert {:ok, second_event} =
+               Agents.create_agent_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{"external_event_id" => "consumer-agent-event-2"})
+               )
+
+      {:ok, other_owner} =
+        Accounts.create_user(admin, %{
+          "email" => "consumer-other-event-owner@example.com",
+          "name" => "Other Consumer Event Owner"
+        })
+
+      {:ok, other_agent} =
+        Agents.create_agent(
+          admin,
+          valid_agent_attrs(other_owner, %{"slug" => "consumer-other-event-agent"})
+        )
+
+      {:ok, other_connection} =
+        Agents.create_connection(
+          admin,
+          valid_connection_attrs(other_agent, other_owner, %{
+            "external_account_id" => "consumer-other-event-account"
+          })
+        )
+
+      assert {:ok, _other_event} =
+               Agents.create_agent_event(
+                 other_agent,
+                 other_connection,
+                 valid_event_attrs(%{"external_event_id" => "consumer-other-event"})
+               )
+
+      assert {:ok, [^first_event]} = Agents.list_agent_events_after(agent, 0, limit: 1)
+      assert {:ok, [^second_event]} = Agents.list_agent_events_after(agent, first_event.sequence)
+      assert {:ok, []} = Agents.list_agent_events_after(agent, second_event.sequence)
+      assert {:error, :unauthorized} = Agents.list_agent_events_after(%User{}, 0)
     end
 
     test "admin and owner can list visible events", %{
@@ -694,6 +832,13 @@ defmodule GrowthPushRouter.AgentsTest do
                  valid_event_attrs(%{"received_at" => ~U[2026-07-01 12:00:00Z]})
                )
 
+      assert {:ok, internal_event} =
+               Agents.create_agent_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{"external_event_id" => "internal-visible-event"})
+               )
+
       assert {:ok, other_event} =
                Agents.create_connection_event(
                  other_agent,
@@ -708,6 +853,8 @@ defmodule GrowthPushRouter.AgentsTest do
       assert Enum.map(events, & &1.id) == [other_event.id, event.id]
       assert {:ok, [^event]} = Agents.list_events(owner)
       assert {:ok, [^event]} = Agents.list_events(owner, id: event.id)
+      assert {:ok, []} = Agents.list_events(admin, id: internal_event.id, stored_by: "agent")
+      assert {:ok, []} = Agents.list_events(owner, id: internal_event.id, stored_by: "agent")
       assert {:ok, []} = Agents.list_events(owner, id: other_event.id)
     end
 
@@ -719,6 +866,13 @@ defmodule GrowthPushRouter.AgentsTest do
     } do
       assert {:ok, event} = Agents.create_connection_event(agent, connection, valid_event_attrs())
 
+      assert {:ok, internal_event} =
+               Agents.create_agent_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{"external_event_id" => "internal-fetch-event"})
+               )
+
       {:ok, other_owner} =
         Accounts.create_user(admin, %{
           "email" => "other-fetch-event-owner@example.com",
@@ -728,6 +882,9 @@ defmodule GrowthPushRouter.AgentsTest do
       assert {:ok, ^event} = Agents.fetch_event(admin, event.id)
       assert {:ok, ^event} = Agents.fetch_event(owner, event.id)
       assert {:ok, ^event} = Agents.fetch_event(agent, event.id)
+      assert {:error, :unauthorized} = Agents.fetch_event(admin, internal_event.id)
+      assert {:error, :unauthorized} = Agents.fetch_event(owner, internal_event.id)
+      assert {:error, :unauthorized} = Agents.fetch_event(agent, internal_event.id)
       assert {:error, :unauthorized} = Agents.fetch_event(other_owner, event.id)
       assert {:error, :unauthorized} = Agents.fetch_event(owner, Ecto.UUID.generate())
       assert {:error, :unauthorized} = Agents.fetch_event(owner, "not-a-uuid")

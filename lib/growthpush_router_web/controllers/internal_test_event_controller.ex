@@ -6,6 +6,7 @@ defmodule GrowthPushRouterWeb.InternalTestEventController do
   use GrowthPushRouterWeb, :controller
 
   alias GrowthPushRouter.Agents
+  alias GrowthPushRouter.RuntimeMode
 
   @doc """
   Handles `POST /internal/test-event` for admin-triggered demo events.
@@ -24,8 +25,10 @@ defmodule GrowthPushRouterWeb.InternalTestEventController do
     current_user = conn.assigns.current_user
 
     with {:ok, connection} <- Agents.fetch_connection(current_user, connection_id(params)),
-         {:ok, agent} <- Agents.fetch_agent(current_user, connection.agent_id) do
-      Agents.create_connection_event(agent, connection, test_event_attrs(connection))
+         {:ok, agent} <- Agents.fetch_agent(current_user, connection.agent_id),
+         {:ok, event} <-
+           Agents.create_connection_event(agent, connection, test_event_attrs(connection)) do
+      maybe_sync_to_agent(agent, connection, event)
     end
   end
 
@@ -44,6 +47,27 @@ defmodule GrowthPushRouterWeb.InternalTestEventController do
   defp connection_id(%{"connection_id" => connection_id}), do: connection_id
   defp connection_id(%{"test_event" => %{"connection_id" => connection_id}}), do: connection_id
   defp connection_id(_params), do: nil
+
+  defp maybe_sync_to_agent(agent, connection, event) do
+    if RuntimeMode.supports?(:agent) do
+      with {:ok, _agent_event} <-
+             Agents.create_agent_event(agent, connection, agent_event_attrs(event)) do
+        Agents.mark_event_synced(agent, event)
+      end
+    else
+      {:ok, event}
+    end
+  end
+
+  defp agent_event_attrs(event) do
+    %{
+      "event_type" => event.event_type,
+      "external_event_id" => event.external_event_id,
+      "payload" => event.payload,
+      "received_at" => event.received_at,
+      "status" => "received"
+    }
+  end
 
   defp test_event_attrs(connection) do
     event_id = "test-event-#{connection.id}-#{System.unique_integer([:positive])}"

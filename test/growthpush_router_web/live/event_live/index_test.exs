@@ -35,8 +35,16 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
   end
 
   test "user lists only owned events", %{conn: conn} do
-    {admin, owner, event} = create_event_fixture("index-owned-events")
+    %{admin: admin, owner: owner, agent: agent, connection: connection, event: event} =
+      create_event_context_fixture("index-owned-events")
+
     {_other_owner, other_event} = create_other_event_fixture(admin, "index-hidden-events")
+
+    assert {:ok, agent_event} =
+             Agents.create_agent_event(agent, connection, %{
+               "event_type" => "agent_internal_index_owned",
+               "payload" => %{"message" => "internal agent event"}
+             })
 
     {:ok, _view, html} =
       conn
@@ -44,8 +52,10 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
       |> live(~p"/events")
 
     assert html =~ "eventos recebidos"
-    assert html =~ event.external_event_id
-    refute html =~ other_event.external_event_id
+    assert html =~ event.event_type
+    refute html =~ other_event.event_type
+    refute html =~ agent_event.event_type
+    refute html =~ "id externo"
   end
 
   test "admin index without a connection filter does not list global events", %{conn: conn} do
@@ -59,23 +69,31 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
 
     assert html =~ "eventos recebidos"
     assert html =~ "Abra os eventos a partir da conexão de um customer."
-    refute html =~ event.external_event_id
-    refute html =~ other_event.external_event_id
+    refute html =~ event.event_type
+    refute html =~ other_event.event_type
   end
 
   test "connection filter limits events", %{conn: conn} do
-    {admin, _owner, event} = create_event_fixture("index-filtered-events")
+    %{admin: admin, agent: agent, connection: connection, event: event} =
+      create_event_context_fixture("index-filtered-events")
 
     {_other_owner, other_event} =
       create_other_event_fixture(admin, "index-filtered-hidden-events")
+
+    assert {:ok, agent_event} =
+             Agents.create_agent_event(agent, connection, %{
+               "event_type" => "agent_internal_index_filtered",
+               "payload" => %{"message" => "internal agent event"}
+             })
 
     {:ok, _view, html} =
       conn
       |> log_in_user(admin)
       |> live(~p"/admin/events?connection_id=#{event.connection_id}")
 
-    assert html =~ event.external_event_id
-    refute html =~ other_event.external_event_id
+    assert html =~ event.event_type
+    refute html =~ other_event.event_type
+    refute html =~ agent_event.event_type
     assert html =~ "Event Owner"
     assert html =~ "Growth Push index-filtered-events"
     refute html =~ event.connection_id
@@ -106,6 +124,12 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
   end
 
   defp create_event_fixture(label) do
+    %{admin: admin, owner: owner, event: event} = create_event_context_fixture(label)
+
+    {admin, owner, event}
+  end
+
+  defp create_event_context_fixture(label) do
     admin = create_admin()
 
     {:ok, owner} =
@@ -135,12 +159,12 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
 
     {:ok, event} =
       Agents.create_connection_event(agent, connection, %{
-        "event_type" => "message_received",
+        "event_type" => "#{label}_received",
         "external_event_id" => "#{label}-event",
         "payload" => %{"message" => "hello from #{label}"}
       })
 
-    {admin, owner, event}
+    %{admin: admin, owner: owner, agent: agent, connection: connection, event: event}
   end
 
   defp create_other_event_fixture(%User{} = admin, label) do
@@ -171,7 +195,7 @@ defmodule GrowthPushRouterWeb.EventLive.IndexTest do
 
     {:ok, event} =
       Agents.create_connection_event(agent, connection, %{
-        "event_type" => "message_received",
+        "event_type" => "#{label}_received",
         "external_event_id" => "#{label}-event",
         "payload" => %{"message" => "hello from #{label}"}
       })
