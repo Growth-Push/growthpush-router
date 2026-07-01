@@ -67,10 +67,16 @@ defmodule GrowthPushRouterWeb.DashboardLive.Index do
       <header class="border-b border-base-300 bg-base-100">
         <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <span class="font-semibold">{gettext(".dashboard.nav_title")}</span>
-          <.link href={~p"/logout"} method="delete" class="btn btn-sm">
-            <.icon name="hero-arrow-left-on-rectangle" class="size-4" />
-            {gettext(".dashboard.sign_out")}
-          </.link>
+          <div class="flex items-center gap-2">
+            <.link navigate={~p"/events"} class="btn btn-sm btn-primary btn-soft">
+              <.icon name="hero-inbox-stack" class="size-4" />
+              {gettext(".dashboard.events")}
+            </.link>
+            <.link href={~p"/logout"} method="delete" class="btn btn-sm">
+              <.icon name="hero-arrow-left-on-rectangle" class="size-4" />
+              {gettext(".dashboard.sign_out")}
+            </.link>
+          </div>
         </div>
       </header>
 

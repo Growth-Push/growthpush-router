@@ -63,6 +63,8 @@ defmodule GrowthPushRouterWeb.Router do
     live "/dashboard", DashboardLive.Index, :index
     get "/connect/instagram", InstagramAuthController, :connect
     get "/auth/instagram/callback", InstagramAuthController, :callback
+    live "/events", EventLive.Index, :index
+    live "/events/:id", EventLive.Show, :show
   end
 
   scope "/admin", GrowthPushRouterWeb do
@@ -71,6 +73,8 @@ defmodule GrowthPushRouterWeb.Router do
     live "/users", AdminUserLive.Index, :index
     live "/users/new", AdminUserLive.Form, :new
     live "/users/:id/edit", AdminUserLive.Form, :edit
+    live "/events", EventLive.Index, :admin_index
+    live "/events/:id", EventLive.Show, :admin_show
   end
 
   scope "/internal", GrowthPushRouterWeb do

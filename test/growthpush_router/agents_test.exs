@@ -650,6 +650,7 @@ defmodule GrowthPushRouter.AgentsTest do
                  })
                )
 
+      assert {:ok, [^event]} = Agents.list_events(agent, id: event.id)
       assert {:ok, [^event]} = Agents.list_events(agent, connection_id: connection.id)
       assert {:ok, [^event]} = Agents.list_events(agent, provider: "Meta")
       assert {:ok, [^event]} = Agents.list_events(agent, channel: "Instagram")
@@ -658,6 +659,78 @@ defmodule GrowthPushRouter.AgentsTest do
       assert {:ok, [^event]} = Agents.list_events(agent, external_event_id: " event-list-1 ")
       assert {:ok, [^event]} = Agents.list_events(agent, unsupported: "ignored")
       assert {:ok, []} = Agents.list_events(agent, connection_id: "not-a-uuid")
+    end
+
+    test "admin and owner can list visible events", %{
+      admin: admin,
+      owner: owner,
+      agent: agent,
+      connection: connection
+    } do
+      {:ok, other_owner} =
+        Accounts.create_user(admin, %{
+          "email" => "other-visible-event-owner@example.com",
+          "name" => "Other Event Owner"
+        })
+
+      {:ok, other_agent} =
+        Agents.create_agent(
+          admin,
+          valid_agent_attrs(other_owner, %{"slug" => "other-visible-event-agent"})
+        )
+
+      {:ok, other_connection} =
+        Agents.create_connection(
+          admin,
+          valid_connection_attrs(other_agent, other_owner, %{
+            "external_account_id" => "other-visible-event-account"
+          })
+        )
+
+      assert {:ok, event} =
+               Agents.create_connection_event(
+                 agent,
+                 connection,
+                 valid_event_attrs(%{"received_at" => ~U[2026-07-01 12:00:00Z]})
+               )
+
+      assert {:ok, other_event} =
+               Agents.create_connection_event(
+                 other_agent,
+                 other_connection,
+                 valid_event_attrs(%{
+                   "external_event_id" => "other-visible-event",
+                   "received_at" => ~U[2026-07-01 12:01:00Z]
+                 })
+               )
+
+      assert {:ok, events} = Agents.list_events(admin)
+      assert Enum.map(events, & &1.id) == [other_event.id, event.id]
+      assert {:ok, [^event]} = Agents.list_events(owner)
+      assert {:ok, [^event]} = Agents.list_events(owner, id: event.id)
+      assert {:ok, []} = Agents.list_events(owner, id: other_event.id)
+    end
+
+    test "fetch event respects actor visibility", %{
+      admin: admin,
+      owner: owner,
+      agent: agent,
+      connection: connection
+    } do
+      assert {:ok, event} = Agents.create_connection_event(agent, connection, valid_event_attrs())
+
+      {:ok, other_owner} =
+        Accounts.create_user(admin, %{
+          "email" => "other-fetch-event-owner@example.com",
+          "name" => "Other Event Owner"
+        })
+
+      assert {:ok, ^event} = Agents.fetch_event(admin, event.id)
+      assert {:ok, ^event} = Agents.fetch_event(owner, event.id)
+      assert {:ok, ^event} = Agents.fetch_event(agent, event.id)
+      assert {:error, :unauthorized} = Agents.fetch_event(other_owner, event.id)
+      assert {:error, :unauthorized} = Agents.fetch_event(owner, Ecto.UUID.generate())
+      assert {:error, :unauthorized} = Agents.fetch_event(owner, "not-a-uuid")
     end
 
     test "agent can list only events for its connections", %{
@@ -703,10 +776,9 @@ defmodule GrowthPushRouter.AgentsTest do
                Agents.create_connection_event(agent, other_connection, valid_event_attrs())
     end
 
-    test "list events rejects user actors including admins", %{admin: admin, owner: owner} do
-      assert {:error, :unauthorized} = Agents.list_events(admin)
-      assert {:error, :unauthorized} = Agents.list_events(owner)
+    test "list events rejects invalid actors" do
       assert {:error, :unauthorized} = Agents.list_events(%User{email: "client@example.com"})
+      assert {:error, :unauthorized} = Agents.list_events(nil)
     end
   end
 

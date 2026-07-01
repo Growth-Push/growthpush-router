@@ -347,14 +347,27 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Form do
                   <td>{format_datetime(connection.last_checked_at)}</td>
                   <td>{format_datetime(connection.last_error_at)}</td>
                   <td class="text-right">
-                    <.form for={%{}} action={~p"/internal/test-event"} method="post">
-                      <input type="hidden" name="connection_id" value={connection.id} />
-                      <input type="hidden" name="return_to" value={~p"/admin/users/#{@user}/edit"} />
-                      <.button type="submit" class="btn btn-xs btn-primary btn-soft">
-                        <.icon name="hero-bolt" class="size-4" />
-                        {gettext(".admin_connections.test_event")}
-                      </.button>
-                    </.form>
+                    <div class="flex justify-end gap-2">
+                      <.link
+                        navigate={~p"/admin/events?connection_id=#{connection.id}"}
+                        class="btn btn-xs"
+                      >
+                        <.icon name="hero-inbox-stack" class="size-4" />
+                        {gettext(".admin_connections.view_events")}
+                      </.link>
+                      <.form for={%{}} action={~p"/internal/test-event"} method="post">
+                        <input type="hidden" name="connection_id" value={connection.id} />
+                        <input
+                          type="hidden"
+                          name="return_to"
+                          value={~p"/admin/events?connection_id=#{connection.id}"}
+                        />
+                        <.button type="submit" class="btn btn-xs btn-primary btn-soft">
+                          <.icon name="hero-bolt" class="size-4" />
+                          {gettext(".admin_connections.test_event")}
+                        </.button>
+                      </.form>
+                    </div>
                   </td>
                 </tr>
               </tbody>

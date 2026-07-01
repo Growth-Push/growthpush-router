@@ -170,7 +170,15 @@ defmodule GrowthPushRouterWeb.AdminUserLive.Index do
     ~H"""
     <header class="border-b border-base-300 bg-base-100">
       <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <.link navigate={~p"/admin/users"} class="font-semibold">{gettext(".admin_nav.title")}</.link>
+        <nav class="flex items-center gap-3">
+          <.link navigate={~p"/admin/users"} class="font-semibold">
+            {gettext(".admin_nav.title")}
+          </.link>
+          <.link navigate={~p"/admin/events"} class="btn btn-sm btn-primary btn-soft">
+            <.icon name="hero-inbox-stack" class="size-4" />
+            {gettext(".admin_nav.events")}
+          </.link>
+        </nav>
         <div class="flex items-center gap-3">
           <span class="hidden text-sm text-base-content/70 sm:block">{@current_user.email}</span>
           <.link href={~p"/logout"} method="delete" class="btn btn-sm">

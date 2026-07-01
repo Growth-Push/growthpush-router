@@ -493,7 +493,7 @@ defmodule GrowthPushRouter.Agents do
   def create_connection_event(_agent, _connection, _attrs), do: {:error, :unauthorized}
 
   @doc """
-  Lists connection events visible to an agent.
+  Lists connection events visible to an actor.
 
   ## Examples
 
@@ -527,15 +527,73 @@ defmodule GrowthPushRouter.Agents do
       iex> {:ok, events} = Agents.list_events(agent, event_type: "Message_Received")
       iex> Enum.map(events, & &1.event_type)
       ["message_received"]
+      iex> {:ok, owner_events} = Agents.list_events(owner, event_type: "Message_Received")
+      iex> Enum.map(owner_events, & &1.event_type)
+      ["message_received"]
 
   """
   def list_events(actor, opts \\ [])
 
+  def list_events(%User{is_admin: true}, opts) do
+    {:ok, do_list_events(opts)}
+  end
+
+  def list_events(%User{id: owner_id}, opts) when is_binary(owner_id) do
+    {:ok, do_list_events_for_owner(opts, owner_id)}
+  end
+
   def list_events(%Agent{id: agent_id}, opts) when is_binary(agent_id) do
-    {:ok, do_list_events(opts, agent_id)}
+    {:ok, do_list_events_for_agent(opts, agent_id)}
   end
 
   def list_events(_actor, _opts), do: {:error, :unauthorized}
+
+  @doc """
+  Fetches a connection event visible to an actor.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "events-fetch-doc@example.com", "name" => "Events Fetch Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "events-fetch-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_connection(admin, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "connected_by_user_id" => owner.id,
+      ...>     "provider" => "meta",
+      ...>     "channel" => "instagram",
+      ...>     "external_account_id" => "events-fetch-doc-account",
+      ...>     "display_name" => "Events Fetch Doc",
+      ...>     "access_token_ref" => "vault://meta/instagram/events-fetch-doc"
+      ...>   })
+      iex> {:ok, event} =
+      ...>   Agents.create_connection_event(agent, connection, %{
+      ...>     "event_type" => "message_received",
+      ...>     "payload" => %{"entry" => []}
+      ...>   })
+      iex> {:ok, fetched_event} = Agents.fetch_event(owner, event.id)
+      iex> fetched_event.id == event.id
+      true
+
+  """
+  def fetch_event(actor, id) when is_binary(id) do
+    case list_events(actor, id: id) do
+      {:ok, [%Event{} = event]} -> {:ok, event}
+      {:ok, []} -> {:error, :unauthorized}
+      {:error, :unauthorized} -> {:error, :unauthorized}
+    end
+  end
+
+  def fetch_event(_actor, _id), do: {:error, :unauthorized}
 
   defp do_list_agents(opts) do
     query = from(a in Agent)
@@ -575,16 +633,35 @@ defmodule GrowthPushRouter.Agents do
     end)
   end
 
-  defp do_list_events(opts, agent_id) do
+  defp do_list_events(opts) do
     opts
     |> do_list_events_query()
-    |> where([_e, c], c.agent_id == ^agent_id)
-    |> order_by([e, _c], asc: e.received_at, asc: e.inserted_at)
+    |> order_events()
     |> Repo.all()
   end
 
+  defp do_list_events_for_owner(opts, owner_id) do
+    opts
+    |> do_list_events_query()
+    |> where([_e, _c, a], a.owner_id == ^owner_id)
+    |> order_events()
+    |> Repo.all()
+  end
+
+  defp do_list_events_for_agent(opts, agent_id) do
+    opts
+    |> do_list_events_query()
+    |> where([_e, c, _a], c.agent_id == ^agent_id)
+    |> order_events()
+    |> Repo.all()
+  end
+
+  defp order_events(query) do
+    order_by(query, [e, _c, _a], desc: e.received_at, desc: e.inserted_at)
+  end
+
   defp do_list_events_query(opts) do
-    query = from(e in Event, join: c in assoc(e, :connection))
+    query = from(e in Event, join: c in assoc(e, :connection), join: a in assoc(c, :agent))
 
     Enum.reduce(opts, query, fn filter, q ->
       filter_event_query(q, [filter])
@@ -719,36 +796,43 @@ defmodule GrowthPushRouter.Agents do
 
   defp filter_connection_query(query, _), do: query
 
+  defp filter_event_query(query, id: id) when is_binary(id) do
+    case Ecto.UUID.cast(id) do
+      {:ok, id} -> where(query, [e, _c, _a], e.id == ^id)
+      :error -> where(query, false)
+    end
+  end
+
   defp filter_event_query(query, connection_id: connection_id) when is_binary(connection_id) do
     case Ecto.UUID.cast(connection_id) do
-      {:ok, connection_id} -> where(query, [e, _c], e.connection_id == ^connection_id)
+      {:ok, connection_id} -> where(query, [e, _c, _a], e.connection_id == ^connection_id)
       :error -> where(query, false)
     end
   end
 
   defp filter_event_query(query, provider: provider) when is_binary(provider) do
-    where(query, [e, _c], e.provider == ^GrowthPushRouter.Helpers.normalize_string(provider))
+    where(query, [e, _c, _a], e.provider == ^GrowthPushRouter.Helpers.normalize_string(provider))
   end
 
   defp filter_event_query(query, channel: channel) when is_binary(channel) do
-    where(query, [e, _c], e.channel == ^GrowthPushRouter.Helpers.normalize_string(channel))
+    where(query, [e, _c, _a], e.channel == ^GrowthPushRouter.Helpers.normalize_string(channel))
   end
 
   defp filter_event_query(query, status: status) when is_binary(status) do
-    where(query, [e, _c], e.status == ^GrowthPushRouter.Helpers.normalize_string(status))
+    where(query, [e, _c, _a], e.status == ^GrowthPushRouter.Helpers.normalize_string(status))
   end
 
   defp filter_event_query(query, event_type: event_type) when is_binary(event_type) do
     where(
       query,
-      [e, _c],
+      [e, _c, _a],
       e.event_type == ^GrowthPushRouter.Helpers.normalize_string(event_type)
     )
   end
 
   defp filter_event_query(query, external_event_id: external_event_id)
        when is_binary(external_event_id) do
-    where(query, [e, _c], e.external_event_id == ^String.trim(external_event_id))
+    where(query, [e, _c, _a], e.external_event_id == ^String.trim(external_event_id))
   end
 
   defp filter_event_query(query, _), do: query

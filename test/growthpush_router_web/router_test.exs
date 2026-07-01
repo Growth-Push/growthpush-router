@@ -52,7 +52,9 @@ defmodule GrowthPushRouterWeb.RouterTest do
           ~p"/privacy",
           ~p"/data-deletion",
           ~p"/dashboard",
-          ~p"/admin/users"
+          ~p"/events",
+          ~p"/admin/users",
+          ~p"/admin/events"
         ] do
       conn =
         conn

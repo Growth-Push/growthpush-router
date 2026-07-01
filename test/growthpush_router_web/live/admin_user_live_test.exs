@@ -434,6 +434,8 @@ defmodule GrowthPushRouterWeb.AdminUserLiveTest do
       assert html =~ "ativo"
       assert html =~ "/internal/test-event"
       assert html =~ "disparar teste"
+      assert html =~ ~s(href="/admin/events?connection_id=#{connection_id_from_html(html)}")
+      assert html =~ "ver eventos"
       refute html =~ "vault://meta/instagram/growth-push"
     end
 
@@ -528,6 +530,14 @@ defmodule GrowthPushRouterWeb.AdminUserLiveTest do
       "display_name" => "Growth Push",
       "access_token_ref" => "vault://meta/instagram/growth-push"
     }
+  end
+
+  defp connection_id_from_html(html) do
+    html
+    |> Floki.parse_document!()
+    |> Floki.find("input[name='connection_id']")
+    |> Floki.attribute("value")
+    |> List.first()
   end
 
   defp endpoint_test_button_disabled?(html) do

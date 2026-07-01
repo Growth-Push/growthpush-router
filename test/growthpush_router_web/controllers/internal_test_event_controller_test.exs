@@ -52,6 +52,23 @@ defmodule GrowthPushRouterWeb.InternalTestEventControllerTest do
     assert [%{"id" => "admin-success-instagram-account"}] = event.payload["entry"]
   end
 
+  test "admin can return to the events list filtered by connection", %{conn: conn} do
+    {admin, _owner, _agent, connection} = create_connection_fixture("admin-events-return")
+    return_to = ~p"/admin/events?connection_id=#{connection.id}"
+
+    conn =
+      conn
+      |> log_in_user(admin)
+      |> post(~p"/internal/test-event", %{
+        "connection_id" => connection.id,
+        "return_to" => return_to
+      })
+
+    assert redirected_to(conn) == return_to
+    assert %Event{connection_id: connection_id} = Repo.one(Event)
+    assert connection_id == connection.id
+  end
+
   test "admin receives an error for invalid connection ids", %{conn: conn} do
     {admin, _owner, _agent, _connection} = create_connection_fixture("admin-invalid")
 
