@@ -185,8 +185,24 @@ Expected response:
 123456
 ```
 
-This only verifies the webhook URL. Receiving real `POST` webhook events,
-checking Meta signatures, and storing event payloads are separate steps.
+## Webhook Event Delivery
+
+After verification, Meta sends webhook events with `POST /webhooks/meta`.
+
+The current implementation is intentionally minimal:
+
+* it accepts Meta webhook payloads and responds `200` quickly;
+* it reads `entry[0].id` as the external account id;
+* when that id matches a local `meta` / `instagram` connection, it persists an
+  edge event;
+* when the router runs in `both` mode, it also writes an agent-side outbox event
+  for local consumers;
+* when the payload is unknown or the account is not connected, it still responds
+  `200` and does not persist an event.
+
+This keeps Meta delivery from breaking while the payload parser stays small.
+Checking Meta signatures, forwarding events to remote agents, and syncing CRM or
+inbox systems are separate steps.
 
 ## Local Development Example
 

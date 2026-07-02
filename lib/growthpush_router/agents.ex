@@ -281,6 +281,59 @@ defmodule GrowthPushRouter.Agents do
   def fetch_connection(_actor_user, _id), do: {:error, :unauthorized}
 
   @doc """
+  Fetches a provider connection by external account id for system ingestion.
+
+  This lookup is used by trusted webhook ingestion paths that receive provider
+  events before there is an authenticated user actor.
+
+  ## Examples
+
+      iex> alias GrowthPushRouter.Accounts
+      iex> alias GrowthPushRouter.Accounts.User
+      iex> alias GrowthPushRouter.Agents
+      iex> admin = User.with_runtime_role(%User{email: "admin@example.test"})
+      iex> {:ok, owner} = Accounts.create_user(admin, %{"email" => "connections-provider-fetch-doc@example.com", "name" => "Connections Provider Fetch Doc"})
+      iex> {:ok, agent} =
+      ...>   Agents.create_agent(admin, %{
+      ...>     "owner_id" => owner.id,
+      ...>     "slug" => "connections-provider-fetch-doc",
+      ...>     "endpoint_url" => "https://agent.example.test/events",
+      ...>     "shared_secret" => "agent-secret-1234"
+      ...>   })
+      iex> {:ok, connection} =
+      ...>   Agents.create_connection(admin, %{
+      ...>     "agent_id" => agent.id,
+      ...>     "connected_by_user_id" => owner.id,
+      ...>     "provider" => "meta",
+      ...>     "channel" => "instagram",
+      ...>     "external_account_id" => "provider-fetch-doc-account",
+      ...>     "display_name" => "Connections Provider Fetch Doc",
+      ...>     "access_token_ref" => "vault://meta/instagram/provider-fetch-doc"
+      ...>   })
+      iex> {:ok, fetched_connection} = Agents.fetch_provider_connection(" Meta ", " Instagram ", "provider-fetch-doc-account")
+      iex> {fetched_connection.id, fetched_connection.agent.id} == {connection.id, agent.id}
+      true
+
+  """
+  def fetch_provider_connection(provider, channel, external_account_id)
+      when is_binary(provider) and is_binary(channel) and is_binary(external_account_id) do
+    query =
+      Connection
+      |> filter_connection_query(provider: provider)
+      |> filter_connection_query(channel: channel)
+      |> filter_connection_query(external_account_id: external_account_id)
+      |> preload(:agent)
+
+    case Repo.one(query) do
+      %Connection{} = connection -> {:ok, connection}
+      nil -> {:error, :not_found}
+    end
+  end
+
+  def fetch_provider_connection(_provider, _channel, _external_account_id),
+    do: {:error, :not_found}
+
+  @doc """
   Creates a connected channel as an admin operation.
 
   ## Examples

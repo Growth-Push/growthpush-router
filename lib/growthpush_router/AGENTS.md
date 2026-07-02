@@ -30,6 +30,7 @@
   ```
 
 - Prefer adding new filter clauses over embedding ad hoc conditionals in public context functions.
+- For focused lookup functions that combine several filters, start from the base schema/query and pipe through the existing filter helper clauses, for example `Connection |> filter_connection_query(provider: provider) |> filter_connection_query(channel: channel)`, instead of writing a custom inline `from` with repeated `where` clauses.
 - Keep the fallback `defp filter_query(query, _), do: query` so unknown options are ignored consistently.
 - Prefer pipelines over nested helper calls when transforming data for the next helper; write `opts |> force_owner_filter(owner_id) |> do_list_agents()` instead of `do_list_agents(force_owner_filter(opts, owner_id))`.
 - Prefer happy-path function clauses and small private helpers over large `cond` blocks. Use `cond` only when the alternatives are genuinely symmetric and clauses would be less clear.

@@ -43,6 +43,7 @@ defmodule GrowthPushRouterWeb.Router do
     pipe_through [:edge]
 
     get "/meta", MetaWebhookController, :verify
+    post "/meta", MetaWebhookController, :create
   end
 
   scope "/", GrowthPushRouterWeb do
