@@ -39,6 +39,12 @@ defmodule GrowthPushRouterWeb.Router do
     get "/health", HealthController, :show
   end
 
+  scope "/webhooks", GrowthPushRouterWeb do
+    pipe_through [:edge]
+
+    get "/meta", MetaWebhookController, :verify
+  end
+
   scope "/", GrowthPushRouterWeb do
     pipe_through [:edge, :browser]
 

@@ -152,6 +152,42 @@ Why:
 If Meta asks for App Review, only request permissions that the current feature
 needs.
 
+## Webhook Verification
+
+Meta verifies a webhook callback before it sends real events to it.
+
+Configure a shared verification token in the deployment environment:
+
+```bash
+export META_WEBHOOK_VERIFY_TOKEN="a-long-random-shared-token"
+```
+
+Then register this callback URL in the Meta app webhook settings:
+
+```text
+https://YOUR_PUBLIC_ROUTER_HOST/webhooks/meta
+```
+
+When Meta verifies the callback, it sends `hub.mode`, `hub.verify_token`, and
+`hub.challenge` query params. Growth Push Router accepts the request only when
+`hub.mode` is `subscribe` and `hub.verify_token` matches
+`META_WEBHOOK_VERIFY_TOKEN`, then responds with the raw `hub.challenge` value.
+
+Local curl check:
+
+```bash
+curl "https://YOUR_PUBLIC_ROUTER_HOST/webhooks/meta?hub.mode=subscribe&hub.verify_token=a-long-random-shared-token&hub.challenge=123456"
+```
+
+Expected response:
+
+```text
+123456
+```
+
+This only verifies the webhook URL. Receiving real `POST` webhook events,
+checking Meta signatures, and storing event payloads are separate steps.
+
 ## Local Development Example
 
 1. Start a tunnel to the Phoenix app.
@@ -164,6 +200,7 @@ needs.
    export META_INSTAGRAM_REDIRECT_URI="https://example-tunnel.ngrok-free.app/auth/instagram/callback"
    export META_GRAPH_VERSION="v23.0"
    export META_INSTAGRAM_SCOPES="instagram_basic,pages_show_list,pages_read_engagement"
+   export META_WEBHOOK_VERIFY_TOKEN="a-long-random-shared-token"
    ```
 
 4. Reload direnv:

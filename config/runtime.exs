@@ -35,6 +35,15 @@ if privacy_email != "" do
   config :growthpush_router, privacy_email: privacy_email
 end
 
+meta_webhook_verify_token =
+  "META_WEBHOOK_VERIFY_TOKEN"
+  |> System.get_env("")
+  |> String.trim()
+
+if meta_webhook_verify_token != "" do
+  config :growthpush_router, meta_webhook_verify_token: meta_webhook_verify_token
+end
+
 admin_emails =
   "GROWTHPUSH_ADMIN_EMAILS"
   |> System.get_env("")
