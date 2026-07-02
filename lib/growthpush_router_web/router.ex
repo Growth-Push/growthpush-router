@@ -1,6 +1,8 @@
 defmodule GrowthPushRouterWeb.Router do
   use GrowthPushRouterWeb, :router
 
+  # Runtime-mode gates. Put these first in each scope so the router shows which
+  # surfaces belong to edge nodes and which belong to agent nodes.
   pipeline :edge do
     plug GrowthPushRouterWeb.RuntimeModePlug, {:require, :edge}
   end
@@ -9,6 +11,7 @@ defmodule GrowthPushRouterWeb.Router do
     plug GrowthPushRouterWeb.RuntimeModePlug, {:require, :agent}
   end
 
+  # Browser/LiveView stack. Edge UI routes use this after the mode gate.
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -19,6 +22,8 @@ defmodule GrowthPushRouterWeb.Router do
     plug GrowthPushRouterWeb.UserAuth, :fetch_current_user
   end
 
+  # Browser auth refinements. These only make sense after :browser has loaded
+  # the session and current user.
   pipeline :redirect_if_authenticated do
     plug GrowthPushRouterWeb.UserAuth, :redirect_if_user_is_authenticated
   end
@@ -31,14 +36,19 @@ defmodule GrowthPushRouterWeb.Router do
     plug GrowthPushRouterWeb.UserAuth, :require_admin_user
   end
 
+  # JSON API stack. Agent-facing API endpoints should use [:agent, :api].
   pipeline :api do
     plug :accepts, ["json"]
   end
 
+  # Public infrastructure endpoint. Health stays outside edge/agent mode gates
+  # so deployment checks can reach every node type.
   scope "/", GrowthPushRouterWeb do
     get "/health", HealthController, :show
   end
 
+  # Edge API endpoints. Providers call these webhook routes; they are not
+  # browser or LiveView routes.
   scope "/webhooks", GrowthPushRouterWeb do
     pipe_through [:edge]
 
@@ -46,6 +56,8 @@ defmodule GrowthPushRouterWeb.Router do
     post "/meta", MetaWebhookController, :create
   end
 
+  # Edge public HTML/LiveView routes. These are browser-visible pages that do
+  # not require an authenticated user.
   scope "/", GrowthPushRouterWeb do
     pipe_through [:edge, :browser]
 
@@ -54,6 +66,8 @@ defmodule GrowthPushRouterWeb.Router do
     live "/data-deletion", DataDeletionLive.Show, :show
   end
 
+  # Edge auth HTML/LiveView routes. Anonymous users can reach these; signed-in
+  # users are redirected away.
   scope "/", GrowthPushRouterWeb do
     pipe_through [:edge, :browser, :redirect_if_authenticated]
 
@@ -63,6 +77,8 @@ defmodule GrowthPushRouterWeb.Router do
     post "/password/setup", PasswordSetupController, :create
   end
 
+  # Edge authenticated app routes. LiveViews are the default for user-facing UI;
+  # controllers here are redirect/session/OAuth endpoints.
   scope "/", GrowthPushRouterWeb do
     pipe_through [:edge, :browser, :authenticated]
 
@@ -74,6 +90,7 @@ defmodule GrowthPushRouterWeb.Router do
     live "/events/:id", EventLive.Show, :show
   end
 
+  # Edge admin LiveView routes. Admin-only screens stay on the browser surface.
   scope "/admin", GrowthPushRouterWeb do
     pipe_through [:edge, :browser, :admin]
 
@@ -84,13 +101,16 @@ defmodule GrowthPushRouterWeb.Router do
     live "/events/:id", EventLive.Show, :admin_show
   end
 
+  # Edge admin utility endpoints. These are browser-authenticated actions used
+  # from the admin UI, not external API endpoints.
   scope "/internal", GrowthPushRouterWeb do
     pipe_through [:edge, :browser, :admin]
 
     post "/test-event", InternalTestEventController, :create
   end
 
-  # Other scopes may use custom stacks.
+  # Agent API endpoints. Add agent-owned JSON routes here so they are clearly
+  # separated from the edge browser surface.
   # scope "/api", GrowthPushRouterWeb do
   #   pipe_through [:agent, :api]
   # end
