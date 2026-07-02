@@ -18,7 +18,7 @@ Growth Push Router is designed as a lightweight self-hosted layer that:
 * validates and wraps incoming webhooks;
 * routes events to the correct client-owned agent;
 * keeps business data inside the client environment;
-* forwards events to local tools such as Twenty CRM, Chatwoot, n8n or custom systems.
+* persists agent events in a local database outbox for downstream consumers.
 
 ## Architecture
 
@@ -36,21 +36,24 @@ Instagram / WhatsApp / Email
 Edge Router
         ↓
 Client Agent
+        ↓
+Local DB event outbox
 ```
 
 ### Agent mode
 
 Runs inside the client environment.
 
-It receives signed events from the edge router and applies the client-side business logic:
+It receives signed events from the edge router and stores them in the local event outbox:
 
 ```text
 Client Agent
   ↓
-Twenty CRM
-  ↓
-Chatwoot / n8n / custom workflows
+Local DB event outbox
 ```
+
+For now, processing stops at the local database. Consumers read the outbox and
+perform downstream work independently.
 
 ### Both mode
 
@@ -63,8 +66,14 @@ Meta webhook
   ↓
 Growth Push Router :both
   ↓
-Twenty CRM + Chatwoot
+Local DB event outbox
 ```
+
+Example consumers can read the local DB event outbox and then:
+
+* send a conversation or message to Chatwoot;
+* create or update a lead in Twenty CRM;
+* trigger another local workflow or custom integration.
 
 ## MVP target
 
@@ -77,17 +86,15 @@ Meta App webhook
   ↓
 Growth Push Router in :both mode
   ↓
-Twenty CRM
-  ↓
-Chatwoot API Channel
+Local DB event outbox
 ```
 
 The MVP should demonstrate:
 
 * Instagram event received;
-* event wrapped and processed;
-* lead created or updated in Twenty;
-* conversation/message visible in Chatwoot;
+* event wrapped and stored locally;
+* event visible in the local outbox;
+* example consumers can read the DB outbox and push to systems such as Twenty or Chatwoot;
 * minimal admin/onboarding flow for connecting Instagram;
 * privacy and data deletion pages required for Meta App review.
 
@@ -100,7 +107,7 @@ Instagram OAuth setup is documented in
 * The edge router should not store customer lead history or conversation content long-term.
 * Events sent from edge to agent should be signed.
 * Event processing should be idempotent.
-* Client-side business logic belongs in the agent.
+* Client-side business logic belongs in consumers outside the router core.
 * The project should be simple to self-host.
 * Cloud platforms should be optional, not mandatory.
 
@@ -118,12 +125,15 @@ Meta App permissions and review requirements still apply when using official Met
 
 ## Planned integrations
 
-Initial targets:
+Initial event sources:
 
 * Instagram webhooks
 * WhatsApp webhooks
-* Twenty CRM
-* Chatwoot API Channel
+
+Example outbox consumers:
+
+* Twenty CRM lead creation or updates
+* Chatwoot conversation or message forwarding
 
 Future targets:
 
